@@ -97,5 +97,7 @@ class Volunteer_Article(Base):
     article_id = Column(String(10), ForeignKey("article.article_id"), nullable=False)
 
     # Relationships
+    
     volunteer = relationship("Volunteer", back_populates="volunteer_articles")
     article = relationship("Article", back_populates="volunteer_articles")
+
