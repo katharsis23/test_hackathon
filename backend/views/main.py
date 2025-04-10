@@ -26,3 +26,4 @@ animal_shelter.include_router(shelter_router, prefix="/shelter")
 async def create_tables():
     async with ENGINE.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
