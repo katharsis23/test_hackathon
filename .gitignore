@@ -1,0 +1,3 @@
+database/
+backend/venv
+backend/database.py
