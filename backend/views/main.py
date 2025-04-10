@@ -17,3 +17,5 @@ animal_shelter.add_middleware(
 
 
 animal_shelter.include_router(auth_router, prefix="/auth")
+animal_shelter.include_router(article_router, prefix="/article")
+animal_shelter.include_router()
