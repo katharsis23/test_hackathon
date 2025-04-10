@@ -1,0 +1,274 @@
+.pageLoginSignUpBodyContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url("../../../public/images/background.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.headerLoginSignUp {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  height: 7.5vh;
+  width: 100vw;
+  background-color: rgb(77, 118, 110);
+}
+
+.headerLoginSignUp h1 {
+  color: white;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 3.8vh;
+  margin: 0;
+  margin-left: 1.5vw;
+}
+
+.formBodyContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Montserrat Alternates", sans-serif;
+  flex: 1;
+}
+
+.form-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 21vw;
+  height: 55vh;
+  border-radius: 1vh;
+  box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.5),
+    inset 0px 0px 2px rgba(0, 0, 0, 0.3), 0px 1px 1px rgba(255, 255, 255, 0.05);
+  align-items: center;
+}
+
+.form-box h1 {
+  font-size: 3.8vh;
+  font-weight: lighter;
+  margin: 0;
+  margin-bottom: 2vh;
+  margin-top: 2vh;
+  height: auto;
+}
+
+.tab-buttons {
+  width: 85%;
+  height: auto;
+}
+
+.tab-btn {
+  width: 50%;
+  padding: 1.06vh 2.12vh;
+  border: none;
+  background: rgb(209, 235, 191);
+  cursor: pointer;
+  transition: all 0.35s ease;
+  font-size: 2vh;
+}
+
+.tab-btn.left {
+  border-radius: 1vh 0 0 1vh;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2),
+    -1px -1px 2px rgba(131, 131, 131, 0.8);
+}
+
+.tab-btn.right {
+  border-radius: 0 1vh 1vh 0;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2),
+    -1px -1px 2px rgba(131, 131, 131, 0.8);
+}
+
+.tab-btn.active {
+  background: rgb(167, 197, 84);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+  transform: translateY(1px);
+}
+
+.tab-content {
+  width: 85%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 2vh;
+}
+
+.tab-content label {
+  font-size: 2vh;
+}
+
+.tab-content input {
+  flex: 1;
+  padding: 1vh 2vh;
+  border-radius: 1vh;
+  border: none;
+  background-color: rgb(217, 217, 217);
+  outline: none;
+}
+
+.tab-content select {
+  flex: 1;
+  font-size: 1.4vh;
+
+  padding: 1vh 2vh;
+  border-radius: 1vh;
+  border: none;
+  background-color: rgb(217, 217, 217);
+  outline: none;
+}
+
+.tab-content select option {
+  background-color: rgb(255, 255, 255);
+}
+
+.tab-content button {
+  align-self: center;
+  font-size: 1.4vh;
+  width: 50%;
+  padding: 0.9vh 0.9vh;
+  border-radius: 1vh;
+  border: none;
+  background: rgb(209, 235, 191);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15),
+    1px 1px 2px rgba(131, 131, 131, 0.5);
+}
+
+.tab-content button:hover {
+  background: rgb(167, 197, 84);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1vh;
+}
+
+.form-box.login h1 {
+  margin-top: 5vh;
+}
+
+.signup_link {
+  padding: 5vh 2vh;
+  padding-top: 0;
+  font-size: 1.7vh;
+}
+
+.login_link {
+  padding: 3vh 2vh;
+  padding-top: 0;
+  font-size: 1.7vh;
+}
+
+.signupBtn,
+.loginBtn {
+  width: 5vw;
+  height: 3.7vh;
+  font-size: 1.7vh;
+  border: none;
+  background-color: rgb(253, 253, 253);
+  border-radius: 0.5vh;
+  cursor: pointer;
+}
+
+.signupBtn:hover,
+.loginBtn:hover {
+  background-color: rgb(233, 233, 233);
+}
+
+.form-box.active {
+  display: flex;
+}
+
+.form-box.hidden {
+  display: none;
+}
+
+.form-box.login h1 {
+  margin-top: 5vh;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 30%;
+  text-align: center;
+}
+
+.modal-content form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 90%;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+}
+
+.modal-content .form-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modal-content .form-group input {
+  width: 60%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  background-color: #f9f9f9;
+}
+
+.modal-content button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: rgb(167, 197, 84);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background: rgb(140, 165, 70);
+}
+
+.close-modal {
+  margin-top: 1rem;
+  background: rgb(200, 50, 50);
+  color: white;
+}
