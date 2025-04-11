@@ -6,7 +6,8 @@ from fastapi.responses import JSONResponse
 import json
 from pydantic import BaseModel
 from sqlalchemy.future import select
-
+from sqlalchemy.orm import joinedload
+from sqlalchemy import join
 
 article_router=APIRouter()
 
@@ -199,3 +200,92 @@ async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSe
             status_code=500
         )
         
+
+
+class Add_to_Favourite(BaseModel):
+    volunteer_id:str
+    article_id: str
+
+@article_router.post("/add_to_favourite")
+async def add_to_favourite(request_:Add_to_Favourite, db: AsyncSession=Depends(get_db)):
+    try:
+        # look_for_existing_article=await db.execute(select(Article).where(Article.article_id==request_.article_id))
+        # if not look_for_existing_article:
+        #     return JSONResponse(
+        #         content={
+        #             "msg": "no article found"
+        #         }, 
+        #         status_code=400
+        #     )
+        new_volunteer_article=Volunteer_Article(
+            volunteer_id=request_.volunteer_id,
+            article_id=request_.article_id
+        )
+        db.add(new_volunteer_article)
+        await db.commit()
+        return JSONResponse(
+            content={
+                "msg": "article added to favourite"
+            },
+            status_code=200
+        )
+    except Exception as e:
+        return JSONResponse(
+            content={
+                "msg": "This is bad :(",
+                "detail:": e
+            },
+            status_code=500
+        )
+    
+
+class Fetch_Favourites(BaseModel):
+    volunteer_id: str
+
+@article_router.post("/fetch_favourite_articles")
+async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSession = Depends(get_db)):
+    try:
+        # JOIN Volunteer_Article with Article on article_id
+        stmt = (
+            select(Article)
+            .join(Volunteer_Article, Volunteer_Article.article_id == Article.article_id)
+            .where(Volunteer_Article.volunteer_id == request_.volunteer_id)
+        )
+
+        result = await db.execute(stmt)
+        articles = result.scalars().all()
+
+        if not articles:
+            return JSONResponse(
+                content={"array_of_favourites": []},
+                status_code=200
+            )
+
+        response = [
+            {
+                "photo_url": article.photo_url,
+                "name": article.name,
+                "age": article.age,
+                "sex": article.sex,
+                "health_status": article.health_status,
+                "animal_type": article.animal_type,
+                "description": article.description,
+                "shelter_id": article.shelter_id,
+                "volunteer_id": article.volunteer_id,
+            }
+            for article in articles
+        ]
+
+        return JSONResponse(
+            content={"array_of_favourites": response},
+            status_code=200
+        )
+
+    except Exception as e:
+        return JSONResponse(
+            content={
+                "msg": "This is bad :(",
+                "detail": str(e)
+            },
+            status_code=500
+        )
