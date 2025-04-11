@@ -1,4 +1,5 @@
 database/
 backend/venv
 backend/database.py
-*/__pycache__
+*/pycache/
+backend/views/pycache/

@@ -9,6 +9,7 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  /* min-width: 700px; */
 }
 
 .headerLoginSignUp {
@@ -43,6 +44,9 @@
   justify-content: center;
   width: 21vw;
   height: 55vh;
+  min-width: 350px;
+  max-width: 420px;
+  min-height: fit-content;
   border-radius: 1vh;
   box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.5),
     inset 0px 0px 2px rgba(0, 0, 0, 0.3), 0px 1px 1px rgba(255, 255, 255, 0.05);
