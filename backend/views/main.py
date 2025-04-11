@@ -22,8 +22,11 @@ animal_shelter.include_router(article_router, prefix="/article")
 animal_shelter.include_router(shelter_router, prefix="/shelter")
 
 # Create tables on startup
+
+
 @animal_shelter.on_event("startup")
 async def create_tables():
     async with ENGINE.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+# uvicorn views.main:animal_shelter --reload --port 8000
