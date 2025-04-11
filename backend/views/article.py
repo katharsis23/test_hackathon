@@ -65,7 +65,7 @@ async def post_article(request_:Post_Article, db: AsyncSession=Depends(get_db)):
         return JSONResponse(
             content={
                 "msg":"this is bad :(",
-                "detail:": e
+                "detail:": str(e)
             },
             status_code=500
         )
@@ -103,7 +103,7 @@ async def fetch_article_homepage(request_:Request, db: AsyncSession=Depends(get_
         return JSONResponse(
             content={
                 "msg":"this is bad :(",
-                "detail:": e
+                "detail:": str(e)
             },
             status_code=500
         )
@@ -149,7 +149,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
         return JSONResponse(
             content={
                 "msg":"this is bad :(",
-                "detail:": e
+                "detail:": str(e)
             },
             status_code=500
         )
@@ -195,7 +195,7 @@ async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSe
         return JSONResponse(
             content={
                 "msg":"this is bad :(",
-                "detail:": e
+                "detail:": str(e)
             },
             status_code=500
         )
@@ -233,14 +233,14 @@ async def add_to_favourite(request_:Add_to_Favourite, db: AsyncSession=Depends(g
         return JSONResponse(
             content={
                 "msg": "This is bad :(",
-                "detail:": e
+                "detail:": str(e)
             },
             status_code=500
         )
     
 
 class Fetch_Favourites(BaseModel):
-    volunteer_id: str
+    user_id: str
 
 @article_router.post("/fetch_favourite_articles")
 async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSession = Depends(get_db)):
@@ -249,7 +249,7 @@ async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSessio
         stmt = (
             select(Article)
             .join(Volunteer_Article, Volunteer_Article.article_id == Article.article_id)
-            .where(Volunteer_Article.volunteer_id == request_.volunteer_id)
+            .where(Volunteer_Article.volunteer_id == request_.user_id)
         )
 
         result = await db.execute(stmt)
