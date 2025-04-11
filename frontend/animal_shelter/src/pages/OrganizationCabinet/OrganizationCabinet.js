@@ -9,13 +9,11 @@ import handsImage from "../../assets/images/hands.png";
 import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 
-import Article from "../../models/article_model";
-import Comment from "../../models/comments_model";
-
 import { useNavigate } from "react-router-dom";
 
 const OrganizationCabinet = () => {
   const [comments, setComments] = useState([]);
+  const [animal, setAnimal] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
@@ -60,59 +58,6 @@ const OrganizationCabinet = () => {
       console.error("Помилка під час запиту:", error);
     }
   };
-
-  const [animal, setAnimal] = useState([
-    {
-      id: 1,
-      name: "Барсик",
-      age: 3,
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "Animal Shelter",
-      edit: "",
-      delete: "",
-    },
-    {
-      id: 2,
-      name: "Мурка",
-      age: 2,
-      sex: "Дівчинка",
-      image: animalImage,
-      organization: "Animal Shelter",
-      edit: "",
-      delete: "",
-    },
-    {
-      id: 3,
-      name: "Рекс",
-      age: 5,
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "Animal Shelter",
-      edit: "",
-      delete: "",
-    },
-    {
-      id: 4,
-      name: "Белла",
-      age: 1,
-      sex: "Дівчинка",
-      image: animalImage,
-      organization: "Animal Shelter",
-      edit: "",
-      delete: "",
-    },
-    {
-      id: 5,
-      name: "Шарік",
-      age: 4,
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "Animal Shelter",
-      edit: "",
-      delete: "",
-    },
-  ]);
 
   return (
     <div className="cabinetBodyContainer">
