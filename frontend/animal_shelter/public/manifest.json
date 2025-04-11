@@ -1,0 +1,20 @@
+{
+  "short_name": "Life4Paw",
+  "name": "Life4Paw - Знайди друга",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#4d766e",
+  "background_color": "#f5f7f6"
+}
