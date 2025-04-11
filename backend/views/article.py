@@ -108,3 +108,94 @@ async def fetch_article_homepage(request_:Request, db: AsyncSession=Depends(get_
         )
     
 
+class Fetch_Article_Shelter(BaseModel):
+    shelter_id: str
+
+@article_router.post("/fetch_article_shelter")
+async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession=Depends(get_db)):
+    try:
+        query=await db.execute(select(Article).where(Article.shelter_id==request_.shelter_id).limit(3))
+        articles=query.scalars().all()
+        if articles is None:
+            return JSONResponse(
+                content={
+                    "msg": "fetching is succesfull, but no articles found"
+                },
+                status_code=204
+            )
+        response=[]
+        for article in articles:
+            response.append[
+                {
+                    "photo_url": article.photo_url,
+                    "name": article.name,
+                    "age": article.age,
+                    "sex": article.sex,
+                    "health_status": article.health_status,
+                    "animal_type": article.animal_type,
+                    "description": article.description,
+                    "shelter_id": article.shelter_id,
+                    #"volunteer_id": article.volunteer_id  
+                }
+            ]
+        return JSONResponse(
+            content={
+                "array_of_article": response
+            },
+            status_code=200
+        )
+    except Exception as e:
+        return JSONResponse(
+            content={
+                "msg":"this is bad :(",
+                "detail:": e
+            },
+            status_code=500
+        )
+    
+class Fetch_Article_Volunteer(BaseModel):
+    volunteer_id: str
+
+
+@article_router.post("/fetch_article_volunteer")
+async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSession=Depends(get_db)):
+    try:
+        query=await db.execute(select(Article).where(Article.volunteer_id==request_.volunteer_id).limit(3))
+        articles=query.scalars().all()
+        if articles is None:
+            return JSONResponse(
+                content={
+                    "msg": "fetching is succesfull, but no articles found"
+                },
+                status_code=204
+            )
+        response=[]
+        for article in articles:
+            response.append[
+                {
+                    "photo_url": article.photo_url,
+                    "name": article.name,
+                    "age": article.age,
+                    "sex": article.sex,
+                    "health_status": article.health_status,
+                    "animal_type": article.animal_type,
+                    "description": article.description,
+                    #"shelter_id": article.shelter_id,
+                    "volunteer_id": article.volunteer_id  
+                }
+            ]
+        return JSONResponse(
+            content={
+                "array_of_article": response
+            },
+            status_code=200
+        )
+    except Exception as e:
+        return JSONResponse(
+            content={
+                "msg":"this is bad :(",
+                "detail:": e
+            },
+            status_code=500
+        )
+        
