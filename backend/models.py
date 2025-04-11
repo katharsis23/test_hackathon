@@ -1,5 +1,5 @@
 from sqlalchemy.orm import declarative_base, relationship
-from sqlalchemy import Column, String, Text, Integer, ForeignKey
+from sqlalchemy import Column, String, Text, Integer, ForeignKey, Enum
 import uuid
 from passlib.hash import bcrypt
 
@@ -55,12 +55,15 @@ class Article(Base):
     __tablename__ = "article"
 
     article_id = Column(String(10), primary_key=True, default=generate_unique_id)
-    photo_url = Column(Text)
-    age = Column(Integer)
-    name = Column(String(100))
-    health_status = Column(Text)
-    sex = Column(String(10))
-    description = Column(String(255))
+    photo_url = Column(Text, nullable=True)
+    age = Column(Integer, nullable=True)
+    name = Column(String(100), nullable=True)
+    health_status = Column(Text, nullable=True)
+    sex = Column(String(10), nullable=True)
+    description = Column(String(255), nullable=True)
+    animal_type = Column(Enum("dogs", "cats", name="animal_type_enum"), nullable=True)
+
+
 
     shelter_id = Column(String(10), ForeignKey("shelter.shelter_id"), nullable=False)
     volunteer_id = Column(String(10), ForeignKey("volunteer.volunteer_id"), nullable=False)
