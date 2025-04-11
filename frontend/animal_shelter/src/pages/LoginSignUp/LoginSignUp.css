@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url("../../../public/images/background.svg");
+  background-image: url("../../assets/images/background.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
