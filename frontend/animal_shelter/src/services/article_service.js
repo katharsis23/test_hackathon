@@ -64,6 +64,25 @@ class Article_service{
             throw new Error(`AN ERROR OCCURED ${error}`)
         }
     }
+
+    async add_article_to_favourite(volunteer_id, article_id){
+        try{
+            const payload={
+                "volunteer_id": volunteer_id,
+                "article_id": article_id
+            }
+            const response=await axios.post(
+                `${base_url}/add_to_favourite`,
+                payload
+            );
+            if (response.status===200){
+                return response.data
+            }
+        }catch(error){
+            throw new Error(`AN ERROR OCCURED ${error}`);
+        }
+    }
+    
 }
 
 export default {Article_service};
