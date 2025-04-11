@@ -76,20 +76,68 @@ async def signup(data: SignupUser, db: AsyncSession = Depends(get_db)):
             )
 
 
+class LoginUser(BaseModel):
+    username: str
+    password: str
+    user_type: Literal["volunteer", "shelter"]
+
+
+@auth_router.post("/login")
+async def login(data: LoginUser, db: AsyncSession = Depends(get_db)):
+    if data.user_type == "volunteer":
+        query = await db.execute(select(Volunteer).where(Volunteer.username == data.username))
+        result = query.scalar_one_or_none()
+        if result is not None:
+
+            if result.verify_password(data.password):
+                return JSONResponse(
+                    content={"message": "Login successful."},
+                    status_code=status.HTTP_200_OK
+                )
+            else:
+                return JSONResponse(
+                    content={"message": "Wrong password."},
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return JSONResponse(
+                content={"message": "User doesn't exist."},
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+    elif data.user_type == "shelter":
+        query = await db.execute(select(Shelter).where(Shelter.name == data.username))
+        result = query.scalar_one_or_none()
+        if result is None:
+            return JSONResponse(
+                content={"message": "User doesn't exist."},
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            if result.verify_password(data.password):
+                return JSONResponse(
+                    content={"message": "Login successful."},
+                    status_code=status.HTTP_200_OK
+                )
+            else:
+                return JSONResponse(
+                    content={"message": "Wrong password"},
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
 
 
 class Get_Shelter_Info(BaseModel):
     id: str
 
+
 @auth_router.post("/get_shelter_info")
-async def get_shelter_info(request_: Get_Shelter_Info, db: AsyncSession=Depends(get_db)):
+async def get_shelter_info(request_: Get_Shelter_Info, db: AsyncSession = Depends(get_db)):
     try:
-        query=await db.execute(select(Shelter).where(Shelter.shelter_id==request_.id))
-        shelter=query.scalar_one_or_none()
+        query = await db.execute(select(Shelter).where(Shelter.shelter_id == request_.id))
+        shelter = query.scalar_one_or_none()
         if shelter is None:
             return JSONResponse(
                 content={
-                    "msg":"No shelter found"
+                    "msg": "No shelter found"
                 },
                 status_code=404
             )
@@ -97,9 +145,9 @@ async def get_shelter_info(request_: Get_Shelter_Info, db: AsyncSession=Depends(
             content={
                 "name": shelter.name,
                 "email": shelter.email,
-                "address":shelter.shelter_address,
-                "bank_info":shelter.bank_info,
-                "shelter_category":shelter.shelter_category
+                "address": shelter.shelter_address,
+                "bank_info": shelter.bank_info,
+                "shelter_category": shelter.shelter_category
             },
             status_code=200
         )
@@ -108,7 +156,7 @@ async def get_shelter_info(request_: Get_Shelter_Info, db: AsyncSession=Depends(
             content={"msg": "Failed to update article", "detail": str(e)},
             status_code=500
         )
-    
+
 
 @auth_router.post("/verify-code")
 async def verify_code(code: str, db: AsyncSession = Depends(get_db)):
