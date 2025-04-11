@@ -1,13 +1,14 @@
 import axios from "axios";
 import Article from "../models/article_model";
+//import { data } from "react-router-dom";
 
 
 const base_url="http://localhost:8000/article";
 
 
 class Article_service{
- 
-    async fetch_article_homepage(){
+    //for homepage
+    async fetch_article(){
         try{
             const response=await axios.get(`${base_url}/fetch_article_homepage`);
             if (response.status===200){
@@ -30,5 +31,39 @@ class Article_service{
             throw error;
         }
     }
+    //for volunteer pages
+    async fetch_article(volunteer_id){
+        try{
+            const response=await axios.post(
+                `${base_url}/fetch_article_volunteer`,
+                {
+                    "volunteer_id": volunteer_id
+                }
+            );
+            if(response.status===200){
+                return response.data["array_of_articles"].map(article=>Article.fromJSON(article));
+            }
+        }catch(error){
+            throw new Error(`AN ERROR OCCURED ${error}`)
+        }
+    }
 
+    //for shelter pages
+    async fetch_article(shelter_id){
+        try{
+            const response=await axios.post(
+                `${base_url}/fetch_article_shelter`,
+                {
+                    "shelter_id": shelter_id
+                }
+            );
+            if(response.status===200){
+                return response.data["array_of_articles"].map(article=>Article.fromJSON(article));
+            }
+        }catch(error){
+            throw new Error(`AN ERROR OCCURED ${error}`)
+        }
+    }
 }
+
+export default {Article_service};

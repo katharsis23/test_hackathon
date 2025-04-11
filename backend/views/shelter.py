@@ -10,3 +10,18 @@ from sqlalchemy.future import select
 
 
 shelter_router=APIRouter()
+
+
+@shelter_router.post("/get_shelter_info")
+async def get_shelter_info():
+    pass
+
+@shelter_router.post("/leave_comment")
+async def leave_comment():
+    pass
+
+@shelter_router.post("/fetch_comments")
+async def fetch_comment():
+    pass
+
+

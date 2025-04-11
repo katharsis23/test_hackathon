@@ -54,5 +54,7 @@ class Article {
     }
 }
 
+і
+
 
 export default {Article};
