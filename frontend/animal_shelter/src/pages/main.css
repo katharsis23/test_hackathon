@@ -8,13 +8,27 @@
   padding: 0;
 }
 
+:root {
+  --primary-color: #4d766e;
+  --secondary-color: #7c9a3c;
+  --light-bg: #f5f7f6;
+  --dark-text: #333;
+  --white: #fff;
+  --cta-color: rgb(88, 152, 140);
+  --cta-hover: #1a5c55;
+  --btn-color: #7c9a3c;
+  --btn-hover: #8baf42;
+  --footer-bg: #2a7973;
+}
+
 body {
   font-family: "Roboto Slab", serif;
   line-height: 1.7;
-  color: #333;
-  background-color: #f5f7f6;
-  overflow-x: hidden; /* Додаємо це */
+  color: var(--dark-text);
+  background-color: var(--light-bg);
+  overflow-x: hidden;
   width: 100%;
+  font-size: 16px;
 }
 
 /* Header styles */
@@ -24,20 +38,19 @@ body {
   left: 0;
   right: 0;
   z-index: 50;
-  background-color: #4d766e;
-  color: white;
-  padding: 2vh 2vw;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0.2vh 1vw rgba(0, 0, 0, 0.1);
-  height: 7.5vh;
-  width: 100vw;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: 70px;
 }
 
 .site-title {
   font-family: "Archivo Black", sans-serif;
-  font-size: 3vh;
+  font-size: 1.8rem;
   letter-spacing: 0.5px;
 }
 
@@ -46,9 +59,10 @@ body {
 }
 
 .nav-item {
-  margin: 0 1vw;
+  margin: 0 15px;
   cursor: pointer;
   transition: color 0.3s ease;
+  font-size: 1rem;
 }
 
 .nav-item:hover {
@@ -56,25 +70,26 @@ body {
 }
 
 .cta-button {
-  background-color: rgb(88, 152, 140);
+  background-color: var(--cta-color);
   border: none;
-  padding: 1vh 0.5vw;
-  border-radius: 1vh;
-  color: white;
+  padding: 8px 15px;
+  border-radius: 8px;
+  color: var(--white);
   cursor: pointer;
   transition: background-color 0.3s ease;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  font-size: 0.9rem;
 }
 
 .cta-button:hover {
-  background-color: #1a5c55;
+  background-color: var(--cta-hover);
 }
 
 .mobile-menu-button {
   background: none;
   border: none;
-  color: white;
-  font-size: 1rem;
+  color: var(--white);
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
@@ -82,8 +97,9 @@ body {
 .hero-section {
   position: relative;
   height: 100vh;
-  width: 100%; /* Змінюємо з 100vw на 100% */
+  width: 100%;
   overflow: hidden;
+  margin-top: 70px; /* Account for fixed header */
 }
 
 .hero-background {
@@ -106,89 +122,90 @@ body {
 .hero-content {
   position: relative;
   z-index: 10;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 6vh 3vw 0;
+  padding: 20px;
 }
 
 .hero-text-container {
-  max-width: 47vw;
+  max-width: 800px;
+  width: 90%;
   margin: 0 auto;
 }
 
 .hero-text {
-  color: white;
+  color: var(--white);
   font-family: "Montserrat Alternates", sans-serif;
-  font-size: 2.5vh;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
   line-height: 1.8;
-  margin-bottom: 3vh;
+  margin-bottom: 30px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .find-friend-button {
   display: inline-block;
-  background-color: #7c9a3c;
-  color: white;
+  background-color: var(--btn-color);
+  color: var(--white);
   font-family: "Montserrat Alternates", sans-serif;
-  padding: 1.5vh 4vw;
+  padding: 12px 30px;
   border-radius: 999px;
   text-decoration: none;
-  font-size: 2vh;
+  font-size: clamp(1rem, 2vw, 1.25rem);
   transition: all 0.3s ease;
   border: none;
   cursor: pointer;
 }
 
 .find-friend-button:hover {
-  background-color: #8baf42;
+  background-color: var(--btn-hover);
   transform: scale(1.05);
 }
 
 /* Choose friend section */
 .choose-friend-section {
-  padding: 10vh 3vw;
-  background-color: white;
+  padding: 80px 20px;
+  background-color: var(--white);
   position: relative;
   z-index: 20;
-  min-height: 90vh;
 }
 
 .section-container {
-  width: 100%; /* Змінюємо з 90vw на 100% */
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2vw;
   text-align: center;
 }
 
 .section-title {
   font-family: "Roboto Slab", serif;
-  font-size: 5vh;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 600;
-  margin-bottom: 8vh;
+  margin-bottom: 60px;
   position: relative;
 }
 
 .section-title::after {
   content: "";
   position: absolute;
-  bottom: -2vh;
+  bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 10vw;
-  height: 0.5vh;
-  background-color: #7c9a3c;
+  width: 100px;
+  max-width: 80%;
+  height: 4px;
+  background-color: var(--secondary-color);
 }
 
 .pet-options {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 8vw;
-  margin-bottom: 8vh;
+  gap: 40px;
+  margin-bottom: 60px;
 }
 
 .pet-option {
@@ -197,6 +214,8 @@ body {
   align-items: center;
   cursor: pointer;
   transition: transform 0.3s ease;
+  flex-basis: calc(50% - 40px);
+  max-width: 200px;
 }
 
 .pet-option:hover {
@@ -204,56 +223,56 @@ body {
 }
 
 .pet-icon {
-  width: 15vh;
-  height: 15vh;
+  width: clamp(100px, 20vw, 150px);
+  height: clamp(100px, 20vw, 150px);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2vh;
-  background-color: #f5f7f6;
+  margin-bottom: 20px;
+  background-color: var(--light-bg);
   border-radius: 50%;
-  border: 0.5vh solid #7c9a3c;
-  padding: 2vh;
+  border: 4px solid var(--secondary-color);
+  padding: 15px;
 }
+
 .cat-image {
-  margin-right: 1vw;
+  margin-right: 15px;
 }
+
 .icon-placeholder {
-  font-size: 10vh;
+  font-size: clamp(3rem, 8vw, 5rem);
 }
 
 .pet-type {
   font-family: "Roboto Slab", serif;
-  font-size: 3vh;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   font-weight: 500;
 }
 
 /* Announcements section */
 .announcements-section {
-  padding: 10vh 3vw;
-  background-color: #f5f7f6;
-  min-height: 90vh;
+  padding: 80px 20px;
+  background-color: var(--light-bg);
   position: relative;
 }
 
 .announcements-section .section-title {
   text-align: center;
-  margin-bottom: 5rem;
+  margin-bottom: 60px;
 }
 
 .pets-grid {
-  width: 100%; /* Змінюємо з 90vw на 100% */
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2vw; /* Додаємо padding замість width */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 3vw;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
 }
 
 .pet-card {
-  background-color: white;
-  border-radius: 2vh;
+  background-color: var(--white);
+  border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -265,7 +284,7 @@ body {
 }
 
 .pet-image {
-  height: 30vh;
+  height: 220px;
   overflow: hidden;
 }
 
@@ -276,62 +295,60 @@ body {
 }
 
 .pet-info {
-  padding: 3vh 2vw;
+  padding: 20px;
 }
 
 .pet-name {
   font-family: "Roboto Slab", serif;
-  font-size: 3vh;
-  margin-bottom: 2vh;
+  font-size: clamp(1.3rem, 3vw, 1.5rem);
+  margin-bottom: 15px;
   font-weight: 600;
 }
 
 .pet-details {
   display: flex;
   flex-direction: column;
-  gap: 2vh;
+  gap: 15px;
 }
 
 .detail-item {
   display: flex;
   align-items: center;
-  gap: 1vw;
+  gap: 10px;
 }
 
 .detail-icon {
-  font-size: 2.5vh;
+  font-size: 1.2rem;
 }
 
 .detail-text {
-  font-size: 2vh;
+  font-size: 1rem;
 }
 
 /* Shelters section */
 .shelters-section {
-  padding: 10vh 3vw;
-  background-color: white;
-  min-height: 90vh;
+  padding: 80px 20px;
+  background-color: var(--white);
 }
 
 .shelters-section .section-title {
   text-align: center;
-  margin-bottom: 5rem;
+  margin-bottom: 60px;
 }
 
 .shelters-grid {
-  width: 100%; /* Змінюємо з 90vw на 100% */
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2vw; /* Додаємо padding замість width */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 4vw;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
 }
 
 .shelter-card {
-  background-color: #f5f7f6;
-  border-radius: 2vh;
-  padding: 4vh 3vw;
+  background-color: var(--light-bg);
+  border-radius: 15px;
+  padding: 30px 20px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -343,12 +360,12 @@ body {
 }
 
 .shelter-logo {
-  width: 15vh;
-  height: 15vh;
+  width: clamp(100px, 20vw, 120px);
+  height: clamp(100px, 20vw, 120px);
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 auto 3vh;
-  border: 0.5vh solid #7c9a3c;
+  margin: 0 auto 20px;
+  border: 4px solid var(--secondary-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -359,38 +376,37 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  display: block; /* Added block display */
+  display: block;
 }
 
 .logo-placeholder {
-  font-size: 7vh;
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
 }
 
 .shelter-name {
   font-family: "Roboto Slab", serif;
-  color: #7c9a3c;
-  font-size: 3vh;
+  color: var(--secondary-color);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   font-weight: 600;
-  margin-bottom: 2vh;
+  margin-bottom: 15px;
 }
 
 .shelter-address {
-  font-size: 2vh;
+  font-size: 1rem;
   color: #666;
 }
 
 /* Footer */
 .footer {
-  background-color: #2a7973;
-  color: white;
-  padding: 6vh 3vw;
+  background-color: var(--footer-bg);
+  color: var(--white);
+  padding: 50px 20px;
   text-align: center;
-  min-height: 20vh;
 }
 
 .footer-text {
   font-family: "Roboto Slab", serif;
-  font-size: 4vh;
+  font-size: clamp(1.5rem, 4vw, 2rem);
 }
 
 /* Background paw prints */
@@ -398,7 +414,7 @@ body {
 .announcements-section {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200' fill='none'%3E%3Cpath d='M40 70C46.6274 70 52 64.6274 52 58C52 51.3726 46.6274 46 40 46C33.3726 46 28 51.3726 28 58C28 64.6274 33.3726 70 40 70Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3Cpath d='M60 50C66.6274 50 72 44.6274 72 38C72 31.3726 66.6274 26 60 26C53.3726 26 48 31.3726 48 38C48 44.6274 53.3726 50 60 50Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3Cpath d='M80 70C86.6274 70 92 64.6274 92 58C92 51.3726 86.6274 46 80 46C73.3726 46 68 51.3726 68 58C68 64.6274 73.3726 70 80 70Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3Cpath d='M60 90C66.6274 90 72 84.6274 72 78C72 71.3726 66.6274 66 60 66C53.3726 66 48 71.3726 48 78C48 84.6274 53.3726 90 60 90Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 15vw;
+  background-size: 150px;
 }
 
 /* Media queries for responsiveness */
@@ -412,61 +428,91 @@ body {
     display: none;
   }
 
-  .hero-text {
-    font-size: 1.75rem;
-  }
-
-  .section-title {
-    font-size: 3rem;
-  }
-
-  .pet-icon {
-    width: 15rem;
-    height: 15rem;
-  }
-
-  .pet-type {
-    font-size: 2rem;
+  .pet-option {
+    flex-basis: calc(33.333% - 40px);
   }
 }
 
-/* Media queries */
-@media (max-width: 768px) {
-  .hero-text {
-    font-size: 3vh;
+@media (min-width: 992px) {
+  .site-title {
+    font-size: 2rem;
   }
 
-  .section-title {
-    font-size: 4vh;
+  .pet-option {
+    flex-basis: auto; /* Reset to auto on large screens */
   }
 
-  .pet-icon {
-    width: 30vw;
-    height: 30vw;
+  .pets-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .pet-type {
-    font-size: 2.5vh;
+  .shelters-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .header {
+    padding: 10px 15px;
+    height: 60px;
   }
 
-  .detail-text {
-    font-size: 1.8vh;
+  .site-title {
+    font-size: 1.5rem;
   }
 
-  .hero-text-container {
-    max-width: 90%; /* Змінюємо з vw на % */
+  .hero-section {
+    margin-top: 60px; /* Match header height */
+  }
+
+  .find-friend-button {
+    padding: 10px 25px;
+  }
+
+  .section-title::after {
+    width: 80px;
+  }
+
+  .pet-options {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-title {
+    font-size: 1.3rem;
+  }
+
+  .pet-option {
+    flex-basis: 100%;
+  }
+
+  .pets-grid,
+  .shelters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pet-options {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .shelter-card {
+    padding: 25px 15px;
   }
 }
 
 .icon-image {
-  width: 8vh;
-  height: 8vh;
+  width: 60%;
+  height: 60%;
+  max-width: 80px;
+  max-height: 80px;
   object-fit: contain;
 }
 
 .detail-icon-image {
-  width: 2.5vh;
-  height: 2.5vh;
+  width: 18px;
+  height: 18px;
   object-fit: contain;
   vertical-align: middle;
   filter: brightness(0) saturate(100%); /* Makes icons single color */
