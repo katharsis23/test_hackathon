@@ -15,44 +15,11 @@ import Comment from "../../models/comments_model";
 import { useNavigate } from "react-router-dom";
 
 const OrganizationCabinet = () => {
-  // const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
   const base_url = "";
-  const fetchArticles = async () => {
-    try {
-      const response = await fetch(`${base_url}/fetch_articles`);
-      if (response.ok) {
-        const data = await response.json();
-        const articles = data.array_of_articles.map((item) =>
-          Article.fromJSON(item)
-        );
-        setAnimal(articles);
-      } else {
-        console.error("Помилка завантаження оголошень:", response.status);
-      }
-    } catch (error) {
-      console.error("Помилка під час запиту:", error);
-    }
-  };
-
-  const fetchComments = async () => {
-    try {
-      const response = await fetch(`${base_url}/fetch_comments`);
-      if (response.ok) {
-        const data = await response.json();
-        const fetchedComments = data.array_of_comments.map((item) =>
-          Comment.fromJSON(item)
-        );
-        setComments(fetchedComments);
-      } else {
-        console.error("Помилка завантаження коментарів:", response.status);
-      }
-    } catch (error) {
-      console.error("Помилка під час запиту:", error);
-    }
-  };
 
   const openEditModal = (article) => {
     setSelectedArticle(article);
@@ -146,13 +113,6 @@ const OrganizationCabinet = () => {
       delete: "",
     },
   ]);
-
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    fetchArticles();
-    fetchComments();
-  }, []);
 
   return (
     <div className="cabinetBodyContainer">
@@ -250,7 +210,7 @@ const OrganizationCabinet = () => {
               </div>
               <div className="organizationCardName">
                 <img src={handsImage} alt="Organization" />
-                {article.shelter_id}
+                {article.volunteer_id}
               </div>
             </div>
           ))}
