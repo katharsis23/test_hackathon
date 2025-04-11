@@ -10,6 +10,8 @@ import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 
 import { useNavigate } from "react-router-dom";
+import { ArticleService } from "../../services/article_service";
+import { get_user_id } from "../../services/cache";
 
 const OrganizationCabinet = () => {
   const [comments, setComments] = useState([]);
@@ -17,7 +19,27 @@ const OrganizationCabinet = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
-  const base_url = "";
+  const articleService = new ArticleService();
+  const shelterId = get_user_id();
+
+  // Додано відсутні функції
+  const fetchArticles = async () => {
+    try {
+      const articles = await articleService.fetchArticlesForShelter(shelterId);
+      setAnimal(articles);
+    } catch (error) {
+      console.error("Помилка завантаження оголошень:", error);
+    }
+  };
+
+  const fetchComments = async () => {
+    setComments([]);
+  };
+
+  useEffect(() => {
+    fetchArticles();
+    fetchComments();
+  }, []);
 
   const openEditModal = (article) => {
     setSelectedArticle(article);
@@ -29,33 +51,22 @@ const OrganizationCabinet = () => {
     setIsModalOpen(false);
   };
 
+  // Виправлений метод з використанням ArticleService
   const saveChanges = async () => {
-    try {
-      const response = await fetch(
-        `${base_url}/update_article/${selectedArticle.article_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(selectedArticle),
-        }
-      );
+    if (!selectedArticle) return;
 
-      if (response.ok) {
-        setAnimal((prev) =>
-          prev.map((item) =>
-            item.article_id === selectedArticle.article_id
-              ? selectedArticle
-              : item
-          )
-        );
-        closeEditModal();
-      } else {
-        console.error("Помилка оновлення даних:", response.status);
-      }
+    try {
+      await articleService.edit_article(selectedArticle);
+      setAnimal((prev) =>
+        prev.map((item) =>
+          item.article_id === selectedArticle.article_id
+            ? selectedArticle
+            : item
+        )
+      );
+      closeEditModal();
     } catch (error) {
-      console.error("Помилка під час запиту:", error);
+      console.error("Помилка оновлення:", error);
     }
   };
 
