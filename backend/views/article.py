@@ -289,3 +289,50 @@ async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSessio
             },
             status_code=500
         )
+    
+
+
+class Edit_Article(BaseModel):
+    article_id: str
+    photo_url: str = None
+    name: str = None
+    age: int = None
+    health_status: str
+    description: str = None
+    animal_type: str
+    volunteer_id: str = None
+    shelter_id: str = None
+    sex: str = None
+
+@article_router.put("/edit_article")
+async def edit_article(request_: Edit_Article, db: AsyncSession = Depends(get_db)):
+    try:
+        # Find the article by ID
+        find_the_article = await db.execute(select(Article).where(Article.article_id == request_.article_id))
+        article = find_the_article.scalar_one_or_none()
+
+        if not article:
+            return JSONResponse(
+                content={
+                    "msg": "no article found"
+                },
+                status_code=404
+            )
+
+        # Update only fields that are not None
+        for field, value in request_.dict(exclude_unset=True).items():
+            setattr(article, field, value)
+
+        await db.commit()
+        await db.refresh(article)
+
+        return JSONResponse(
+            content={"msg": "Article updated successfully"},
+            status_code=200
+        )
+
+    except Exception as e:
+        return JSONResponse(
+            content={"msg": "Failed to update article", "detail": str(e)},
+            status_code=500
+        )
