@@ -297,3 +297,177 @@
   align-items: center;
   margin-right: auto;
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 600px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.modalContent h2 {
+  margin-bottom: 1rem;
+  color: #2d4d40;
+}
+
+.modalBody {
+  display: flex;
+  gap: 2rem;
+}
+
+.modalImage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalImage input[type="file"] {
+  display: none;
+}
+
+.customFileUpload {
+  display: inline-block;
+  margin-top: 1vh;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #2d4d40;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.customFileUpload:hover {
+  background-color: #1e3a2e;
+}
+
+.animalPhotoPreview {
+  width: 150px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.imagePlaceholder {
+  width: 150px;
+  height: 200px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #888;
+}
+
+.modalFields {
+  flex: 2;
+  text-align: left;
+}
+
+.modalFields label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.modalFields input,
+.modalFields select,
+.modalFields textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modalFields textarea {
+  resize: none;
+  height: 80px;
+}
+
+.genderButtons,
+.typeButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.genderButton,
+.typeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f0f0f0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.typeButton {
+  background: rgb(209, 235, 191);
+}
+
+.genderButton.left {
+  background-color: rgb(255, 150, 236);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2),
+    -1px -1px 2px rgba(131, 131, 131, 0.8);
+}
+
+.genderButton.right {
+  background-color: rgb(131, 201, 238);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2),
+    -1px -1px 2px rgba(131, 131, 131, 0.8);
+}
+
+.genderButton.active,
+.typeButton.active {
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+  transform: translateY(1px);
+}
+
+.typeButton.active {
+  background: rgb(167, 197, 84);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+  transform: translateY(1px);
+}
+
+.saveButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #2d4d40;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.saveButton:hover {
+  background: #1e3a2e;
+}
+
+.modal img {
+  width: 20%;
+}
