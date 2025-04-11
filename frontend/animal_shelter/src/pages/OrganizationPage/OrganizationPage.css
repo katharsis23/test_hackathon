@@ -60,6 +60,9 @@
   display: flex;
   align-items: center;
   width: 100%;
+  gap: 2rem;
+  padding: 2rem;
+  align-items: flex-start;
 }
 
 .organizationPhoto {
@@ -470,4 +473,45 @@
 
 .modal img {
   width: 20%;
+}
+
+.donationInfo {
+  background-color: white;
+  border-radius: 15px;
+  padding: 1rem;
+  min-width: 400px;
+  text-align: center;
+  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2);
+}
+
+.donationInfo h2 {
+  margin-top: 0rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.bankDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bankDetails p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.bankDetails strong {
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .organizationInfo {
+    flex-direction: column;
+  }
+
+  .donationInfo {
+    width: 100%;
+  }
 }

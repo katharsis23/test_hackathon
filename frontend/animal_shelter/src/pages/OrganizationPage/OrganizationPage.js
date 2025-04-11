@@ -4,7 +4,7 @@ import shelterImage from "../../assets/images/animal-shelter.png";
 import editImage from "../../assets/images/edit.png";
 import ageImage from "../../assets/images/age.png";
 import genderImage from "../../assets/images/gender.png";
-import animalImage from "../../assets/images/image.png";
+import animalImage from "../../assets/images/Pipa.jpg";
 import handsImage from "../../assets/images/hands.png";
 import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
@@ -97,7 +97,7 @@ const OrganizationCabinet = () => {
   const [animal, setAnimal] = useState([
     {
       id: 1,
-      name: "Барсик",
+      name: "Барсік",
       age: 3,
       sex: "Хлопчик",
       image: animalImage,
@@ -169,17 +169,28 @@ const OrganizationCabinet = () => {
       </div>
       <div className="organizationInfo">
         <div className="organizationPhoto">
-          <img src={shelterImage} className="photo-img" />
+          <img src={shelterImage} className="photo-img" alt="Shelter" />
         </div>
         <div className="organizationContacts">
           <div className="organizationName">
             <h1>Назва організації:</h1>
           </div>
           <div className="organizationCategory">
-            <h1>Категорія: притулок для тварин</h1>
+            <h1>Категорія: Притулок для тварин</h1>
           </div>
           <div className="organizationAddress">
-            <h1>Адреса: яворницького 3б львів</h1>
+            <h1>Адреса: Яворницького 3б львів</h1>
+          </div>
+        </div>
+        <div className="donationInfo">
+          <h2>Допомогти</h2>
+          <div className="bankDetails">
+            <p>
+              <strong>Наші реквізити:</strong>
+            </p>
+            <p>Монобанк: 7473998238582</p>
+            <p>Приватбанк: 7473998238582</p>
+            <p>Номер телефону: 7473998238582</p>
           </div>
         </div>
       </div>
@@ -211,64 +222,38 @@ const OrganizationCabinet = () => {
                 <img src={handsImage} alt="Organization" />
                 {article.shelter_id}
               </div>
-              <div className="cardOptions">
-                <button
-                  className="editCard"
-                  onClick={() => openEditModal(article)}
-                >
-                  <img src={editImage} alt="Edit" />
-                </button>
-                <button className="deleteCard">X</button>
-              </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="takeAnimalsBody">
-        <div className="takeAnimalsText">
-          <h1>Прийом тваринок:</h1>
-        </div>
-        <div className="takeAnimalsCards">
-          {animal.map((article) => (
-            <div className="animalCard" key={article.article_id}>
-              <div className="animalImage">
-                <img
-                  src={article.photo_url || animalImage}
-                  alt={article.name}
-                  className="animalPhoto"
-                />
-              </div>
-              <h2 className="animalName">{article.name}</h2>
-              <div className="description">
-                <h1 className="animalAge">
-                  <img src={ageImage} alt="Age" /> Вік: {article.age}
-                </h1>
-                <h1 className="animalGender">
-                  <img src={genderImage} alt="Gender" />
-                  {article.sex}
-                </h1>
-              </div>
-              <div className="organizationCardName">
-                <img src={handsImage} alt="Organization" />
-                {article.shelter_id}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
       <div className="organizationCommentsBody">
         <div className="commentsText">
           <h1>Коментарі:</h1>
         </div>
         <div className="commentsCards">
-          {comments.map((comment) => (
-            <div className="commentCard" key={comment.comment_id}>
-              <p className="commentText">{comment.description}111212</p>
-              <p className="commentAuthor">
-                Автор: {comment.volunteer_id}12121
+          {comments.length > 0 ? (
+            comments.map((comment) => (
+              /*Приклад аби копіювати і вставляти*/
+              <div className="commentCard" key={comment.comment_id}>
+                <div className="commentHeader">
+                  <h3 className="commentAuthor">Іван</h3>
+                </div>
+                <p className="commentText">{comment.description}</p>
+              </div>
+            ))
+          ) : (
+            <div className="commentCard">
+              <div className="commentHeader">
+                <h3 className="commentAuthor">Ніка</h3>
+              </div>
+              <p className="commentText">
+                Чудовий притулок! Дуже привітний персонал та чисті умови для
+                тварин, які там живуть. Я знайшла свого улюбленця тут і дуже
+                щаслива! Рекомендую всім, хто шукає нового друга!
               </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
