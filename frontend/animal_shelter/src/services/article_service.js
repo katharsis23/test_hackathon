@@ -1,5 +1,6 @@
 import axios from "axios";
 import Article from "../models/article_model";
+import { get_user_id } from "./cache";
 //import { data } from "react-router-dom";
 
 
@@ -81,6 +82,43 @@ class Article_service{
         }catch(error){
             throw new Error(`AN ERROR OCCURED ${error}`);
         }
+    }
+
+    async fetch_favourite_articles(){
+        try{
+            const response=await axios.post(
+                `${base_url}/fetch_favourite_articles`,
+                {
+                    "user_id": get_user_id()
+                }
+            );
+            if(response.status===200){
+                return response.data["array_of_favourites"].map(article=>Article.fromJSON(article));
+            }
+        }catch(error){
+            throw new Error(`AN ERROR OCCURED ${error}`);
+        }
+    }
+
+    async edit_article(articleData){
+        try {
+            const response = await axios.put(`${base_url}/edit_article`, articleData, {
+              headers: {
+                "Content-Type": "application/json"
+              }
+            });
+        
+            console.log("Article updated:", response.data);
+            return response.data;
+        
+          } catch (error) {
+            if (error.response) {
+              console.error("Server error:", error.response.data);
+            } else {
+              console.error("Network or client error:", error.message);
+            }
+            throw error;
+          }
     }
     
 }
