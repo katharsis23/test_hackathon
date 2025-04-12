@@ -8,7 +8,7 @@ class Article {
     health_status = "",
     animal_type = "",
     description = "",
-    volunteer_id = "",
+    volunteer_id = "null",
     shelter_id = "",
   } = {}) {
     this.article_id = article_id;
@@ -33,13 +33,13 @@ class Article {
       health_status: json.health_status,
       animal_type: json.animal_type,
       description: json.description,
-      volunteer_id: json.volunteer_id,
+      volunteer_id: json.volunteer_id || null,
       shelter_id: json.shelter_id,
     });
   }
 
   toJSON() {
-    return {
+    const json = {
       article_id: this.article_id,
       photo_url: this.photo_url,
       name: this.name,
@@ -48,8 +48,18 @@ class Article {
       health_status: this.health_status,
       animal_type: this.animal_type,
       description: this.description,
-      volunteer_id: this.volunteer_id,
-      shelter_id: this.shelter_id,
     };
+
+    if (this.volunteer_id) {
+      json.volunteer_id = this.volunteer_id;
+    }
+
+    if (this.shelter_id) {
+      json.shelter_id = this.shelter_id;
+    }
+
+    return json;
   }
 }
+
+export default Article;

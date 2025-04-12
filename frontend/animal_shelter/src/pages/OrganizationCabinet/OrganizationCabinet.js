@@ -8,66 +8,69 @@ import animalImage from "../../assets/images/image.png";
 import handsImage from "../../assets/images/hands.png";
 import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
-
 import { useNavigate } from "react-router-dom";
 
+import Article_service from "../../services/article_service";
+import CommentService from "../../services/comment_service";
+import authService from "../../services/auth";
+import { get_user_id } from "../../services/cache";
+import UserModels from "../../models/user_model";
+const { Shelter } = UserModels;
+
 const OrganizationCabinet = () => {
-  const [comments, setComments] = useState([]);
   const [animal, setAnimal] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [animalVolunteer, setAnimalVolunteer] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [organization, setOrganization] = useState(new Shelter());
+  const navigate = useNavigate();
 
-  const base_url = "";
+  useEffect(() => {
+    const fetchOrganizationInfo = async () => {
+      try {
+        const response = await authService.get_user_info();
+        if (response && response.data) {
+          const shelterData = Shelter.fromJSON(response.data);
+          setOrganization(shelterData);
 
-  const openEditModal = (article) => {
-    setSelectedArticle(article);
-    setIsModalOpen(true);
-  };
+          const articleService = new Article_service();
 
-  const closeEditModal = () => {
-    setSelectedArticle(null);
-    setIsModalOpen(false);
-  };
+          const shelterArticles = await articleService.fetch_article(
+            shelterData.id
+          );
+          console.log("Articles from server (shelter):", shelterArticles);
+          setAnimal(shelterArticles);
 
-  const saveChanges = async () => {
-    try {
-      const response = await fetch(
-        `${base_url}/update_article/${selectedArticle.article_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(selectedArticle),
+          const volunteerArticles = await articleService.fetch_article(
+            get_user_id()
+          );
+          console.log("Articles from server (volunteer):", volunteerArticles);
+          setAnimalVolunteer(volunteerArticles);
+
+          const shelterComments = await CommentService.get_comments(
+            shelterData.id
+          );
+          console.log("Comments from server:", shelterComments);
+          setComments(shelterComments);
+        } else {
+          console.warn("No organization data found.");
         }
-      );
-
-      if (response.ok) {
-        setAnimal((prev) =>
-          prev.map((item) =>
-            item.article_id === selectedArticle.article_id
-              ? selectedArticle
-              : item
-          )
-        );
-        closeEditModal();
-      } else {
-        console.error("Помилка оновлення даних:", response.status);
+      } catch (error) {
+        console.error("Error fetching organization info or articles:", error);
       }
-    } catch (error) {
-      console.error("Помилка під час запиту:", error);
-    }
-  };
+    };
+
+    fetchOrganizationInfo();
+  }, []);
 
   return (
     <div className="cabinetBodyContainer">
       <div className="cabinetHeader">
         <h1>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login">
+          <div className="login" onClick={() => navigate("/")}>
             <h1>Увійти</h1>
           </div>
-          <div className="find">
+          <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>
         </div>
@@ -78,13 +81,13 @@ const OrganizationCabinet = () => {
         </div>
         <div className="organizationContacts">
           <div className="organizationName">
-            <h1>Назва організації:</h1>
+            <h1>{organization.name}</h1>
           </div>
           <div className="organizationCategory">
-            <h1>Категорія: притулок для тварин</h1>
+            <h1>Категорія: {organization.shelter_category}</h1>
           </div>
           <div className="organizationAddress">
-            <h1>Адреса: яворницького 3б львів</h1>
+            <h1>Адреса: {organization.address}</h1>
           </div>
         </div>
       </div>
@@ -94,7 +97,7 @@ const OrganizationCabinet = () => {
         </div>
         <div className="articleCards">
           {animal.map((article) => (
-            <div className="animalCard" key={article.article_id}>
+            <div className="animalCard" key={animal.article_id}>
               <div className="animalImage">
                 <img
                   src={article.photo_url || animalImage}
@@ -114,12 +117,12 @@ const OrganizationCabinet = () => {
               </div>
               <div className="organizationCardName">
                 <img src={handsImage} alt="Organization" />
-                {article.shelter_id}
+                {organization.name}
               </div>
               <div className="cardOptions">
                 <button
                   className="editCard"
-                  onClick={() => openEditModal(article)}
+                  // onClick={() => openEditModal(article)}
                 >
                   <img src={editImage} alt="Edit" />
                 </button>
@@ -134,7 +137,7 @@ const OrganizationCabinet = () => {
           <h1>Прийом тваринок:</h1>
         </div>
         <div className="takeAnimalsCards">
-          {animal.map((article) => (
+          {animalVolunteer.map((article) => (
             <div className="animalCard" key={article.article_id}>
               <div className="animalImage">
                 <img
@@ -168,16 +171,14 @@ const OrganizationCabinet = () => {
         <div className="commentsCards">
           {comments.map((comment) => (
             <div className="commentCard" key={comment.comment_id}>
-              <p className="commentText">{comment.description}111212</p>
-              <p className="commentAuthor">
-                Автор: {comment.volunteer_id}12121
-              </p>
+              <p className="commentText">{comment.description}</p>
+              <p className="commentAuthor">Автор: {comment.volunteer_id}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Модальне вікно */}
+      {/* Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
@@ -341,7 +342,7 @@ const OrganizationCabinet = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

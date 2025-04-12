@@ -62,11 +62,9 @@ async def post_article(request_:Post_Article, db: AsyncSession=Depends(get_db)):
             status_code=200
         )
     except Exception as e:
+        print("Error:", str(e)) 
         return JSONResponse(
-            content={
-                "msg":"this is bad :(",
-                "detail:": str(e)
-            },
+            content={"msg": "Internal Server Error", "detail": str(e)},
             status_code=500
         )
 
@@ -126,7 +124,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
             )
         response=[]
         for article in articles:
-            response.append[
+            response.append(
                 {
                     "photo_url": article.photo_url,
                     "name": article.name,
@@ -138,7 +136,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
                     "shelter_id": article.shelter_id,
                     #"volunteer_id": article.volunteer_id  
                 }
-            ]
+            )
         return JSONResponse(
             content={
                 "array_of_article": response
@@ -199,6 +197,8 @@ async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSe
             },
             status_code=500
         )
+        
+
         
 
 
