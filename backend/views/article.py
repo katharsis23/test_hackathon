@@ -62,11 +62,9 @@ async def post_article(request_:Post_Article, db: AsyncSession=Depends(get_db)):
             status_code=200
         )
     except Exception as e:
+        print("Error:", str(e)) 
         return JSONResponse(
-            content={
-                "msg":"this is bad :(",
-                "detail:": str(e)
-            },
+            content={"msg": "Internal Server Error", "detail": str(e)},
             status_code=500
         )
 

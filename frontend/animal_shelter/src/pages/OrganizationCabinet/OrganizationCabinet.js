@@ -10,64 +10,41 @@ import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 
 import { useNavigate } from "react-router-dom";
+import ArticleService from "../../services/article_service";
+import CommentService from "../../services/comment_service";
+import { get_user_id } from "../../services/cache";
 
 const OrganizationCabinet = () => {
-  const [comments, setComments] = useState([]);
   const [animal, setAnimal] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
 
-  const base_url = "";
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const shelterId = get_user_id();
+        const fetchedArticles = await ArticleService.fetch_article(shelterId);
+        const fetchedComments = await CommentService.get_comments(shelterId);
 
-  const openEditModal = (article) => {
-    setSelectedArticle(article);
-    setIsModalOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setSelectedArticle(null);
-    setIsModalOpen(false);
-  };
-
-  const saveChanges = async () => {
-    try {
-      const response = await fetch(
-        `${base_url}/update_article/${selectedArticle.article_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(selectedArticle),
-        }
-      );
-
-      if (response.ok) {
-        setAnimal((prev) =>
-          prev.map((item) =>
-            item.article_id === selectedArticle.article_id
-              ? selectedArticle
-              : item
-          )
-        );
-        closeEditModal();
-      } else {
-        console.error("Помилка оновлення даних:", response.status);
+        setAnimal(fetchedArticles);
+        setComments(fetchedComments);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    } catch (error) {
-      console.error("Помилка під час запиту:", error);
-    }
-  };
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="cabinetBodyContainer">
       <div className="cabinetHeader">
         <h1>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login">
+          <div className="login" onClick={() => navigate("/")}>
             <h1>Увійти</h1>
           </div>
-          <div className="find">
+          <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>
         </div>
@@ -119,7 +96,7 @@ const OrganizationCabinet = () => {
               <div className="cardOptions">
                 <button
                   className="editCard"
-                  onClick={() => openEditModal(article)}
+                  // onClick={() => openEditModal(article)}
                 >
                   <img src={editImage} alt="Edit" />
                 </button>
@@ -168,16 +145,14 @@ const OrganizationCabinet = () => {
         <div className="commentsCards">
           {comments.map((comment) => (
             <div className="commentCard" key={comment.comment_id}>
-              <p className="commentText">{comment.description}111212</p>
-              <p className="commentAuthor">
-                Автор: {comment.volunteer_id}12121
-              </p>
+              <p className="commentText">{comment.description}</p>
+              <p className="commentAuthor">Автор: {comment.volunteer_id}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Модальне вікно */}
+      {/* Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
@@ -341,7 +316,7 @@ const OrganizationCabinet = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
