@@ -11,9 +11,7 @@ from sqlalchemy import join
 from httpx import AsyncClient
 
 
-article_router=APIRouter()
-
-
+article_router = APIRouter()
 
 
 class Post_Article(BaseModel):
@@ -21,30 +19,31 @@ class Post_Article(BaseModel):
     name: str
     age: int
     health_status: str
-    description: str=None
+    description: str = None
     animal_type: str
-    volunteer_id: str=None
-    shelter_id: str=None
+    volunteer_id: str = None
+    shelter_id: str = None
     sex: str
 
+
 @article_router.post("/post_article")
-async def post_article(request_:Post_Article, db: AsyncSession=Depends(get_db)):
+async def post_article(request_: Post_Article, db: AsyncSession = Depends(get_db)):
     try:
         if not request_.shelter_id and not request_.volunteer_id:
             return JSONResponse(
                 content={
-                    "msg":"no author of article"
+                    "msg": "no author of article"
                 },
                 status_code=400
             )
         if request_.shelter_id and request_.volunteer_id:
             return JSONResponse(
                 content={
-                    "msg": "Double authority i forbidden"
+                    "msg": "Double authority is forbidden"
                 },
                 status_code=400
             )
-        new_article=Article(
+        new_article = Article(
             photo_url=request_.photo_url,
             name=request_.name,
             age=request_.age,
@@ -54,9 +53,17 @@ async def post_article(request_:Post_Article, db: AsyncSession=Depends(get_db)):
             animal_type=request_.animal_type,
             shelter_id=request_.shelter_id,
             volunteer_id=request_.volunteer_id
-            )
+        )
         db.add(new_article)
         await db.commit()
+
+        if request_.volunteer_id:
+            new_article_id = new_article.article_id
+            va = Volunteer_Article(
+                volunteer_id=request_.volunteer_id, article_id=new_article_id)
+            db.add(va)
+            await db.commit()
+
         return JSONResponse(
             content={
                 "msg": "article posted succesfully"
@@ -64,21 +71,19 @@ async def post_article(request_:Post_Article, db: AsyncSession=Depends(get_db)):
             status_code=200
         )
     except Exception as e:
-        print("Error:", str(e)) 
+        print("Error:", str(e))
         return JSONResponse(
             content={"msg": "Internal Server Error", "detail": str(e)},
             status_code=500
         )
 
 
-
-
 @article_router.get("/fetch_article_homepage")
-async def fetch_article_homepage(request_:Request, db: AsyncSession=Depends(get_db)):
+async def fetch_article_homepage(request_: Request, db: AsyncSession = Depends(get_db)):
     try:
-        query=await db.execute(select(Article).limit(4))
-        articles=query.scalars().all()
-        article_list=[]
+        query = await db.execute(select(Article).limit(4))
+        articles = query.scalars().all()
+        article_list = []
         for article in articles:
             article_list.append(
                 {
@@ -90,7 +95,7 @@ async def fetch_article_homepage(request_:Request, db: AsyncSession=Depends(get_
                     "animal_type": article.animal_type,
                     "description": article.description,
                     "shelter_id": article.shelter_id,
-                    #"volunteer_id": article.volunteer_id
+                    # "volunteer_id": article.volunteer_id
                 }
             )
         return JSONResponse(
@@ -102,21 +107,22 @@ async def fetch_article_homepage(request_:Request, db: AsyncSession=Depends(get_
     except Exception as e:
         return JSONResponse(
             content={
-                "msg":"this is bad :(",
+                "msg": "this is bad :(",
                 "detail:": str(e)
             },
             status_code=500
         )
-    
+
 
 class Fetch_Article_Shelter(BaseModel):
     shelter_id: str
 
+
 @article_router.post("/fetch_article_shelter")
-async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession=Depends(get_db)):
+async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSession = Depends(get_db)):
     try:
-        query=await db.execute(select(Article).where(Article.shelter_id==request_.shelter_id).limit(3))
-        articles=query.scalars().all()
+        query = await db.execute(select(Article).where(Article.shelter_id == request_.shelter_id).limit(3))
+        articles = query.scalars().all()
         if articles is None:
             return JSONResponse(
                 content={
@@ -124,7 +130,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
                 },
                 status_code=204
             )
-        response=[]
+        response = []
         for article in articles:
             response.append(
                 {
@@ -148,7 +154,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
     except Exception as e:
         return JSONResponse(
             content={
-                "msg":"this is bad :(",
+                "msg": "this is bad :(",
                 "detail:": str(e)
             },
             status_code=500
@@ -214,27 +220,27 @@ async def fetch_article_volunteer(request_: Request, db: AsyncSession = Depends(
             },
             status_code=500
         )
-        
 
         
 
 
 class Add_to_Favourite(BaseModel):
-    volunteer_id:str
+    volunteer_id: str
     article_id: str
 
+
 @article_router.post("/add_to_favourite")
-async def add_to_favourite(request_:Add_to_Favourite, db: AsyncSession=Depends(get_db)):
+async def add_to_favourite(request_: Add_to_Favourite, db: AsyncSession = Depends(get_db)):
     try:
         # look_for_existing_article=await db.execute(select(Article).where(Article.article_id==request_.article_id))
         # if not look_for_existing_article:
         #     return JSONResponse(
         #         content={
         #             "msg": "no article found"
-        #         }, 
+        #         },
         #         status_code=400
         #     )
-        new_volunteer_article=Volunteer_Article(
+        new_volunteer_article = Volunteer_Article(
             volunteer_id=request_.volunteer_id,
             article_id=request_.article_id
         )
@@ -254,10 +260,11 @@ async def add_to_favourite(request_:Add_to_Favourite, db: AsyncSession=Depends(g
             },
             status_code=500
         )
-    
+
 
 class Fetch_Favourites(BaseModel):
     user_id: str
+
 
 @article_router.post("/fetch_favourite_articles")
 async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSession = Depends(get_db)):
@@ -306,7 +313,6 @@ async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSessio
             },
             status_code=500
         )
-    
 
 
 class Edit_Article(BaseModel):
@@ -320,6 +326,7 @@ class Edit_Article(BaseModel):
     volunteer_id: str = None
     shelter_id: str = None
     sex: str = None
+
 
 @article_router.put("/edit_article")
 async def edit_article(request_: Edit_Article, db: AsyncSession = Depends(get_db)):
