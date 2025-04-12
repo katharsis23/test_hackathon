@@ -1,0 +1,517 @@
+* {
+  box-sizing: border-box;
+}
+
+.cabinetBodyContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 600px;
+  background-image: url("../../assets/images/background.svg");
+  background-repeat: repeat;
+  background-position: top left;
+  background-size: auto;
+}
+
+.cabinetHeader {
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 7.5vh;
+  width: 100%;
+  background-color: rgb(77, 118, 110);
+}
+
+.cabinetHeader h1 {
+  color: white;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 3.8vh;
+  margin: 0;
+  margin-left: 1.5vw;
+}
+
+.headerBtnContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 1.5vw;
+}
+
+.login h1,
+.find h1 {
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: lighter;
+  font-size: 2.2vh;
+  cursor: pointer;
+  margin-right: 1vw;
+  margin-left: 1vw;
+}
+
+.find {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 1vh;
+  padding: 1vh 0.2vw;
+  background-color: rgb(88, 152, 140);
+}
+
+.organizationInfo {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 2rem;
+  padding: 2rem;
+  align-items: flex-start;
+}
+
+.organizationPhoto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18vw;
+  height: 24vh;
+  padding: 4vh 12vh;
+}
+
+.photo-img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.organizationContacts {
+  font-family: "Montserrat Alternates", sans-serif;
+  flex: 1;
+}
+
+.organizationName h1 {
+  font-size: 5vh;
+}
+
+.organizationCategory h1,
+.organizationAddress h1 {
+  font-weight: lighter;
+  font-size: 3.2vh;
+}
+
+.organizationArticlesBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-top: 2vh;
+}
+
+.activeArticles {
+  display: flex;
+  width: 100%;
+  padding-left: 5vw;
+  font-size: 1.7vh;
+}
+
+.articleCards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 78%;
+  height: auto;
+  margin-top: 2vh;
+}
+
+.animalCard {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  width: 13vw;
+  min-width: 200px;
+  max-width: 320px;
+  max-height: 500px;
+  min-height: 200px;
+  overflow: hidden;
+  margin: 1.6vh;
+}
+
+.animalImage {
+  width: 100%;
+  height: 23vh;
+  object-fit: cover;
+  background-color: #000;
+  border-top-left-radius: 2vh;
+  border-top-right-radius: 2vh;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.animalPhoto {
+  width: 100%;
+  border-top-left-radius: 2vh;
+  border-top-right-radius: 2vh;
+  object-fit: cover;
+}
+
+.animalName {
+  font-size: 3.3vh;
+  font-weight: bold;
+  margin: 1.2vh 1vh;
+  color: #000;
+}
+
+.description {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.2vh 2vh 1.2vh 1vh;
+  gap: 24px;
+}
+
+.animalAge,
+.animalGender {
+  display: flex;
+  align-items: center;
+  font-size: 1.8vh;
+  font-weight: normal;
+  color: #444;
+}
+
+.animalAge img,
+.animalGender img,
+.organizationCardName img {
+  width: 2.8vh;
+  height: 2.8vh;
+  margin-right: 0.5vh;
+}
+
+.organizationCardName {
+  display: flex;
+  align-items: center;
+  font-size: 1.8vh;
+  font-weight: normal;
+  margin: 1.2vh 2vh 1.2vh 1vh;
+  color: #444;
+}
+
+.cardOptions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+  bottom: 0;
+  right: 0;
+}
+
+.editCard,
+.deleteCard {
+  width: 3vh;
+  height: 3vh;
+  border-radius: 50%;
+  border: none;
+  background-color: rgb(73, 66, 66);
+  color: rgb(255, 255, 255);
+  margin-left: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editCard img {
+  width: 2vh;
+  height: 2vh;
+  object-fit: cover;
+}
+
+.takeAnimalsCards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: auto;
+  margin-top: 2vh;
+}
+
+.takeAnimalsBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-top: 2vh;
+}
+
+.takeAnimalsText {
+  display: flex;
+  width: 100%;
+  padding-left: 5vw;
+  font-size: 1.7vh;
+}
+
+.organizationCommentsBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-top: 2vh;
+}
+
+.commentsText {
+  display: flex;
+  width: 100%;
+  padding-left: 5vw;
+  font-size: 1.7vh;
+}
+
+.commentsCards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 78%;
+  height: auto;
+  margin-top: 2vh;
+  gap: 2vh;
+}
+
+.commentCard {
+  width: 100%;
+  padding: 15px;
+  border-radius: 8px;
+  background: #ffffff;
+  margin-bottom: 1vh;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  word-wrap: break-word;
+}
+
+.commentText {
+  font-size: 1.8vh;
+  color: #333;
+  margin-bottom: 0.5vh;
+  font-family: "Montserrat Alternates", sans-serif;
+  height: auto;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.commentRating {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: auto;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 600px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.modalContent h2 {
+  margin-bottom: 1rem;
+  color: #2d4d40;
+}
+
+.modalBody {
+  display: flex;
+  gap: 2rem;
+}
+
+.modalImage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalImage input[type="file"] {
+  display: none;
+}
+
+.customFileUpload {
+  display: inline-block;
+  margin-top: 1vh;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #2d4d40;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.customFileUpload:hover {
+  background-color: #1e3a2e;
+}
+
+.animalPhotoPreview {
+  width: 150px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.imagePlaceholder {
+  width: 150px;
+  height: 200px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #888;
+}
+
+.modalFields {
+  flex: 2;
+  text-align: left;
+}
+
+.modalFields label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.modalFields input,
+.modalFields select,
+.modalFields textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modalFields textarea {
+  resize: none;
+  height: 80px;
+}
+
+.genderButtons,
+.typeButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.genderButton,
+.typeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f0f0f0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.typeButton {
+  background: rgb(209, 235, 191);
+}
+
+.genderButton.left {
+  background-color: rgb(255, 150, 236);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2),
+    -1px -1px 2px rgba(131, 131, 131, 0.8);
+}
+
+.genderButton.right {
+  background-color: rgb(131, 201, 238);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2),
+    -1px -1px 2px rgba(131, 131, 131, 0.8);
+}
+
+.genderButton.active,
+.typeButton.active {
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+  transform: translateY(1px);
+}
+
+.typeButton.active {
+  background: rgb(167, 197, 84);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+  transform: translateY(1px);
+}
+
+.saveButton {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #2d4d40;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.saveButton:hover {
+  background: #1e3a2e;
+}
+
+.modal img {
+  width: 20%;
+}
+
+.donationInfo {
+  background-color: white;
+  border-radius: 15px;
+  padding: 1rem;
+  min-width: 400px;
+  text-align: center;
+  box-shadow: 0px 0px 32px rgba(0, 0, 0, 0.2);
+}
+
+.donationInfo h2 {
+  margin-top: 0rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.bankDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bankDetails p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.bankDetails strong {
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .organizationInfo {
+    flex-direction: column;
+  }
+
+  .donationInfo {
+    width: 100%;
+  }
+}

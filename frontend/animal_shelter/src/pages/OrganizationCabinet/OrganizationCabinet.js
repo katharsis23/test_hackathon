@@ -53,14 +53,12 @@ const OrganizationCabinet = () => {
         health_status: selectedArticle.health_status,
         animal_type: selectedArticle.animal_type,
         description: selectedArticle.description,
-        shelter_id: organization.id, // Add shelter ID
-        volunteer_id: selectedArticle.volunteer_id || currentUserId, // Use existing or current user ID
+        shelter_id: organization.id,
+        volunteer_id: selectedArticle.volunteer_id || currentUserId,
       };
 
-      // Call edit method
       await articleService.edit_article(updatedArticle);
 
-      // Update local state
       setAnimal((prev) =>
         prev.map((article) =>
           article.article_id === updatedArticle.article_id
@@ -72,7 +70,7 @@ const OrganizationCabinet = () => {
       closeEditModal();
     } catch (error) {
       console.error("Error saving changes:", error);
-      alert("Failed to save changes. Please try again."); // Add user feedback
+      alert("Failed to save changes. Please try again.");
     }
   };
 
@@ -119,7 +117,7 @@ const OrganizationCabinet = () => {
       <div className="cabinetHeader">
         <h1>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login" onClick={() => navigate("/")}>
+          <div className="login" onClick={() => navigate("/LoginSignUp")}>
             <h1>Увійти</h1>
           </div>
           <div className="find" onClick={() => navigate("/ArticleForm")}>
@@ -239,7 +237,6 @@ const OrganizationCabinet = () => {
           ))}
         </div>
       </div>
-      Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
