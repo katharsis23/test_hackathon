@@ -8,6 +8,8 @@ from pydantic import BaseModel
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from sqlalchemy import join
+from httpx import AsyncClient
+
 
 article_router=APIRouter()
 
@@ -134,7 +136,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
                     "animal_type": article.animal_type,
                     "description": article.description,
                     "shelter_id": article.shelter_id,
-                    #"volunteer_id": article.volunteer_id  
+                    "volunteer_id": article.volunteer_id  
                 }
             )
         return JSONResponse(
@@ -152,26 +154,41 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
             status_code=500
         )
     
-class Fetch_Article_Volunteer(BaseModel):
-    volunteer_id: str
 
 
-@article_router.post("/fetch_article_volunteer")
-async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSession=Depends(get_db)):
+@article_router.get("/fetch_article_volunteer")
+async def fetch_article_volunteer(request_: Request, db: AsyncSession = Depends(get_db)):
     try:
-        query=await db.execute(select(Article).where(Article.volunteer_id==request_.volunteer_id).limit(3))
-        articles=query.scalars().all()
-        if articles is None:
+        query = await db.execute(
+            select(Article).where(Article.volunteer_id.isnot(None))
+        )
+        articles = query.scalars().all()
+
+        if not articles:
             return JSONResponse(
                 content={
-                    "msg": "fetching is succesfull, but no articles found"
+                    "msg": "Fetching is successful, but no articles found"
                 },
                 status_code=204
             )
-        response=[]
-        for article in articles:
-            response.append[
-                {
+
+        response = []
+        url = "http://localhost:8000/auth/get_user_info"
+
+        async with AsyncClient() as client:
+            for article in articles:
+                try:
+                    request_to_fetch_data = await client.post(url, json={
+                        "id": article.volunteer_id,
+                        "user_type": "volunteer"
+                    })
+                    vol_data = request_to_fetch_data.json()
+                    vol_username = vol_data["name"]
+                except Exception as inner_e:
+                    vol_username = "Unavailable"
+                    # Optional: log error if needed
+
+                response.append({
                     "photo_url": article.photo_url,
                     "name": article.name,
                     "age": article.age,
@@ -179,21 +196,21 @@ async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSe
                     "health_status": article.health_status,
                     "animal_type": article.animal_type,
                     "description": article.description,
-                    #"shelter_id": article.shelter_id,
-                    "volunteer_id": article.volunteer_id  
-                }
-            ]
+                    "shelter_id": article.shelter_id,
+                    "volunteer_id": article.volunteer_id,
+                    "volunteer_name": vol_username
+                })
+
         return JSONResponse(
-            content={
-                "array_of_article": response
-            },
+            content={"array_of_article": response},
             status_code=200
         )
+
     except Exception as e:
         return JSONResponse(
             content={
-                "msg":"this is bad :(",
-                "detail:": str(e)
+                "msg": "this is bad :(",
+                "detail": str(e)  # fixed typo
             },
             status_code=500
         )

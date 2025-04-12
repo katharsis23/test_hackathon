@@ -35,37 +35,26 @@ class Article_service {
     }
   }
   //for volunteer pages
-  async fetch_article(volunteer_id) {
+  async fetch_article_volunteer() {
     try {
-      const response = await axios.post(`${base_url}/fetch_article_volunteer`, {
-        volunteer_id: volunteer_id,
+      const response = await axios.get(`${base_url}/fetch_article_volunteer`);
+    
+    if (response.status === 200) {
+      const articles_with_names = response.data.array_of_article.map(item => {
+        return {
+          article: Article.fromJSON(item),
+          volunteer_name: item["volunteer_name"]
+        };
       });
-      if (response.status === 200) {
-        return response.data["array_of_article"].map((article) =>
-          Article.fromJSON(article)
-        );
-      }
+
+      return articles_with_names;
+    }
     } catch (error) {
       throw new Error(`AN ERROR OCCURED ${error}`);
     }
   }
 
-  async fetch_volunteer_articles() {
-    try {
-      const response = await axios.get(`${base_url}/fetch_volunteer_articles`);
-      if (response.status === 200) {
-        return (
-          response.data?.array_of_articles?.map((article) =>
-            Article.fromJSON(article)
-          ) || []
-        );
-      }
-      return [];
-    } catch (error) {
-      console.error("Error fetching volunteer articles:", error);
-      return [];
-    }
-  }
+  
 
   //for shelter pages
   async fetch_article(shelter_id) {

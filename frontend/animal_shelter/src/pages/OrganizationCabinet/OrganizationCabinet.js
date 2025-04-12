@@ -40,9 +40,7 @@ const OrganizationCabinet = () => {
           console.log("Articles from server (shelter):", shelterArticles);
           setAnimal(shelterArticles);
 
-          const volunteerArticles = await articleService.fetch_article(
-            get_user_id()
-          );
+          const volunteerArticles = await articleService.fetch_article_volunteer();
           console.log("Articles from server (volunteer):", volunteerArticles);
           setAnimalVolunteer(volunteerArticles);
 
