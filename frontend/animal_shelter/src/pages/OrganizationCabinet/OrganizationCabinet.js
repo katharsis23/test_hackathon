@@ -17,11 +17,12 @@ import { get_user_id } from "../../services/cache";
 const OrganizationCabinet = () => {
   const [animal, setAnimal] = useState([]);
   const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const shelterId = get_user_id(); // Assuming shelter_id is the same as user_id
+        const shelterId = get_user_id();
         const fetchedArticles = await ArticleService.fetch_article(shelterId);
         const fetchedComments = await CommentService.get_comments(shelterId);
 
@@ -40,10 +41,10 @@ const OrganizationCabinet = () => {
       <div className="cabinetHeader">
         <h1>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login">
+          <div className="login" onClick={() => navigate("/")}>
             <h1>Увійти</h1>
           </div>
-          <div className="find">
+          <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>
         </div>

@@ -2,10 +2,8 @@ import React, { use, useReducer, useState } from "react";
 import "./LoginSignUp.css";
 import { useNavigate } from "react-router-dom";
 import { set_user_type } from "../../services/cache";
-import authService from "../../services/auth"
+import authService from "../../services/auth";
 import axios from "axios";
-
-
 
 const LoginSignUp = () => {
   const navigate = useNavigate();
@@ -29,24 +27,28 @@ const LoginSignUp = () => {
     const response = await authService.handle_login(username, password);
 
     if (response) {
-      navigate("/OrganizationCabinet"); // на сторінку home
-    }
-    else {
+      navigate("/ArticleForm");
+    } else {
       alert("Login failed.");
     }
-  }
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const response = await authService.handle_signup(username, password, email, shelter_address, shelter_category);
+    const response = await authService.handle_signup(
+      username,
+      password,
+      email,
+      shelter_address,
+      shelter_category
+    );
 
     if (response) {
       setIsModalOpen(true);
+    } else {
+      alert("Signup failed.");
     }
-    else {
-      alert('Signup failed.')
-    }
-  }
+  };
 
   const handleVerification = async (e) => {
     e.preventDefault();
@@ -57,12 +59,10 @@ const LoginSignUp = () => {
       setIsModalOpen(false);
       toggleForm();
       navigate("/OrganizationCabinet"); // на сторінку home
-    }
-    else {
-      alert('Signup failed.')
+    } else {
+      alert("Signup failed.");
     }
   };
-
 
   return (
     <div className="pageLoginSignUpBodyContainer">
@@ -75,16 +75,24 @@ const LoginSignUp = () => {
             <h1>Реєстрація</h1>
             <div className="tab-buttons">
               <button
-                className={`tab-btn left ${activeTab === "volunteer" ? "active" : ""
-                  }`}
-                onClick={() => { setActiveTab("volunteer"); set_user_type("volunteer") }}
+                className={`tab-btn left ${
+                  activeTab === "volunteer" ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("volunteer");
+                  set_user_type("volunteer");
+                }}
               >
                 Волонтер
               </button>
               <button
-                className={`tab-btn right ${activeTab === "organization" ? "active" : ""
-                  }`}
-                onClick={() => { setActiveTab("organization"); set_user_type("shelter") }}
+                className={`tab-btn right ${
+                  activeTab === "organization" ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("organization");
+                  set_user_type("shelter");
+                }}
               >
                 Організація
               </button>
@@ -93,21 +101,30 @@ const LoginSignUp = () => {
               <form className="tab-content active" onSubmit={handleSignup}>
                 <div className="form-group">
                   <label>Email:</label>
-                  <input type="email"
+                  <input
+                    type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)} required />
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="form-group">
                   <label>Ім'я:</label>
-                  <input type="text" value={username}
+                  <input
+                    type="text"
+                    value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    required />
+                    required
+                  />
                 </div>
                 <div className="form-group">
                   <label>Пароль:</label>
-                  <input type="password" value={password}
+                  <input
+                    type="password"
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    required />
+                    required
+                  />
                 </div>
                 <button type="submit">Зареєструватись</button>
               </form>
@@ -117,8 +134,12 @@ const LoginSignUp = () => {
                 <div className="form-group">
                   <label>Тип організації:</label>
                   <select required>
-                    <option value={shelter_category}
-                      onChange={(e) => setShelterCategory(e.target.value)} disabled selected>
+                    <option
+                      value={shelter_category}
+                      onChange={(e) => setShelterCategory(e.target.value)}
+                      disabled
+                      selected
+                    >
                       Оберіть тип
                     </option>
                     <option value="vet">Ветеринарна клініка</option>
@@ -137,22 +158,30 @@ const LoginSignUp = () => {
                 </div>
                 <div className="form-group">
                   <label>Email:</label>
-                  <input type="email"
+                  <input
+                    type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required />
+                    required
+                  />
                 </div>
                 <div className="form-group">
                   <label>Ім'я організації:</label>
-                  <input type="text"
+                  <input
+                    type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    required />
+                    required
+                  />
                 </div>
                 <div className="form-group">
                   <label>Пароль:</label>
-                  <input type="password" value={password}
-                    onChange={(e) => setPassword(e.target.value)} required />
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
                 </div>
                 <button type="submit">Зареєструватись</button>
               </form>
@@ -170,16 +199,24 @@ const LoginSignUp = () => {
             <h1>Логін</h1>
             <div className="tab-buttons">
               <button
-                className={`tab-btn left ${activeTab === "volunteer" ? "active" : ""
-                  }`}
-                onClick={() => { setActiveTab("volunteer"); set_user_type("volunteer") }}
+                className={`tab-btn left ${
+                  activeTab === "volunteer" ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("volunteer");
+                  set_user_type("volunteer");
+                }}
               >
                 Волонтер
               </button>
               <button
-                className={`tab-btn right ${activeTab === "organization" ? "active" : ""
-                  }`}
-                onClick={() => { setActiveTab("organization"); set_user_type("shelter") }}
+                className={`tab-btn right ${
+                  activeTab === "organization" ? "active" : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("organization");
+                  set_user_type("shelter");
+                }}
               >
                 Організація
               </button>
@@ -187,15 +224,21 @@ const LoginSignUp = () => {
             <form className="tab-content active" onSubmit={handleLogin}>
               <div className="form-group">
                 <label>Ім'я:</label>
-                <input type="text" value={username}
+                <input
+                  type="text"
+                  value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  required />
+                  required
+                />
               </div>
               <div className="form-group">
                 <label>Пароль:</label>
-                <input type="password" value={password}
+                <input
+                  type="password"
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required />
+                  required
+                />
               </div>
               <button type="submit">Увійти</button>
             </form>
@@ -209,34 +252,32 @@ const LoginSignUp = () => {
         </div>
       </div>
 
-      {
-        isModalOpen && (
-          <div className="modal">
-            <div className="modal-content">
-              <h2>Підтвердження реєстрації</h2>
-              <form onSubmit={handleVerification}>
-                <div className="form-group">
-                  <label>Введіть код підтвердження:</label>
-                  <input
-                    type="text"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="submit">Підтвердити</button>
-              </form>
-              <button
-                className="close-modal"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Закрити
-              </button>
-            </div>
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Підтвердження реєстрації</h2>
+            <form onSubmit={handleVerification}>
+              <div className="form-group">
+                <label>Введіть код підтвердження:</label>
+                <input
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  required
+                />
+              </div>
+              <button type="submit">Підтвердити</button>
+            </form>
+            <button
+              className="close-modal"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Закрити
+            </button>
           </div>
-        )
-      }
-    </div >
+        </div>
+      )}
+    </div>
   );
 };
 
