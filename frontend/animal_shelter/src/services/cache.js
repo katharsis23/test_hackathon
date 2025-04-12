@@ -19,7 +19,7 @@ function get_user_type() {
 function save_user_id(user_id) {
   try {
     const user_type = get_user_type();
-    const key = user_type === "volunteer" ? "volunteer" : "shelter"; // Оголошення змінної key
+    const key = user_type === "volunteer" ? "volunteer" : "shelter";
     sessionStorage.setItem(key, user_id);
   } catch (e) {
     throw new Error("Cannot put shelter_id");
@@ -29,7 +29,7 @@ function save_user_id(user_id) {
 function get_user_id() {
   try {
     const user_type = get_user_type();
-    const key = user_type === "volunteer" ? "volunteer" : "shelter"; // Оголошення змінної key
+    const key = user_type === "volunteer" ? "volunteer" : "shelter";
     return sessionStorage.getItem(key);
   } catch (error) {
     throw new Error(`An error occured ${error}`);
