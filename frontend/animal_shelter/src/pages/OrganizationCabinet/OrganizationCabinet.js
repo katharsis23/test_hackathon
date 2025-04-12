@@ -10,41 +10,30 @@ import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 
 import { useNavigate } from "react-router-dom";
-import { ArticleService } from "../../services/article_service";
+import ArticleService from "../../services/article_service";
+import CommentService from "../../services/comment_service";
 import { get_user_id } from "../../services/cache";
 
 const OrganizationCabinet = () => {
-  const [animal, setAnimal] = useState([
-    {
-      article_id: 1,
-      photo_url: "",
-      name: "Барсик",
-      age: 2,
-      sex: "Хлопчик",
-      shelter_id: "Притулок Львів",
-    },
-    {
-      article_id: 2,
-      photo_url: "",
-      name: "Мурка",
-      age: 3,
-      sex: "Дівчинка",
-      shelter_id: "Притулок Київ",
-    },
-  ]);
+  const [animal, setAnimal] = useState([]);
+  const [comments, setComments] = useState([]);
 
-  const [comments, setComments] = useState([
-    {
-      comment_id: 1,
-      description: "Дуже гарна організація!",
-      volunteer_id: "Волонтер Олег",
-    },
-    {
-      comment_id: 2,
-      description: "Дякую за вашу роботу!",
-      volunteer_id: "Волонтер Ірина",
-    },
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const shelterId = get_user_id(); // Assuming shelter_id is the same as user_id
+        const fetchedArticles = await ArticleService.fetch_article(shelterId);
+        const fetchedComments = await CommentService.get_comments(shelterId);
+
+        setAnimal(fetchedArticles);
+        setComments(fetchedComments);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="cabinetBodyContainer">
