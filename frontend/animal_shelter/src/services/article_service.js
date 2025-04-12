@@ -38,21 +38,26 @@ class Article_service {
   async fetch_article_volunteer() {
     try {
       const response = await axios.get(`${base_url}/fetch_article_volunteer`);
-    
-    if (response.status === 200) {
-      const articles_with_names = response.data.array_of_article.map(item => {
-        return {
-          article: Article.fromJSON(item),
-          volunteer_name: item["volunteer_name"]
-        };
-      });
-
-      return articles_with_names;
-    }
+  
+      if (response.status === 200) {
+        const articles_with_names = response.data.array_of_article.map(item => {
+          // Make sure the item is correctly passed to Article
+          const article = Article.fromJSON(item);
+  
+          // Ensure volunteer_name is added properly
+          return {
+            ...article,  // spread all the article properties
+            volunteer_name: item["volunteer_name"]
+          };
+        });
+  
+        return articles_with_names;
+      }
     } catch (error) {
-      throw new Error(`AN ERROR OCCURED ${error}`);
+      throw new Error(`AN ERROR OCCURRED ${error}`);
     }
   }
+  
 
   
 

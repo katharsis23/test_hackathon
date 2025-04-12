@@ -128,7 +128,7 @@ async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSessio
                 content={
                     "msg": "fetching is succesfull, but no articles found"
                 },
-                status_code=204
+                status_code=200
             )
         response = []
         for article in articles:
@@ -175,7 +175,7 @@ async def fetch_article_volunteer(request_: Request, db: AsyncSession = Depends(
                 content={
                     "msg": "Fetching is successful, but no articles found"
                 },
-                status_code=204
+                status_code=200
             )
 
         response = []
@@ -206,7 +206,7 @@ async def fetch_article_volunteer(request_: Request, db: AsyncSession = Depends(
                     "volunteer_id": article.volunteer_id,
                     "volunteer_name": vol_username
                 })
-
+        print("fetched_articles:", articles)
         return JSONResponse(
             content={"array_of_article": response},
             status_code=200
