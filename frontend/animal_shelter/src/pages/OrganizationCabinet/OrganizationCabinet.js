@@ -24,7 +24,57 @@ const OrganizationCabinet = () => {
   const [animalVolunteer, setAnimalVolunteer] = useState([]);
   const [comments, setComments] = useState([]);
   const [organization, setOrganization] = useState(new Shelter());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(null);
   const navigate = useNavigate();
+
+  const openEditModal = (article) => {
+    setSelectedArticle({ ...article });
+    setIsModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsModalOpen(false);
+    setSelectedArticle(null);
+  };
+
+  const saveChanges = async () => {
+    try {
+      const articleService = new Article_service();
+
+      // Get current user ID
+      const currentUserId = get_user_id();
+
+      // Prepare updated article data
+      const updatedArticle = {
+        article_id: selectedArticle.article_id,
+        photo_url: selectedArticle.photo_url,
+        name: selectedArticle.name,
+        age: selectedArticle.age,
+        sex: selectedArticle.sex,
+        health_status: selectedArticle.health_status,
+        animal_type: selectedArticle.animal_type,
+        description: selectedArticle.description,
+        shelter_id: organization.id,
+        volunteer_id: selectedArticle.volunteer_id || currentUserId,
+      };
+
+      await articleService.edit_article(updatedArticle);
+
+      setAnimal((prev) =>
+        prev.map((article) =>
+          article.article_id === updatedArticle.article_id
+            ? updatedArticle
+            : article
+        )
+      );
+
+      closeEditModal();
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      alert("Failed to save changes. Please try again.");
+    }
+  };
 
   useEffect(() => {
     const fetchOrganizationInfo = async () => {
@@ -70,7 +120,7 @@ const OrganizationCabinet = () => {
       <div className="cabinetHeader">
         <h1>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login" onClick={() => navigate("/")}>
+          <div className="login" onClick={() => navigate("/LoginSignUp")}>
             <h1>Увійти</h1>
           </div>
           <div className="find" onClick={() => navigate("/ArticleForm")}>
@@ -106,6 +156,11 @@ const OrganizationCabinet = () => {
                   src={article.photo_url || animalImage}
                   alt={article.name}
                   className="animalPhoto"
+                  onError={(e) => {
+                    console.log("Failed to load image:", article.photo_url);
+                    e.target.src = animalImage;
+                  }}
+                  crossOrigin="anonymous"
                 />
               </div>
               <h2 className="animalName">{article.name}</h2>
@@ -125,7 +180,7 @@ const OrganizationCabinet = () => {
               <div className="cardOptions">
                 <button
                   className="editCard"
-                  // onClick={() => openEditModal(article)}
+                  onClick={() => openEditModal(article)}
                 >
                   <img src={editImage} alt="Edit" />
                 </button>
@@ -148,6 +203,11 @@ const OrganizationCabinet = () => {
                   src={volunteer.article.photo_url || animalImage}
                   alt={volunteer.article.name}
                   className="animalPhoto"
+                  onError={(e) => {
+                    console.log("Failed to load image:", article.photo_url);
+                    e.target.src = animalImage;
+                  }}
+                  crossOrigin="anonymous"
                 />
               </div>
               <h2 className="animalName">{volunteer.article.name}</h2>
@@ -181,49 +241,25 @@ const OrganizationCabinet = () => {
           ))}
         </div>
       </div>
-    
-  
-
-
-      
-
-      {/* Модальне вікно
+{/* Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
             <h2>Редагування</h2>
             <div className="modalBody">
-              <div className="modalImage">
-                {selectedArticle.photo_url ? (
-                  <img
-                    src={selectedArticle.photo_url}
-                    alt="Фото тваринки"
-                    className="animalPhotoPreview"
-                  />
-                ) : (
-                  <div className="imagePlaceholder">Фото тваринки</div>
-                )}
-                <label className="customFileUpload">
-                  Вибрати фото
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                          setSelectedArticle({
-                            ...selectedArticle,
-                            photo_url: event.target.result,
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                </label>
-              </div>
+              <label>
+                Посилання на фото:
+                <input
+                  type="text"
+                  value={selectedArticle.photo_url}
+                  onChange={(e) =>
+                    setSelectedArticle({
+                      ...selectedArticle,
+                      photo_url: e.target.value,
+                    })
+                  }
+                />
+              </label>
               <div className="modalFields">
                 <label>
                   Ім'я:
@@ -288,12 +324,12 @@ const OrganizationCabinet = () => {
                   <div className="typeButtons">
                     <button
                       className={`typeButton ${
-                        selectedArticle.animal_type === "Пес" ? "active" : ""
+                        selectedArticle.animal_type === "dogs" ? "active" : ""
                       }`}
                       onClick={() =>
                         setSelectedArticle({
                           ...selectedArticle,
-                          animal_type: "Пес",
+                          animal_type: "dogs",
                         })
                       }
                     >
@@ -301,12 +337,12 @@ const OrganizationCabinet = () => {
                     </button>
                     <button
                       className={`typeButton ${
-                        selectedArticle.animal_type === "Кіт" ? "active" : ""
+                        selectedArticle.animal_type === "cats" ? "active" : ""
                       }`}
                       onClick={() =>
                         setSelectedArticle({
                           ...selectedArticle,
-                          animal_type: "Кіт",
+                          animal_type: "cats",
                         })
                       }
                     >
@@ -351,7 +387,7 @@ const OrganizationCabinet = () => {
             </button>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

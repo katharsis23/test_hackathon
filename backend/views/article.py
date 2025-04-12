@@ -219,10 +219,7 @@ async def fetch_article_volunteer(request_: Request, db: AsyncSession = Depends(
                 "detail": str(e)  # fixed typo
             },
             status_code=500
-        )
-
-        
-
+        )        
 
 class Add_to_Favourite(BaseModel):
     volunteer_id: str
