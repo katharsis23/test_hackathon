@@ -116,9 +116,10 @@ const LoginSignUp = () => {
               <form className="tab-content active" onSubmit={handleSignup}>
                 <div className="form-group">
                   <label>Тип організації:</label>
-                  <select required>
-                    <option value={shelter_category}
-                      onChange={(e) => setShelterCategory(e.target.value)} disabled selected>
+                  <select value={shelter_category}
+                    onChange={(e) => setShelterCategory(e.target.value)}
+                    required>
+                    <option disabled selected>
                       Оберіть тип
                     </option>
                     <option value="vet">Ветеринарна клініка</option>
