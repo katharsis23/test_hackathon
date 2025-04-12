@@ -24,6 +24,7 @@ animal_shelter.include_router(shelter_router, prefix="/shelter")
 # Create tables on startup
 
 
+
 @animal_shelter.on_event("startup")
 async def create_tables():
     async with ENGINE.begin() as conn:

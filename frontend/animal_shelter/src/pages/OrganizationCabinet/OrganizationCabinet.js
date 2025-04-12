@@ -10,6 +10,8 @@ import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 import { useNavigate } from "react-router-dom";
 
+
+import Article from "../../models/article_model";
 import Article_service from "../../services/article_service";
 import CommentService from "../../services/comment_service";
 import authService from "../../services/auth";
@@ -99,21 +101,22 @@ const OrganizationCabinet = () => {
 
           const articleService = new Article_service();
 
-          const shelterArticles = await articleService.fetch_article(
-            shelterData.id
-          );
+          const shelterArticles = await articleService.fetch_article(shelterData.id);
           console.log("Articles from server (shelter):", shelterArticles);
           setAnimal(shelterArticles);
 
-          const volunteerArticles = await articleService.fetch_article(
-            get_user_id()
-          );
+          const volunteerArticles = await articleService.fetch_article_volunteer();
           console.log("Articles from server (volunteer):", volunteerArticles);
-          setAnimalVolunteer(volunteerArticles);
 
-          const shelterComments = await CommentService.get_comments(
-            shelterData.id
-          );
+          // Transform the volunteer articles to include volunteer name
+          const transformedVolunteerArticles = volunteerArticles.map((item) => ({
+            article: Article.fromJSON(item),
+            volunteer_name: item["volunteer_name"]
+          }));
+
+          setAnimalVolunteer(transformedVolunteerArticles);
+
+          const shelterComments = await CommentService.get_comments(shelterData.id);
           console.log("Comments from server:", shelterComments);
           setComments(shelterComments);
         } else {
@@ -167,7 +170,7 @@ const OrganizationCabinet = () => {
         </div>
         <div className="articleCards">
           {animal.map((article) => (
-            <div className="animalCard" key={animal.article_id}>
+            <div className="animalCard" key={article.article_id}>
               <div className="animalImage">
                 <img
                   src={article.photo_url || animalImage}
@@ -212,12 +215,13 @@ const OrganizationCabinet = () => {
           <h1>Прийом тваринок:</h1>
         </div>
         <div className="takeAnimalsCards">
-          {animalVolunteer.map((article) => (
-            <div className="animalCard" key={article.article_id}>
+          {animalVolunteer.map((volunteer) => (
+
+            <div className="animalCard" key={volunteer.article.article_id}>
               <div className="animalImage">
                 <img
-                  src={article.photo_url || animalImage}
-                  alt={article.name}
+                  src={volunteer.article.photo_url || animalImage}
+                  alt={volunteer.article.name}
                   className="animalPhoto"
                   onError={(e) => {
                     console.log("Failed to load image:", article.photo_url);
@@ -226,19 +230,19 @@ const OrganizationCabinet = () => {
                   crossOrigin="anonymous"
                 />
               </div>
-              <h2 className="animalName">{article.name}</h2>
+              <h2 className="animalName">{volunteer.article.name}</h2>
               <div className="description">
                 <h1 className="animalAge">
-                  <img src={ageImage} alt="Age" /> Вік: {article.age}
+                  <img src={ageImage} alt="Age" /> Вік: {volunteer.article.age}
                 </h1>
                 <h1 className="animalGender">
                   <img src={genderImage} alt="Gender" />
-                  {article.sex}
+                  {volunteer.article.sex}
                 </h1>
               </div>
               <div className="organizationCardName">
                 <img src={handsImage} alt="Organization" />
-                {article.volunteer_id}
+                {volunteer.volunteer_name}
               </div>
             </div>
           ))}
@@ -257,6 +261,7 @@ const OrganizationCabinet = () => {
           ))}
         </div>
       </div>
+{/* Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
