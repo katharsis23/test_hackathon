@@ -74,7 +74,7 @@ const OrganizationCabinet = () => {
       </div>
       <div className="organizationInfo">
         <div className="organizationPhoto">
-          <img src={shelterImage} className="photo-img" />
+        <img src={shelterImage} className="photo-img" />
         </div>
         <div className="organizationContacts">
           <div className="organizationName">
