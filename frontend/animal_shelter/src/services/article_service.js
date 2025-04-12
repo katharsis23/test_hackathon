@@ -7,12 +7,21 @@ const base_url = "http://localhost:8000/article";
 
 class Article_service {
   //for homepage
-  async fetch_article() {
+  async fetch_article_homepage() {
     try {
       const response = await axios.get(`${base_url}/fetch_article_homepage`);
       if (response.status === 200) {
         const response_data = response.data["array_of_article"];
-        return response_data.map((article) => Article.fromJSON(article));
+        return response_data.map((item) => 
+        {
+          const article=Article.fromJSON(item)
+          
+          return{
+            ...article,
+            author_name: item["author_name"]
+          }
+        }
+      );
       }
     } catch (error) {
       throw new Error(`An error occured ${error}`);
@@ -138,4 +147,4 @@ class Article_service {
   }
 }
 
-export default Article_service;
+export default new Article_service();

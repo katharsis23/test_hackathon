@@ -204,7 +204,7 @@ const OrganizationCabinet = () => {
                   alt={volunteer.article.name}
                   className="animalPhoto"
                   onError={(e) => {
-                    console.log("Failed to load image:", article.photo_url);
+                    console.log("Failed to load image:", volunteer.article.photo_url);
                     e.target.src = animalImage;
                   }}
                   crossOrigin="anonymous"
@@ -241,7 +241,7 @@ const OrganizationCabinet = () => {
           ))}
         </div>
       </div>
-{/* Модальне вікно
+      {/* Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
@@ -387,8 +387,8 @@ const OrganizationCabinet = () => {
             </button>
           </div>
         </div>
-      )}
-    </div>
+)}*/}
+    </div> 
   );
 };
 
