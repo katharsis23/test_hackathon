@@ -148,6 +148,7 @@ async def get_User_info(request_: Get_User_Info, db: AsyncSession = Depends(get_
                 )
             return JSONResponse(
                 content={
+                    "id": shelter.shelter_id,
                     "name": shelter.name,
                     "email": shelter.email,
                     "address": shelter.shelter_address,

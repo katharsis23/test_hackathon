@@ -11,7 +11,7 @@ class Article_service {
     try {
       const response = await axios.get(`${base_url}/fetch_article_homepage`);
       if (response.status === 200) {
-        const response_data = response.data["array_of_articles"];
+        const response_data = response.data["array_of_article"];
         return response_data.map((article) => Article.fromJSON(article));
       }
     } catch (error) {
@@ -41,12 +41,29 @@ class Article_service {
         volunteer_id: volunteer_id,
       });
       if (response.status === 200) {
-        return response.data["array_of_articles"].map((article) =>
+        return response.data["array_of_article"].map((article) =>
           Article.fromJSON(article)
         );
       }
     } catch (error) {
       throw new Error(`AN ERROR OCCURED ${error}`);
+    }
+  }
+
+  async fetch_volunteer_articles() {
+    try {
+      const response = await axios.get(`${base_url}/fetch_volunteer_articles`);
+      if (response.status === 200) {
+        return (
+          response.data?.array_of_articles?.map((article) =>
+            Article.fromJSON(article)
+          ) || []
+        );
+      }
+      return [];
+    } catch (error) {
+      console.error("Error fetching volunteer articles:", error);
+      return [];
     }
   }
 
@@ -57,7 +74,7 @@ class Article_service {
         shelter_id: shelter_id,
       });
       if (response.status === 200) {
-        return response.data["array_of_articles"].map((article) =>
+        return response.data["array_of_article"].map((article) =>
           Article.fromJSON(article)
         );
       }

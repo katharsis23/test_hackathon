@@ -27,7 +27,7 @@ const LoginSignUp = () => {
     const response = await authService.handle_login(username, password);
 
     if (response) {
-      navigate("/ArticleForm");
+      navigate("/OrganizationCabinet");
     } else {
       alert("Login failed.");
     }

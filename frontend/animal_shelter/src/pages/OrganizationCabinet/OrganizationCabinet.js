@@ -8,32 +8,58 @@ import animalImage from "../../assets/images/image.png";
 import handsImage from "../../assets/images/hands.png";
 import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
-
 import { useNavigate } from "react-router-dom";
-import ArticleService from "../../services/article_service";
+
+import Article_service from "../../services/article_service";
 import CommentService from "../../services/comment_service";
+import authService from "../../services/auth";
 import { get_user_id } from "../../services/cache";
+import UserModels from "../../models/user_model";
+const { Shelter } = UserModels;
 
 const OrganizationCabinet = () => {
   const [animal, setAnimal] = useState([]);
+  const [animalVolunteer, setAnimalVolunteer] = useState([]);
   const [comments, setComments] = useState([]);
+  const [organization, setOrganization] = useState(new Shelter());
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchOrganizationInfo = async () => {
       try {
-        const shelterId = get_user_id();
-        const fetchedArticles = await ArticleService.fetch_article(shelterId);
-        const fetchedComments = await CommentService.get_comments(shelterId);
+        const response = await authService.get_user_info();
+        if (response && response.data) {
+          const shelterData = Shelter.fromJSON(response.data);
+          setOrganization(shelterData);
 
-        setAnimal(fetchedArticles);
-        setComments(fetchedComments);
+          const articleService = new Article_service();
+
+          const shelterArticles = await articleService.fetch_article(
+            shelterData.id
+          );
+          console.log("Articles from server (shelter):", shelterArticles);
+          setAnimal(shelterArticles);
+
+          const volunteerArticles = await articleService.fetch_article(
+            get_user_id()
+          );
+          console.log("Articles from server (volunteer):", volunteerArticles);
+          setAnimalVolunteer(volunteerArticles);
+
+          const shelterComments = await CommentService.get_comments(
+            shelterData.id
+          );
+          console.log("Comments from server:", shelterComments);
+          setComments(shelterComments);
+        } else {
+          console.warn("No organization data found.");
+        }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching organization info or articles:", error);
       }
     };
 
-    fetchData();
+    fetchOrganizationInfo();
   }, []);
 
   return (
@@ -55,13 +81,13 @@ const OrganizationCabinet = () => {
         </div>
         <div className="organizationContacts">
           <div className="organizationName">
-            <h1>Назва організації:</h1>
+            <h1>{organization.name}</h1>
           </div>
           <div className="organizationCategory">
-            <h1>Категорія: притулок для тварин</h1>
+            <h1>Категорія: {organization.shelter_category}</h1>
           </div>
           <div className="organizationAddress">
-            <h1>Адреса: яворницького 3б львів</h1>
+            <h1>Адреса: {organization.address}</h1>
           </div>
         </div>
       </div>
@@ -71,7 +97,7 @@ const OrganizationCabinet = () => {
         </div>
         <div className="articleCards">
           {animal.map((article) => (
-            <div className="animalCard" key={article.article_id}>
+            <div className="animalCard" key={animal.article_id}>
               <div className="animalImage">
                 <img
                   src={article.photo_url || animalImage}
@@ -91,7 +117,7 @@ const OrganizationCabinet = () => {
               </div>
               <div className="organizationCardName">
                 <img src={handsImage} alt="Organization" />
-                {article.shelter_id}
+                {organization.name}
               </div>
               <div className="cardOptions">
                 <button
@@ -111,7 +137,7 @@ const OrganizationCabinet = () => {
           <h1>Прийом тваринок:</h1>
         </div>
         <div className="takeAnimalsCards">
-          {animal.map((article) => (
+          {animalVolunteer.map((article) => (
             <div className="animalCard" key={article.article_id}>
               <div className="animalImage">
                 <img

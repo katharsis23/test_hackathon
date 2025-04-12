@@ -124,7 +124,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
             )
         response=[]
         for article in articles:
-            response.append[
+            response.append(
                 {
                     "photo_url": article.photo_url,
                     "name": article.name,
@@ -136,7 +136,7 @@ async def fetch_article_shelter(request_:Fetch_Article_Shelter, db: AsyncSession
                     "shelter_id": article.shelter_id,
                     #"volunteer_id": article.volunteer_id  
                 }
-            ]
+            )
         return JSONResponse(
             content={
                 "array_of_article": response
@@ -197,6 +197,8 @@ async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSe
             },
             status_code=500
         )
+        
+
         
 
 
