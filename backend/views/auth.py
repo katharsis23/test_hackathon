@@ -76,44 +76,116 @@ async def signup(data: SignupUser, db: AsyncSession = Depends(get_db)):
             )
 
 
+class LoginUser(BaseModel):
+    username: str
+    password: str
+    user_type: Literal["volunteer", "shelter"]
 
 
-class Get_Shelter_Info(BaseModel):
+@auth_router.post("/login")
+async def login(data: LoginUser, db: AsyncSession = Depends(get_db)):
+    if data.user_type == "volunteer":
+        query = await db.execute(select(Volunteer).where(Volunteer.username == data.username))
+        result = query.scalar_one_or_none()
+        if result is not None:
+
+            if result.verify_password(data.password):
+                return JSONResponse(
+                    content={"message": "Login successful.",
+                             "user_id": result.volunteer_id},
+                    status_code=status.HTTP_200_OK
+                )
+            else:
+                return JSONResponse(
+                    content={"message": "Wrong password."},
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return JSONResponse(
+                content={"message": "User doesn't exist."},
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+    elif data.user_type == "shelter":
+        query = await db.execute(select(Shelter).where(Shelter.name == data.username))
+        result = query.scalar_one_or_none()
+        if result is None:
+            return JSONResponse(
+                content={"message": "User doesn't exist."},
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            if result.verify_password(data.password):
+                return JSONResponse(
+                    content={"message": "Login successful.",
+                             "user_id": result.shelter_id},
+                    status_code=status.HTTP_200_OK
+                )
+            else:
+                return JSONResponse(
+                    content={"message": "Wrong password"},
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+
+
+class Get_User_Info(BaseModel):
     id: str
+    user_type: Literal["volunteer", "shelter"]
 
-@auth_router.post("/get_shelter_info")
-async def get_shelter_info(request_: Get_Shelter_Info, db: AsyncSession=Depends(get_db)):
+
+@auth_router.post("/get_user_info")
+async def get_User_info(request_: Get_User_Info, db: AsyncSession = Depends(get_db)):
     try:
-        query=await db.execute(select(Shelter).where(Shelter.shelter_id==request_.id))
-        shelter=query.scalar_one_or_none()
-        if shelter is None:
+        if request_.user_type == "shelter":
+
+            query = await db.execute(select(Shelter).where(Shelter.shelter_id == request_.id))
+            shelter = query.scalar_one_or_none()
+            if shelter is None:
+                return JSONResponse(
+                    content={
+                        "msg": "No shelter found"
+                    },
+                    status_code=status.HTTP_404_NOT_FOUND
+                )
             return JSONResponse(
                 content={
-                    "msg":"No shelter found"
+                    "name": shelter.name,
+                    "email": shelter.email,
+                    "address": shelter.shelter_address,
+                    "bank_info": shelter.bank_info,
+                    "shelter_category": shelter.shelter_category
                 },
-                status_code=404
+                status_code=status.HTTP_200_OK
             )
-        return JSONResponse(
-            content={
-                "name": shelter.name,
-                "email": shelter.email,
-                "address":shelter.shelter_address,
-                "bank_info":shelter.bank_info,
-                "shelter_category":shelter.shelter_category
-            },
-            status_code=200
-        )
+        elif request_.user_type == "volunteer":
+            query = await db.execute(select(Volunteer).where(Volunteer.volunteer_id == request_.id))
+            volunteer = query.scalar_one_or_none()
+            if volunteer:
+                return JSONResponse(
+                    content={
+                        "name": volunteer.username,
+                        "email": volunteer.email,
+                    },
+                    status_code=status.HTTP_200_OK
+                )
+            return JSONResponse(
+                content={"msg": "No user found."},
+                status_code=status.HTTP_404_NOT_FOUND
+            )
     except Exception as e:
         return JSONResponse(
             content={"msg": "Failed to update article", "detail": str(e)},
-            status_code=500
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
-    
+
+
+class verificationCode(BaseModel):
+    ver_code: str
+
 
 @auth_router.post("/verify-code")
-async def verify_code(code: str, db: AsyncSession = Depends(get_db)):
+async def verify_code(code: verificationCode, db: AsyncSession = Depends(get_db)):
     try:
-        code = code.strip()
+        code = code.ver_code.strip()
 
         if int(code) in temp_user:
             user_data = temp_user[int(code)]
