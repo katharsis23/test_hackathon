@@ -70,9 +70,9 @@ class Article(Base):
         Enum("dogs", "cats", name="animal_type_enum"), nullable=True)
 
     shelter_id = Column(String(10), ForeignKey(
-        "shelter.shelter_id"), nullable=False)
+        "shelter.shelter_id"), nullable=True)
     volunteer_id = Column(String(10), ForeignKey(
-        "volunteer.volunteer_id"), nullable=False)
+        "volunteer.volunteer_id"), nullable=True)
 
     # Relationships
     shelter = relationship("Shelter", back_populates="articles")
