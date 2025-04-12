@@ -14,61 +14,37 @@ import { ArticleService } from "../../services/article_service";
 import { get_user_id } from "../../services/cache";
 
 const OrganizationCabinet = () => {
-  const [comments, setComments] = useState([]);
-  const [animal, setAnimal] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [animal, setAnimal] = useState([
+    {
+      article_id: 1,
+      photo_url: "",
+      name: "Барсик",
+      age: 2,
+      sex: "Хлопчик",
+      shelter_id: "Притулок Львів",
+    },
+    {
+      article_id: 2,
+      photo_url: "",
+      name: "Мурка",
+      age: 3,
+      sex: "Дівчинка",
+      shelter_id: "Притулок Київ",
+    },
+  ]);
 
-  const articleService = new ArticleService();
-  const shelterId = get_user_id();
-
-  // Додано відсутні функції
-  const fetchArticles = async () => {
-    try {
-      const articles = await articleService.fetchArticlesForShelter(shelterId);
-      setAnimal(articles);
-    } catch (error) {
-      console.error("Помилка завантаження оголошень:", error);
-    }
-  };
-
-  const fetchComments = async () => {
-    setComments([]);
-  };
-
-  useEffect(() => {
-    fetchArticles();
-    fetchComments();
-  }, []);
-
-  const openEditModal = (article) => {
-    setSelectedArticle(article);
-    setIsModalOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setSelectedArticle(null);
-    setIsModalOpen(false);
-  };
-
-  // Виправлений метод з використанням ArticleService
-  const saveChanges = async () => {
-    if (!selectedArticle) return;
-
-    try {
-      await articleService.edit_article(selectedArticle);
-      setAnimal((prev) =>
-        prev.map((item) =>
-          item.article_id === selectedArticle.article_id
-            ? selectedArticle
-            : item
-        )
-      );
-      closeEditModal();
-    } catch (error) {
-      console.error("Помилка оновлення:", error);
-    }
-  };
+  const [comments, setComments] = useState([
+    {
+      comment_id: 1,
+      description: "Дуже гарна організація!",
+      volunteer_id: "Волонтер Олег",
+    },
+    {
+      comment_id: 2,
+      description: "Дякую за вашу роботу!",
+      volunteer_id: "Волонтер Ірина",
+    },
+  ]);
 
   return (
     <div className="cabinetBodyContainer">
@@ -130,7 +106,7 @@ const OrganizationCabinet = () => {
               <div className="cardOptions">
                 <button
                   className="editCard"
-                  onClick={() => openEditModal(article)}
+                  // onClick={() => openEditModal(article)}
                 >
                   <img src={editImage} alt="Edit" />
                 </button>
@@ -179,16 +155,14 @@ const OrganizationCabinet = () => {
         <div className="commentsCards">
           {comments.map((comment) => (
             <div className="commentCard" key={comment.comment_id}>
-              <p className="commentText">{comment.description}111212</p>
-              <p className="commentAuthor">
-                Автор: {comment.volunteer_id}12121
-              </p>
+              <p className="commentText">{comment.description}</p>
+              <p className="commentAuthor">Автор: {comment.volunteer_id}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Модальне вікно */}
+      {/* Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
@@ -352,7 +326,7 @@ const OrganizationCabinet = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
