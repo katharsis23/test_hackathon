@@ -198,7 +198,6 @@ async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSe
             status_code=500
         )
         
-
         
 
 
