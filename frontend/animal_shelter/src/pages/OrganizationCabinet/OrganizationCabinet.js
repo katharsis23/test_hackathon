@@ -23,8 +23,23 @@ const OrganizationCabinet = () => {
   const [comments, setComments] = useState([]);
   const [organization, setOrganization] = useState(new Shelter());
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await authService.get_user_info();
+        setIsLoggedIn(!!response);
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const openEditModal = (article) => {
     setSelectedArticle({ ...article });
@@ -115,10 +130,15 @@ const OrganizationCabinet = () => {
   return (
     <div className="cabinetBodyContainer">
       <div className="cabinetHeader">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login" onClick={() => navigate("/LoginSignUp")}>
-            <h1>Увійти</h1>
+          <div
+            className="login"
+            onClick={() =>
+              navigate(isLoggedIn ? "/OrganizationCabinet" : "/LoginSignUp")
+            }
+          >
+            <h1>{isLoggedIn ? "Кабінет" : "Увійти"}</h1>
           </div>
           <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>

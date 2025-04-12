@@ -86,7 +86,7 @@ const ArticleForm = () => {
   return (
     <div className="articleFormBody">
       <div className="articleFormHeader">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
       </div>
       <div className="articleForm">
         <div className="formContent">

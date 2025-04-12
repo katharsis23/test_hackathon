@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Main.css";
 import PetCardModal from "../../components/PetModal/PetCardModal";
 import { useNavigate } from "react-router-dom";
+import authService from "../../services/auth";
 
-// Import pet and shelter images
 import pipaDog from "../../assets/images/Pipa.jpg";
 import ameliaCat from "../../assets/images/Amelia.jpg";
 import layaCat from "../../assets/images/Laya.jpg";
@@ -12,7 +12,6 @@ import gladpetLogo from "../../assets/images/gladpet.jpg";
 import lkplevLogo from "../../assets/images/lkplev.jpg";
 import happypawLogo from "../../assets/images/happypaw.jpg";
 
-// Import icons
 import ageIcon from "../../assets/images/age.png";
 import catIcon from "../../assets/images/cat.png";
 import dogIcon from "../../assets/images/dog.png";
@@ -23,9 +22,23 @@ export default function Life4PawApp() {
   const [scrollY, setScrollY] = useState(0);
   const [selectedPet, setSelectedPet] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  // Pet data
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await authService.get_user_info();
+        setIsLoggedIn(!!response);
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
   const pets = [
     {
       id: 1,
@@ -107,8 +120,13 @@ export default function Life4PawApp() {
       <header className="header">
         <h1 className="site-title">Life4Paw</h1>
         <nav className="main-nav">
-          <span className="nav-item" onClick={() => navigate("/LoginSignUp")}>
-            <h1>Увійти</h1>
+          <span
+            className="nav-item"
+            onClick={() =>
+              navigate(isLoggedIn ? "/OrganizationCabinet" : "/LoginSignUp")
+            }
+          >
+            <h1>{isLoggedIn ? "Кабінет" : "Увійти"}</h1>
           </span>
           <button className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
