@@ -7,10 +7,7 @@ from pydantic import BaseModel
 from sqlalchemy.future import select
 
 
-
-
 shelter_router=APIRouter()
-
 
 
 class Post_Comment(BaseModel):
