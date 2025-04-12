@@ -299,7 +299,7 @@ body {
 }
 
 .detail-icon {
-  font-size: 2.5vh;
+  font-size: 0vh;
 }
 
 .detail-text {
@@ -383,14 +383,14 @@ body {
 .footer {
   background-color: #2a7973;
   color: white;
-  padding: 6vh 3vw;
-  text-align: center;
-  min-height: 20vh;
+  padding: 2vh 2vw;
+  text-align: right;
+  height: 75px;
 }
 
 .footer-text {
   font-family: "Roboto Slab", serif;
-  font-size: 4vh;
+  font-size: 2vh;
 }
 
 /* Background paw prints */
