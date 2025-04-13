@@ -82,7 +82,7 @@ export default function Life4PawApp() {
     if (announcements) {
       announcements.scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "start",
       });
     }
   };
