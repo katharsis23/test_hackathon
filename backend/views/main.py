@@ -16,13 +16,13 @@ animal_shelter.add_middleware(
     allow_credentials=True,
 )
 
+
 # Route includes
 animal_shelter.include_router(auth_router, prefix="/auth")
 animal_shelter.include_router(article_router, prefix="/article")
 animal_shelter.include_router(shelter_router, prefix="/shelter")
 
 # Create tables on startup
-
 
 
 @animal_shelter.on_event("startup")

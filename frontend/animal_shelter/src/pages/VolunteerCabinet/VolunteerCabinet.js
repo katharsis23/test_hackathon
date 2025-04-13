@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import "./VolunteerCabinet.css";
 import volunteerImage from "../../assets/images/volunteer.svg";
@@ -8,9 +7,10 @@ import genderImage from "../../assets/images/gender.png";
 import handsImage from "../../assets/images/hands.png";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/auth";
-import articleService from "../../services/article_service";
+import ArticleService from "../../services/article_service";
 import Article from "../../models/article_model";
 
+const articleService = new ArticleService();
 
 const VolunteerCabinet = () => {
     const [username, setUsername] = useState("");

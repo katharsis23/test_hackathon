@@ -7,7 +7,6 @@ import VolunteerCabinet from "./pages/VolunteerCabinet/VolunteerCabinet";
 import Life4PawApp from "./pages/MainPage/Main";
 import OrganizationPage from "./pages/OrganizationCabinetPage/OrganizationPage";
 import Search from "./pages/Search/Search";
-import VolunteerCabinet from "./pages/VolunteerCabinet/VolunteerCabinet";
 
 function App() {
   return (
