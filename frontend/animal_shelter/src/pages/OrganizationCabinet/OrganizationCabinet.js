@@ -10,7 +10,6 @@ import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 import { useNavigate } from "react-router-dom";
 
-
 import Article from "../../models/article_model";
 import Article_service from "../../services/article_service";
 import CommentService from "../../services/comment_service";
@@ -29,7 +28,7 @@ const OrganizationCabinet = () => {
   const navigate = useNavigate();
 
   const openEditModal = (article) => {
-    setSelectedArticle({...article });
+    setSelectedArticle({ ...article });
     setIsModalOpen(true);
   };
 
@@ -56,7 +55,7 @@ const OrganizationCabinet = () => {
         animal_type: selectedArticle.animal_type,
         description: selectedArticle.description,
         shelter_id: organization.id || currentUserId,
-       // volunteer_id: selectedArticle.volunteer_id
+        // volunteer_id: selectedArticle.volunteer_id
       };
 
       await articleService.edit_article(updatedArticle);
@@ -86,22 +85,29 @@ const OrganizationCabinet = () => {
 
           const articleService = new Article_service();
 
-          const shelterArticles = await articleService.fetch_article(shelterData.id);
+          const shelterArticles = await articleService.fetch_article(
+            shelterData.id
+          );
           console.log("Articles from server (shelter):", shelterArticles);
           setAnimal(shelterArticles);
 
-          const volunteerArticles = await articleService.fetch_article_volunteer();
+          const volunteerArticles =
+            await articleService.fetch_article_volunteer();
           console.log("Articles from server (volunteer):", volunteerArticles);
 
           // Transform the volunteer articles to include volunteer name
-          const transformedVolunteerArticles = volunteerArticles.map((item) => ({
-            article: Article.fromJSON(item),
-            volunteer_name: item["volunteer_name"]
-          }));
+          const transformedVolunteerArticles = volunteerArticles.map(
+            (item) => ({
+              article: Article.fromJSON(item),
+              volunteer_name: item["volunteer_name"],
+            })
+          );
 
           setAnimalVolunteer(transformedVolunteerArticles);
 
-          const shelterComments = await CommentService.get_comments(shelterData.id);
+          const shelterComments = await CommentService.get_comments(
+            shelterData.id
+          );
           console.log("Comments from server:", shelterComments);
           setComments(shelterComments);
         } else {
@@ -118,11 +124,8 @@ const OrganizationCabinet = () => {
   return (
     <div className="cabinetBodyContainer">
       <div className="cabinetHeader">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login" onClick={() => navigate("/LoginSignUp")}>
-            <h1>Увійти</h1>
-          </div>
           <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>
@@ -196,7 +199,6 @@ const OrganizationCabinet = () => {
         </div>
         <div className="takeAnimalsCards">
           {animalVolunteer.map((volunteer) => (
-
             <div className="animalCard" key={volunteer.article.article_id}>
               <div className="animalImage">
                 <img
@@ -204,7 +206,14 @@ const OrganizationCabinet = () => {
                   alt={volunteer.article.name}
                   className="animalPhoto"
                   onError={(e) => {
-                    console.log("Failed to load image:", volunteer.article.photo_url);
+                    console.log(
+                      "Failed to load image:",
+                      volunteer.article.photo_url
+                    );
+                    console.log(
+                      "Failed to load image:",
+                      volunteer.article.photo_url
+                    );
                     e.target.src = animalImage;
                   }}
                   crossOrigin="anonymous"
@@ -386,8 +395,8 @@ const OrganizationCabinet = () => {
             </button>
           </div>
         </div>
-)}
-    </div> 
+      )}
+    </div>
   );
 };
 

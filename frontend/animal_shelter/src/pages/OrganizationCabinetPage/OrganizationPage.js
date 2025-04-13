@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./OrganizationPage.css";
 import PetCardModal from "../../components/PetModal/PetCardModal";
 import { useNavigate } from "react-router-dom";
+import authService from "../../services/auth";
 
-// Import images
 import shelterImage from "../../assets/images/animal-shelter.png";
 import ageImage from "../../assets/images/age.png";
 import genderImage from "../../assets/images/gender.png";
@@ -16,6 +16,7 @@ const OrganizationPage = () => {
   const [selectedPet, setSelectedPet] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
   const [animal, setAnimal] = useState([
     {
       id: 1,
@@ -73,11 +74,8 @@ const OrganizationPage = () => {
   return (
     <div className="cabinetBodyContainer">
       <div className="cabinetHeader">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login">
-            <h1>Увійти</h1>
-          </div>
           <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>
@@ -119,14 +117,14 @@ const OrganizationPage = () => {
         <div className="articleCards">
           {animal.map((pet) => (
             <div
-              className="animalCard"
+              className="animalCardPage"
               key={pet.id}
               onClick={() => openPetModal(pet)}
             >
-              <div className="animalImage">
+              <div className="animalImagePage">
                 <img src={pet.image} alt={pet.name} className="animalPhoto" />
               </div>
-              <h2 className="animalName">{pet.name}</h2>
+              <h2 className="animalNamePage">{pet.name}</h2>
               <div className="description">
                 <h1 className="animalAge">
                   <img src={ageImage} alt="Age" />
