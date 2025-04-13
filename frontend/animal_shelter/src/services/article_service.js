@@ -7,12 +7,21 @@ const base_url = "http://localhost:8000/article";
 
 class Article_service {
   //for homepage
-  async fetch_article() {
+  async fetch_article_homepage() {
     try {
       const response = await axios.get(`${base_url}/fetch_article_homepage`);
       if (response.status === 200) {
-        const response_data = response.data["array_of_articles"];
-        return response_data.map((article) => Article.fromJSON(article));
+        const response_data = response.data["array_of_article"];
+        return response_data.map((item) => 
+        {
+          const article=Article.fromJSON(item)
+          
+          return{
+            ...article,
+            author_name: item["author_name"]
+          }
+        }
+      );
       }
     } catch (error) {
       throw new Error(`An error occured ${error}`);
@@ -35,20 +44,31 @@ class Article_service {
     }
   }
   //for volunteer pages
-  async fetch_article(volunteer_id) {
+  async fetch_article_volunteer() {
     try {
-      const response = await axios.post(`${base_url}/fetch_article_volunteer`, {
-        volunteer_id: volunteer_id,
-      });
+      const response = await axios.get(`${base_url}/fetch_article_volunteer`);
+  
       if (response.status === 200) {
-        return response.data["array_of_articles"].map((article) =>
-          Article.fromJSON(article)
-        );
+        const articles_with_names = response.data.array_of_article.map(item => {
+          // Make sure the item is correctly passed to Article
+          const article = Article.fromJSON(item);
+  
+          // Ensure volunteer_name is added properly
+          return {
+            ...article,  // spread all the article properties
+            volunteer_name: item["volunteer_name"]
+          };
+        });
+  
+        return articles_with_names;
       }
     } catch (error) {
-      throw new Error(`AN ERROR OCCURED ${error}`);
+      throw new Error(`AN ERROR OCCURRED ${error}`);
     }
   }
+  
+
+  
 
   //for shelter pages
   async fetch_article(shelter_id) {
@@ -57,7 +77,7 @@ class Article_service {
         shelter_id: shelter_id,
       });
       if (response.status === 200) {
-        return response.data["array_of_articles"].map((article) =>
+        return response.data["array_of_article"].map((article) =>
           Article.fromJSON(article)
         );
       }
@@ -127,4 +147,4 @@ class Article_service {
   }
 }
 
-export default Article_service;
+export default new Article_service();

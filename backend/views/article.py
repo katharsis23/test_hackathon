@@ -8,6 +8,8 @@ from pydantic import BaseModel
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from sqlalchemy import join
+from httpx import AsyncClient
+
 
 article_router = APIRouter()
 
@@ -75,20 +77,51 @@ async def fetch_article_homepage(request_: Request, db: AsyncSession = Depends(g
         query = await db.execute(select(Article).limit(4))
         articles = query.scalars().all()
         article_list = []
+        
         for article in articles:
-            article_list.append(
-                {
-                    "photo_url": article.photo_url,
-                    "name": article.name,
-                    "age": article.age,
-                    "sex": article.sex,
-                    "health_status": article.health_status,
-                    "animal_type": article.animal_type,
-                    "description": article.description,
-                    "shelter_id": article.shelter_id,
-                    # "volunteer_id": article.volunteer_id
-                }
-            )
+            author_name = "Unknown"  # Default value in case requests fail
+            
+            try:
+                if article.volunteer_id is not None:
+                    async with AsyncClient() as client:
+                        request_to_author_name = await client.post(
+                        url="http://localhost:8000/auth/get_user_info",
+                        json={  # ← also fix: use `json=` instead of `content=`
+                         "id": article.volunteer_id,
+                         "user_type": "volunteer"
+                        }
+                    )
+                    vol_data = request_to_author_name.json()
+                    author_name = vol_data["name"]
+                elif article.shelter_id is not None:
+                    async with AsyncClient() as client:
+                        request_to_author_name = await client.post(
+                        url="http://localhost:8000/auth/get_user_info",
+                        json={
+                        "id": article.shelter_id,
+                        "user_type": "shelter"
+                        }
+                        )
+                vol_data = request_to_author_name.json()
+                author_name = vol_data["name"]
+            except Exception as e:
+                # Log the error but continue processing other articles
+                print(f"Error fetching author name: {e}")
+                
+            article_list.append({
+                "article_id": article.article_id,  # Make sure to include the ID
+                "photo_url": article.photo_url,
+                "name": article.name,
+                "age": article.age,
+                "sex": article.sex,
+                "health_status": article.health_status,
+                "animal_type": article.animal_type,
+                "description": article.description,
+                "shelter_id": article.shelter_id,
+                "volunteer_id": article.volunteer_id,
+                "author_name": author_name
+            })
+            
         return JSONResponse(
             content={
                 "array_of_article": article_list
@@ -96,10 +129,11 @@ async def fetch_article_homepage(request_: Request, db: AsyncSession = Depends(g
             status_code=200
         )
     except Exception as e:
+        print(f"Error in fetch_article_homepage: {str(e)}")  # Add more detailed logging
         return JSONResponse(
             content={
-                "msg": "this is bad :(",
-                "detail:": str(e)
+                "msg": "Error fetching articles",
+                "detail": str(e)
             },
             status_code=500
         )
@@ -119,11 +153,11 @@ async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSessio
                 content={
                     "msg": "fetching is succesfull, but no articles found"
                 },
-                status_code=204
+                status_code=200
             )
         response = []
         for article in articles:
-            response.append[
+            response.append(
                 {
                     "photo_url": article.photo_url,
                     "name": article.name,
@@ -133,9 +167,9 @@ async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSessio
                     "animal_type": article.animal_type,
                     "description": article.description,
                     "shelter_id": article.shelter_id,
-                    # "volunteer_id": article.volunteer_id
+                    "volunteer_id": article.volunteer_id  
                 }
-            ]
+            )
         return JSONResponse(
             content={
                 "array_of_article": response
@@ -150,28 +184,42 @@ async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSessio
             },
             status_code=500
         )
+    
 
 
-class Fetch_Article_Volunteer(BaseModel):
-    volunteer_id: str
-
-
-@article_router.post("/fetch_article_volunteer")
-async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSession = Depends(get_db)):
+@article_router.get("/fetch_article_volunteer")
+async def fetch_article_volunteer(request_: Request, db: AsyncSession = Depends(get_db)):
     try:
-        query = await db.execute(select(Article).where(Article.volunteer_id == request_.volunteer_id).limit(3))
+        query = await db.execute(
+            select(Article).where(Article.volunteer_id.isnot(None))
+        )
         articles = query.scalars().all()
-        if articles is None:
+
+        if not articles:
             return JSONResponse(
                 content={
-                    "msg": "fetching is succesfull, but no articles found"
+                    "msg": "Fetching is successful, but no articles found"
                 },
-                status_code=204
+                status_code=200
             )
+
         response = []
-        for article in articles:
-            response.append[
-                {
+        url = "http://localhost:8000/auth/get_user_info"
+
+        async with AsyncClient() as client:
+            for article in articles:
+                try:
+                    request_to_fetch_data = await client.post(url, json={
+                        "id": article.volunteer_id,
+                        "user_type": "volunteer"
+                    })
+                    vol_data = request_to_fetch_data.json()
+                    vol_username = vol_data["name"]
+                except Exception as inner_e:
+                    vol_username = "Unavailable"
+                    # Optional: log error if needed
+
+                response.append({
                     "photo_url": article.photo_url,
                     "name": article.name,
                     "age": article.age,
@@ -179,25 +227,24 @@ async def fetch_article_volunteer(request_: Fetch_Article_Volunteer, db: AsyncSe
                     "health_status": article.health_status,
                     "animal_type": article.animal_type,
                     "description": article.description,
-                    # "shelter_id": article.shelter_id,
-                    "volunteer_id": article.volunteer_id
-                }
-            ]
+                    "shelter_id": article.shelter_id,
+                    "volunteer_id": article.volunteer_id,
+                    "volunteer_name": vol_username
+                })
+        print("fetched_articles:", articles)
         return JSONResponse(
-            content={
-                "array_of_article": response
-            },
+            content={"array_of_article": response},
             status_code=200
         )
+
     except Exception as e:
         return JSONResponse(
             content={
                 "msg": "this is bad :(",
-                "detail:": str(e)
+                "detail": str(e)  # fixed typo
             },
             status_code=500
-        )
-
+        )        
 
 class Add_to_Favourite(BaseModel):
     volunteer_id: str
