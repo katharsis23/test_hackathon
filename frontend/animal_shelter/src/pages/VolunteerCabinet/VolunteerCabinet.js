@@ -59,7 +59,7 @@ const VolunteerCabinet = () => {
             <h2 className="animalNameVolunteer">Мурзік</h2>
             <div className="descriptionVolunteer">
               <h1 className="animalAgeVolunteer">
-                <img src={ageImage} alt="Age" /> Вік: 10
+                <img src={ageImage} alt="Age" /> Вік:10
               </h1>
               <h1 className="animalGenderVolunteer">
                 <img src={genderImage} alt="Gender" />
@@ -75,7 +75,7 @@ const VolunteerCabinet = () => {
             <div className="animalImageVolunteer">
               <img
                 src="https://th.bing.com/th/id/OIP.Wl4ICx3mgr_UNcTl4DZ52QAAAA?rs=1&pid=ImgDetMain"
-                className="animalPhoto"
+                className="animalPhotoVolunteer"
               />
             </div>
             <h2 className="animalNameVolunteer">Мілка</h2>
@@ -97,7 +97,7 @@ const VolunteerCabinet = () => {
             <div className="animalImageVolunteer">
               <img
                 src="https://th.bing.com/th/id/OIP.Q0A35f2q_4NCwjB3slN6wQHaJ4?rs=1&pid=ImgDetMain"
-                className="animalPhoto"
+                className="animalPhotoVolunteer"
               />
             </div>
             <h2 className="animalNameVolunteer">Анатолій</h2>
