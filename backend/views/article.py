@@ -413,9 +413,9 @@ class Edit_Article(BaseModel):
     photo_url: str = None
     name: str = None
     age: int = None
-    health_status: str
+    health_status: str =None
     description: str = None
-    animal_type: str
+    animal_type: str =None
     volunteer_id: str = None
     shelter_id: str = None
     sex: str = None
@@ -424,6 +424,8 @@ class Edit_Article(BaseModel):
 @article_router.put("/edit_article")
 async def edit_article(request_: Edit_Article, db: AsyncSession = Depends(get_db)):
     try:
+
+        print(f"received article_id {request_.article_id}, age: {request_.age}, photo_url:{request_.photo_url}")
         # Find the article by ID
         find_the_article = await db.execute(select(Article).where(Article.article_id == request_.article_id))
         article = find_the_article.scalar_one_or_none()
@@ -433,7 +435,7 @@ async def edit_article(request_: Edit_Article, db: AsyncSession = Depends(get_db
                 content={
                     "msg": "no article found"
                 },
-                status_code=404
+                status_code=400
             )
 
         # Update only fields that are not None

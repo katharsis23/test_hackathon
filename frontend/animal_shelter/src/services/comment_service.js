@@ -30,8 +30,14 @@ class CommentService {
       });
 
       if (response.status === 200 && response.data.comments) {
-        return response.data.comments.map((comment) =>
-          Comments.fromJSON(comment)
+        return response.data.comments.map((item) =>
+        {
+          const comment=Comments.fromJSON(item)
+          return{
+            ...comment,
+            "volunteer_name": item["author_name"]
+          }
+        }
         );
       }
       return [];

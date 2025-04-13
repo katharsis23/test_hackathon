@@ -26,7 +26,7 @@ const LoginSignUp = () => {
     e.preventDefault();
     const response = await authService.handle_login(username, password);
     if (response) {
-      navigate("/OrganizationCabinet");
+      navigate("/");
     } else {
       alert("Login failed.");
     }
@@ -58,7 +58,7 @@ const LoginSignUp = () => {
       setIsModalOpen(false);
       set_user_type("volunteer")
       toggleForm();
-      navigate("/OrganizationCabinet"); // на сторінку home
+      navigate("/");
     } else {
       alert("Signup failed.");
     }
@@ -67,7 +67,7 @@ const LoginSignUp = () => {
   return (
     <div className="pageLoginSignUpBodyContainer">
       <div className="headerLoginSignUp">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
       </div>
       <div className="formBodyContainer">
         <div className="formContainer">

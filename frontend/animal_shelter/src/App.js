@@ -6,6 +6,8 @@ import ArticleForm from "./pages/ArticleForm/ArticleForm";
 import VolunteerCabinet from "./pages/VolunteerCabinet/VolunteerCabinet";
 import Life4PawApp from "./pages/MainPage/Main";
 import OrganizationPage from "./pages/OrganizationCabinetPage/OrganizationPage";
+import Search from "./pages/Search/Search";
+import VolunteerCabinet from "./pages/VolunteerCabinet/VolunteerCabinet";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/ArticleForm" element={<ArticleForm />} />
         <Route path="/VolunteerCabinet" element={<VolunteerCabinet />} />
         <Route path="/" element={<Life4PawApp />} />
+        <Route path="/OrganizationPage" element={<OrganizationPage />} />
+        <Route path="/Search" element={<Search />} />
       </Routes>
     </Router>
   );

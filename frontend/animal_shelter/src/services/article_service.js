@@ -12,16 +12,14 @@ class Article_service {
       const response = await axios.get(`${base_url}/fetch_article_homepage`);
       if (response.status === 200) {
         const response_data = response.data["array_of_article"];
-        return response_data.map((item) => 
-        {
-          const article=Article.fromJSON(item)
-          
-          return{
+        return response_data.map((item) => {
+          const article = Article.fromJSON(item);
+
+          return {
             ...article,
-            author_name: item["author_name"]
-          }
-        }
-      );
+            author_name: item["author_name"],
+          };
+        });
       }
     } catch (error) {
       throw new Error(`An error occured ${error}`);
@@ -47,28 +45,27 @@ class Article_service {
   async fetch_article_volunteer() {
     try {
       const response = await axios.get(`${base_url}/fetch_article_volunteer`);
-  
+
       if (response.status === 200) {
-        const articles_with_names = response.data.array_of_article.map(item => {
-          // Make sure the item is correctly passed to Article
-          const article = Article.fromJSON(item);
-  
-          // Ensure volunteer_name is added properly
-          return {
-            ...article,  // spread all the article properties
-            volunteer_name: item["volunteer_name"]
-          };
-        });
-  
+        const articles_with_names = response.data.array_of_article.map(
+          (item) => {
+            // Make sure the item is correctly passed to Article
+            const article = Article.fromJSON(item);
+
+            // Ensure volunteer_name is added properly
+            return {
+              ...article, // spread all the article properties
+              volunteer_name: item["volunteer_name"],
+            };
+          }
+        );
+
         return articles_with_names;
       }
     } catch (error) {
       throw new Error(`AN ERROR OCCURRED ${error}`);
     }
   }
-  
-
-  
 
   //for shelter pages
   async fetch_article(shelter_id) {
@@ -122,6 +119,7 @@ class Article_service {
     }
   }
 
+  //put all the updated article data here
   async edit_article(articleData) {
     try {
       const response = await axios.put(
@@ -147,4 +145,4 @@ class Article_service {
   }
 }
 
-export default new Article_service();
+export default Article_service;
