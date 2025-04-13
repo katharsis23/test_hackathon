@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Search.css";
-// Імпорти зображень
+import { useNavigate } from "react-router-dom";
+import authService from "../../services/auth";
+
 import ageImage from "../../assets/images/age.png";
 import genderImage from "../../assets/images/gender.png";
 import animalImage from "../../assets/images/image.png";
@@ -11,6 +13,23 @@ import logoImage from "../../assets/images/animal-shelter.png";
 import PetCardModal from "../../components/PetModal/PetCardModal";
 
 function Search() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await authService.get_user_info();
+        setIsLoggedIn(!!response);
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
   const mockAnimals = [
     {
       article_id: 1,
@@ -323,12 +342,12 @@ function Search() {
 
   function AnimalCard({ animal, isFavorite, onFavoriteToggle, onCardClick }) {
     return (
-      <div className="animalCard" onClick={() => onCardClick(animal)}>
-        <div className="animalImage">
+      <div className="animalCardSearch" onClick={() => onCardClick(animal)}>
+        <div className="animalImageSearch">
           <img
             src={animal.photo_url || animalImage}
             alt={animal.name}
-            className="animalPhoto"
+            className="animalPhotoSearch"
           />
           <button
             className={`favorite-btn ${isFavorite ? "active" : ""}`}
@@ -340,17 +359,17 @@ function Search() {
             {isFavorite ? "❤️" : "🤍"}
           </button>
         </div>
-        <h2 className="animalName">{animal.name}</h2>
-        <div className="description">
-          <h1 className="animalAge">
+        <h2 className="animalNameSearch">{animal.name}</h2>
+        <div className="descriptionSearch">
+          <h1 className="animalAgeSearch">
             <img src={ageImage} alt="Age" /> Вік: {animal.age}
           </h1>
-          <h1 className="animalGender">
+          <h1 className="animalGenderSearch">
             <img src={genderImage} alt="Gender" />
             {animal.sex}
           </h1>
         </div>
-        <div className="organizationCardName">
+        <div className="organizationCardNameSearch">
           <img src={handsImage} alt="Organization" />
           {animal.shelter_id}
         </div>
@@ -361,12 +380,17 @@ function Search() {
   return (
     <div className="SearchPage">
       <div className="cabinetHeader">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login">
+          <div
+            className="login"
+            onClick={() =>
+              navigate(isLoggedIn ? "/OrganizationCabinet" : "/LoginSignUp")
+            }
+          >
             <h1>Увійти</h1>
           </div>
-          <div className="find">
+          <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>
         </div>
@@ -397,7 +421,11 @@ function Search() {
       </div>
 
       {isModalOpen && selectedAnimal && (
-        <PetCardModal animal={selectedAnimal} onClose={closeModal} />
+        <PetCardModal
+          animal={selectedAnimal}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+        />
       )}
     </div>
   );
