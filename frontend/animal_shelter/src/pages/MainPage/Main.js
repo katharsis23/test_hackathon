@@ -164,13 +164,19 @@ export default function Life4PawApp() {
           <h2 className="section-title">Обери свого друга!</h2>
           <div className="pet-options">
             <div className="pet-option">
-              <div className="pet-icon dog-icon">
+              <div
+                className="pet-icon dog-icon"
+                onClick={() => navigate("/Search")}
+              >
                 <img src={dogIcon} alt="Dog icon" className="icon-image" />
               </div>
               <p className="pet-type">Песик</p>
             </div>
             <div className="pet-option">
-              <div className="pet-icon cat-icon">
+              <div
+                className="pet-icon cat-icon"
+                onClick={() => navigate("/Search")}
+              >
                 <img
                   src={catIcon}
                   alt="Cat icon"

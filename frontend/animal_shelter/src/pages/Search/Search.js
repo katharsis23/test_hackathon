@@ -8,7 +8,7 @@ import handsImage from "../../assets/images/hands.png";
 import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 import logoImage from "../../assets/images/animal-shelter.png";
-import PetCardModal from "../../components/PetCardModal/PetCardModal";
+import PetCardModal from "../../components/PetModal/PetCardModal";
 
 function Search() {
   const mockAnimals = [
@@ -161,6 +161,7 @@ function Search() {
   };
 
   const openModal = (animal) => {
+    console.log("Modal open triggered", animal);
     setSelectedAnimal(animal);
     setIsModalOpen(true);
   };
