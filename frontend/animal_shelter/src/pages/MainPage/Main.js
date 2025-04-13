@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Main.css";
-import PetCardModal from "../../components/PetModal/PetCardModal";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/auth";
 
@@ -17,69 +16,35 @@ import catIcon from "../../assets/images/cat.png";
 import dogIcon from "../../assets/images/dog.png";
 import genderIcon from "../../assets/images/gender.png";
 import handsIcon from "../../assets/images/hands.png";
+import Article from "../../models/article_model";
+import Article_service from "../../services/article_service";
 
 export default function Life4PawApp() {
   const [scrollY, setScrollY] = useState(0);
   const [selectedPet, setSelectedPet] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const fetchArticle = async () => {
       try {
-        const response = await authService.get_user_info();
-        setIsLoggedIn(!!response);
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setIsLoggedIn(false);
+        setLoading(true);
+        const fetchedData = await Article_service.fetch_article_homepage();
+        console.log("Fetched data:", fetchedData); // Debug log
+        setPets(Array.isArray(fetchedData) ? fetchedData : []);
+      } catch (err) {
+        console.error("Error fetching pets:", err);
+        setError("Failed to load pets. Please try again later.");
+      } finally {
+        setLoading(false);
       }
     };
 
-    checkAuth();
+    fetchArticle();
   }, []);
-
-  const pets = [
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: pipaDog,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "dog",
-    },
-    {
-      id: 2,
-      name: "Амелія",
-      age: 4,
-      ageUnit: "роки",
-      sex: "Дівчинка",
-      image: ameliaCat,
-      organization: "Sirius",
-      description:
-        "Ласкава та спокійна кішечка, яка насолоджується спокійним життям. Любить сидіти на підвіконні та спостерігати за птахами. Прекрасно ладить з іншими тваринами.",
-      healthStatus: "Здорова",
-      type: "cat",
-    },
-    {
-      id: 3,
-      name: "Лайа",
-      age: 6,
-      ageUnit: "місяців",
-      sex: "Дівчинка",
-      image: layaCat,
-      organization: "Волонтер: Іван",
-      description:
-        "Лайа - грайлива собачка з дуже приємним характером. Любить гратися з м'ячиками та іншими іграшками. Шукає дім, де її будуть любити та піклуватися.",
-      healthStatus: "Хворенька",
-      type: "cat",
-    },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,13 +70,30 @@ export default function Life4PawApp() {
     }
   };
 
-  const openPetModal = (pet) => {
-    setSelectedPet(pet);
-    setIsModalOpen(true);
-  };
+  // Function to safely get shelter/volunteer information
+  const getShelterVolunteerInfo = (petData) => {
+    if (!petData) return "Unknown";
 
-  const closePetModal = () => {
-    setIsModalOpen(false);
+    // Access article properties from the new structure
+    const pet = petData; // The entire object now contains article properties
+    const authorName = pet.author_name || "Unknown Author";
+
+    // const shelterInfo = pet.shelter_id ? `Shelter: ${pet.shelter_id}` : "";
+    // const volunteerInfo = pet.volunteer_id && pet.volunteer_id !== "null" ? `Volunteer: ${pet.volunteer_id}` : "";
+
+    // let displayInfo = authorName;
+
+    // if (shelterInfo || volunteerInfo) {
+    //   displayInfo += " (";
+    //   if (shelterInfo && volunteerInfo) {
+    //     displayInfo += `${shelterInfo} | ${volunteerInfo}`;
+    //   } else {
+    //     displayInfo += shelterInfo || volunteerInfo;
+    //   }
+    //   displayInfo += ")";
+    // }
+
+    return authorName;
   };
 
   return (
@@ -192,56 +174,70 @@ export default function Life4PawApp() {
       {/* Announcements Section */}
       <section className="announcements-section">
         <h2 className="section-title">Оголошення</h2>
-        <div className="pets-grid">
-          {pets.map((pet) => (
-            <div
-              className="pet-card"
-              key={pet.id}
-              onClick={() => openPetModal(pet)}
-            >
-              <div className="pet-image">
-                <img src={pet.image} alt={pet.name} />
-              </div>
-              <div className="pet-info">
-                <h3 className="pet-name">{pet.name}</h3>
-                <div className="pet-details">
-                  <div className="detail-item">
-                    <span className="detail-icon">
-                      <img
-                        src={ageIcon}
-                        alt="Age"
-                        className="detail-icon-image"
-                      />
-                    </span>
-                    <span className="detail-text">
-                      {pet.age} {pet.ageUnit}
-                    </span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-icon">
-                      <img
-                        src={genderIcon}
-                        alt="Gender"
-                        className="detail-icon-image"
-                      />
-                    </span>
-                    <span className="detail-text">{pet.sex}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-icon">
-                      <img
-                        src={handsIcon}
-                        alt="Shelter"
-                        className="detail-icon-image"
-                      />
-                    </span>
-                    <span className="detail-text">{pet.organization}</span>
+
+        {loading ? (
+          <div className="loading-message">Loading pets...</div>
+        ) : error ? (
+          <div className="error-message">{error}</div>
+        ) : pets && pets.length > 0 ? (
+          <div className="pets-grid">
+            {pets.map((petData) => (
+              <div
+                className="pet-card"
+                key={petData.article_id || `pet-${Math.random()}`}
+              >
+                <div className="pet-image">
+                  {petData.photo_url && (
+                    <img src={petData.photo_url} alt={petData.name || "Pet"} />
+                  )}
+                </div>
+                <div className="pet-info">
+                  <h3 className="pet-name">{petData.name || "Unnamed Pet"}</h3>
+                  <div className="pet-details">
+                    <div className="detail-item">
+                      <span className="detail-icon">
+                        <img
+                          src={ageIcon}
+                          alt="Age"
+                          className="detail-icon-image"
+                        />
+                      </span>
+                      <span className="detail-text">
+                        {petData.age || "Unknown"}
+                      </span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-icon">
+                        <img
+                          src={genderIcon}
+                          alt="Gender"
+                          className="detail-icon-image"
+                        />
+                      </span>
+                      <span className="detail-text">
+                        {petData.sex || "Unknown"}
+                      </span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-icon">
+                        <img
+                          src={handsIcon}
+                          alt="Author"
+                          className="detail-icon-image"
+                        />
+                      </span>
+                      <span className="detail-text">
+                        {getShelterVolunteerInfo(petData)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-pets-message">No pets available at the moment</div>
+        )}
       </section>
 
       {/* Shelters Section */}
@@ -326,13 +322,6 @@ export default function Life4PawApp() {
       <footer className="footer">
         <p className="footer-text">© 2025 Life4Paw. Всі права захищені.</p>
       </footer>
-
-      {/* Pet Modal */}
-      <PetCardModal
-        isOpen={isModalOpen}
-        onClose={closePetModal}
-        pet={selectedPet}
-      />
     </div>
   );
 }
