@@ -10,9 +10,6 @@ const PetCardModal = ({ isOpen, onClose, pet }) => {
   // Функція для правильного відмінювання слів за числами
   const getUnitForm = (value, unit) => {
     // Використовуємо ageUnit, якщо він є у даних тварини
-    if (pet.ageUnit) {
-      return pet.ageUnit;
-    }
 
     // Резервний варіант, якщо ageUnit не вказано
     if (unit === "місяць") {

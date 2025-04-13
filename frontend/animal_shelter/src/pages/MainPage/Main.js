@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./Main.css";
-import PetCardModal from "../../components/PetModal/PetCardModal";
 import { useNavigate } from "react-router-dom";
+import "./Main.css";
 
 // Import pet and shelter images
 import pipaDog from "../../assets/images/Pipa.jpg";
@@ -19,91 +18,49 @@ import dogIcon from "../../assets/images/dog.png";
 import genderIcon from "../../assets/images/gender.png";
 import handsIcon from "../../assets/images/hands.png";
 
+// Import services
+import Article_service from "../../services/article_service";
+const article_service = new Article_service();
+
 export default function Life4PawApp() {
-  const [scrollY, setScrollY] = useState(0);
-  const [selectedPet, setSelectedPet] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Pet data
-  const pets = [
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: pipaDog,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "dog",
-    },
-    {
-      id: 2,
-      name: "Амелія",
-      age: 4,
-      ageUnit: "роки",
-      sex: "Дівчинка",
-      image: ameliaCat,
-      organization: "Sirius",
-      description:
-        "Ласкава та спокійна кішечка, яка насолоджується спокійним життям. Любить сидіти на підвіконні та спостерігати за птахами. Прекрасно ладить з іншими тваринами.",
-      healthStatus: "Здорова",
-      type: "cat",
-    },
-    {
-      id: 3,
-      name: "Лайа",
-      age: 6,
-      ageUnit: "місяців",
-      sex: "Дівчинка",
-      image: layaCat,
-      organization: "Волонтер: Іван",
-      description:
-        "Лайа - грайлива собачка з дуже приємним характером. Любить гратися з м'ячиками та іншими іграшками. Шукає дім, де її будуть любити та піклуватися.",
-      healthStatus: "Хворенька",
-      type: "cat",
-    },
-  ];
-
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const fetchedData = await article_service.fetch_article_homepage();
+        console.log("Articles from server:", fetchedData);
+
+        if (fetchedData && Array.isArray(fetchedData)) {
+          setPets(fetchedData);
+        } else {
+          setPets([]);
+        }
+      } catch (err) {
+        console.error("Error fetching articles:", err);
+        setError("Failed to load pets");
+      } finally {
+        setLoading(false);
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    fetchArticles();
   }, []);
-
-  const heroOpacity = Math.max(1 - scrollY / 300, 0);
 
   const scrollToAnnouncements = (e) => {
     e.preventDefault();
     const announcements = document.querySelector(".announcements-section");
     if (announcements) {
-      announcements.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      announcements.scrollIntoView({ behavior: "smooth" });
     }
-  };
-
-  const openPetModal = (pet) => {
-    setSelectedPet(pet);
-    setIsModalOpen(true);
-  };
-
-  const closePetModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
     <div className="app-container">
-      {/* Header */}
       <header className="header">
         <h1 className="site-title">Life4Paw</h1>
         <nav className="main-nav">
@@ -114,201 +71,155 @@ export default function Life4PawApp() {
             <h1>Знайшли тварину?</h1>
           </button>
         </nav>
-        <button className="mobile-menu-button">Menu</button>
       </header>
 
-      {/* Hero Section */}
       <section className="hero-section">
-        <div className="hero-background"></div>
-        <div className="hero-overlay"></div>
         <div className="hero-content">
-          <div className="hero-text-container">
-            <p className="hero-text">
-              Life4Paw - це сайт, де притулки викладають анкети тварин, а люди
-              шукають собі улюбленця або можуть допомогти. Тут можна забрати
-              кота чи собаку, стати волонтером або просто підтримати притулки.
-              Все просто — зайшов, обрав, допоміг. Без зайвих складнощів.
-            </p>
-            <a
-              href="#"
-              className="find-friend-button"
-              onClick={scrollToAnnouncements}
-            >
-              Знайти друга
-            </a>
-          </div>
+          <p className="hero-text">
+            Life4Paw - це сайт, де притулки викладають анкети тварин, а люди
+            шукають собі улюбленця або можуть допомогти.
+          </p>
+          <a
+            href="#"
+            className="find-friend-button"
+            onClick={scrollToAnnouncements}
+          >
+            Знайти друга
+          </a>
         </div>
       </section>
 
-      {/* Choose Your Friend Section */}
-      <section id="find-friend" className="choose-friend-section">
+      <section className="choose-friend-section">
         <div className="section-container">
           <h2 className="section-title">Обери свого друга!</h2>
           <div className="pet-options">
             <div className="pet-option">
-              <div className="pet-icon dog-icon">
-                <img src={dogIcon} alt="Dog icon" className="icon-image" />
-              </div>
-              <p className="pet-type">Песик</p>
+              <img src={dogIcon} alt="Dog" className="icon-image" />
+              <p>Песик</p>
             </div>
             <div className="pet-option">
-              <div className="pet-icon cat-icon">
-                <img
-                  src={catIcon}
-                  alt="Cat icon"
-                  className="icon-image cat-image"
-                />
-              </div>
-              <p className="pet-type">Котик</p>
+              <img src={catIcon} alt="Cat" className="icon-image" />
+              <p>Котик</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Announcements Section */}
       <section className="announcements-section">
         <h2 className="section-title">Оголошення</h2>
-        <div className="pets-grid">
-          {pets.map((pet) => (
-            <div
-              className="pet-card"
-              key={pet.id}
-              onClick={() => openPetModal(pet)}
-            >
-              <div className="pet-image">
-                <img src={pet.image} alt={pet.name} />
-              </div>
-              <div className="pet-info">
-                <h3 className="pet-name">{pet.name}</h3>
-                <div className="pet-details">
-                  <div className="detail-item">
-                    <span className="detail-icon">
-                      <img
-                        src={ageIcon}
-                        alt="Age"
-                        className="detail-icon-image"
-                      />
-                    </span>
-                    <span className="detail-text">
-                      {pet.age} {pet.ageUnit}
-                    </span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-icon">
+        {loading ? (
+          <div className="loading-message">Завантаження...</div>
+        ) : error ? (
+          <div class="error-message">{error}</div>
+        ) : (
+          <div className="pets-grid">
+            {pets.map((pet) => (
+              <div className="pet-card" key={pet.article_id}>
+                <div className="pet-image">
+                  <img
+                    src={pet.photo_url || pipaDog}
+                    alt={pet.name}
+                    className="pet-photo"
+                    onError={(e) => {
+                      e.target.src = pipaDog;
+                    }}
+                  />
+                </div>
+                <div className="pet-info">
+                  <h3 className="pet-name">{pet.name}</h3>
+                  <div className="pet-details">
+                    <div className="detail-item">
+                      <img src={ageIcon} alt="Age" className="detail-icon" />
+                      <span>
+                        Вік: {pet.age} {pet.age_unit || "років"}
+                      </span>
+                    </div>
+                    <div className="detail-item">
                       <img
                         src={genderIcon}
                         alt="Gender"
-                        className="detail-icon-image"
+                        className="detail-icon"
                       />
-                    </span>
-                    <span className="detail-text">{pet.sex}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-icon">
+                      <span>{pet.sex}</span>
+                    </div>
+                    <div className="detail-item">
                       <img
                         src={handsIcon}
-                        alt="Shelter"
-                        className="detail-icon-image"
+                        alt="Organization"
+                        className="detail-icon"
                       />
-                    </span>
-                    <span className="detail-text">{pet.organization}</span>
+                      <span>
+                        {pet.shelter_name ||
+                          pet.volunteer_name ||
+                          "Невідомий притулок"}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="shelters-section">
+        <h2 className="section-title">Притулки для тварин!</h2>
+        <div className="shelters-grid">
+          {[
+            {
+              name: "Сіріус",
+              logo: siriusLogo,
+              url: "https://dogcat.com.ua/",
+              location: "м.Київ",
+              year: "2000",
+            },
+            {
+              name: "GladPet",
+              logo: gladpetLogo,
+              url: "https://gladpet.org/",
+              location: "Вся Україна",
+              year: "2015",
+            },
+            {
+              name: "LKP LEV",
+              logo: lkplevLogo,
+              url: "https://lkplev.com/",
+              location: "м.Львів",
+              year: "2003",
+            },
+            {
+              name: "Happy Paw",
+              logo: happypawLogo,
+              url: "https://happypaw.ua/",
+              location: "Вся Україна",
+              year: "2012",
+            },
+          ].map((shelter) => (
+            <div className="shelter-card" key={shelter.name}>
+              <div className="shelter-logo">
+                <img src={shelter.logo} alt={shelter.name} />
+              </div>
+              <a
+                href={shelter.url}
+                className="shelter-name"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {shelter.name}
+              </a>
+              <p className="shelter-address">
+                {shelter.location}
+                <br />
+                Рік заснування: {shelter.year}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Shelters Section */}
-      <section className="shelters-section">
-        <h2 className="section-title">Притулки для тварин!</h2>
-        <div className="shelters-grid">
-          <div className="shelter-card">
-            <div className="shelter-logo">
-              <img src={siriusLogo} alt="Сіріус" />
-            </div>
-            <a
-              className="shelter-name"
-              href="https://dogcat.com.ua/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Сіріус
-            </a>
-            <p className="shelter-address">
-              м.Київ <br />
-              Рік заснування: 2000
-            </p>
-          </div>
-
-          <div className="shelter-card">
-            <div className="shelter-logo">
-              <img src={gladpetLogo} alt="GladPet" />
-            </div>
-            <a
-              className="shelter-name"
-              href="https://gladpet.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GladPet
-            </a>
-            <p className="shelter-address">
-              Вся Україна <br />
-              Рік Заснування: 2015
-            </p>
-          </div>
-
-          <div className="shelter-card">
-            <div className="shelter-logo">
-              <img src={lkplevLogo} alt="LKP LEV" />
-            </div>
-            <a
-              className="shelter-name"
-              href="https://lkplev.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LKP LEV
-            </a>
-            <p className="shelter-address">
-              м.Львів <br />
-              Рік Заснування: 2003
-            </p>
-          </div>
-
-          <div className="shelter-card">
-            <div className="shelter-logo">
-              <img src={happypawLogo} alt="Happy Paw" />
-            </div>
-            <a
-              className="shelter-name"
-              href="https://happypaw.ua/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Happy Paw
-            </a>
-            <p className="shelter-address">
-              Вся Україна <br />
-              Рік Заснування: 2012
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
       <footer className="footer">
-        <p className="footer-text">© 2025 Life4Paw. Всі права захищені.</p>
+        <p>© 2025 Life4Paw. Всі права захищені.</p>
       </footer>
-
-      {/* Pet Modal */}
-      <PetCardModal
-        isOpen={isModalOpen}
-        onClose={closePetModal}
-        pet={selectedPet}
-      />
     </div>
   );
 }
