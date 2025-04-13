@@ -29,7 +29,7 @@ const OrganizationCabinet = () => {
   const navigate = useNavigate();
 
   const openEditModal = (article) => {
-    setSelectedArticle({ ...article });
+    setSelectedArticle({...article });
     setIsModalOpen(true);
   };
 
@@ -55,8 +55,8 @@ const OrganizationCabinet = () => {
         health_status: selectedArticle.health_status,
         animal_type: selectedArticle.animal_type,
         description: selectedArticle.description,
-        shelter_id: organization.id,
-        volunteer_id: selectedArticle.volunteer_id || currentUserId,
+        shelter_id: organization.id || currentUserId,
+       // volunteer_id: selectedArticle.volunteer_id
       };
 
       await articleService.edit_article(updatedArticle);
@@ -236,12 +236,11 @@ const OrganizationCabinet = () => {
           {comments.map((comment) => (
             <div className="commentCard" key={comment.comment_id}>
               <p className="commentText">{comment.description}</p>
-              <p className="commentAuthor">Автор: {comment.volunteer_id}</p>
+              <p className="commentAuthor">Автор: {comment.volunteer_name}</p>
             </div>
           ))}
         </div>
       </div>
-      {/* Модальне вікно
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
@@ -387,7 +386,7 @@ const OrganizationCabinet = () => {
             </button>
           </div>
         </div>
-)}*/}
+)}
     </div> 
   );
 };

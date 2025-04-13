@@ -122,6 +122,7 @@ class Article_service {
     }
   }
 
+  //put all the updated article data here
   async edit_article(articleData) {
     try {
       const response = await axios.put(
@@ -147,4 +148,4 @@ class Article_service {
   }
 }
 
-export default new Article_service();
+export default Article_service;

@@ -158,26 +158,12 @@ const OrganizationPage = () => {
           <h1>Коментарі:</h1>
         </div>
         <div className="commentsCards">
-          {comments.length > 0 ? (
-            comments.map((comment) => (
-              <div className="commentCard" key={comment.comment_id}>
-                <div className="commentHeader">
-                  <h3 className="commentAuthor">Іван</h3>
-                </div>
-                <p className="commentText">{comment.description}</p>
-              </div>
-            ))
-          ) : (
-            <div className="commentCard">
-              <div className="commentHeader">
-                <h3 className="commentAuthor">Ніка</h3>
-              </div>
-              <p className="commentText">
-                Чудовий притулок! Дуже привітний персонал та чисті умови для
-                тварин, які там живуть.
-              </p>
+        {comments.map((comment) => (
+            <div className="commentCard" key={comment.comment_id}>
+              <p className="commentText">{comment.description}</p>
+              <p className="commentAuthor">Автор: {comment.volunteer_name}</p>
             </div>
-          )}
+          ))}
         </div>
       </div>
     </div>
