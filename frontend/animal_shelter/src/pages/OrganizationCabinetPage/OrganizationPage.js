@@ -9,60 +9,25 @@ import ageImage from "../../assets/images/age.png";
 import genderImage from "../../assets/images/gender.png";
 import animalImage from "../../assets/images/Pipa.jpg";
 import handsImage from "../../assets/images/hands.png";
+import UserModels from "../../models/user_model";
+import Article_service from "../../services/article_service";
+import CommentService from "../../services/comment_service";
 
 import Comment from "../../models/comments_model";
+
+const { Shelter } = UserModels;
 
 const OrganizationPage = () => {
   const [selectedPet, setSelectedPet] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [organization, setOrganization] = useState(new Shelter());
+  const [animal, setAnimal] = useState([]);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
-  const [animal, setAnimal] = useState([
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "cat",
-    },
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "cat",
-    },
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "cat",
-    },
-  ]);
-
-  const [comments, setComments] = useState([]);
-
-  const openPetModal = (pet) => {
-    setSelectedPet(pet);
+  const openPetModal = (animal) => {
+    console.log("Selected pet:", animal);
+    setSelectedPet(animal);
     setIsModalOpen(true);
   };
 
@@ -70,6 +35,35 @@ const OrganizationPage = () => {
     setIsModalOpen(false);
     setSelectedPet(null);
   };
+
+  useEffect(() => {
+    const fetchOrganizationInfo = async () => {
+      try {
+        const response = await authService.get_user_info();
+        if (response && response.data) {
+          const shelterData = Shelter.fromJSON(response.data);
+          setOrganization(shelterData);
+
+          const articleService = new Article_service();
+          const shelterArticles = await articleService.fetch_article(
+            shelterData.id
+          );
+          setAnimal(shelterArticles);
+
+          const shelterComments = await CommentService.get_comments(
+            shelterData.id
+          );
+          setComments(shelterComments);
+        } else {
+          console.warn("No organization data found.");
+        }
+      } catch (error) {
+        console.error("Error fetching organization info or articles:", error);
+      }
+    };
+
+    fetchOrganizationInfo();
+  }, []);
 
   return (
     <div className="cabinetBodyContainer">
@@ -88,13 +82,13 @@ const OrganizationPage = () => {
         </div>
         <div className="organizationContactsPage">
           <div className="organizationNamePage">
-            <h1>Назва організації:</h1>
+            <h1>{organization.name}</h1>
           </div>
           <div className="organizationCategoryPage">
-            <h1>Категорія: Притулок для тварин</h1>
+            <h1>Категорія: {organization.shelter_category}</h1>
           </div>
           <div className="organizationAddressPage">
-            <h1>Адреса: Яворницького 3б львів</h1>
+            <h1>Адреса: {organization.address}</h1>
           </div>
         </div>
         <div className="donationInfo">
@@ -115,29 +109,33 @@ const OrganizationPage = () => {
           <h1>Активні оголошення: </h1>
         </div>
         <div className="articleCardsPage">
-          {animal.map((pet) => (
+          {animal.map((animal) => (
             <div
               className="animalCardPage"
-              key={pet.id}
-              onClick={() => openPetModal(pet)}
+              key={animal.id}
+              onClick={() => openPetModal(animal)}
             >
               <div className="animalImagePage">
-                <img src={pet.image} alt={pet.name} className="animalPhoto" />
+                <img
+                  src={animal.photo_url || animalImage}
+                  alt={animal.name}
+                  className="animalPhoto"
+                />
               </div>
-              <h2 className="animalNamePage">{pet.name}</h2>
+              <h2 className="animalNamePage">{animal.name}</h2>
               <div className="descriptionPage">
                 <h1 className="animalAgePage">
                   <img src={ageImage} alt="Age" />
-                  Вік: {pet.age} {pet.ageUnit}
+                  Вік: {animal.age} {animal.ageUnit}
                 </h1>
                 <h1 className="animalGenderPage">
                   <img src={genderImage} alt="Gender" />
-                  {pet.sex}
+                  {animal.sex}
                 </h1>
               </div>
               <div className="organizationCardNamePage">
                 <img src={handsImage} alt="Organization" />
-                {pet.organization}
+                {organization.name}
               </div>
             </div>
           ))}
@@ -148,7 +146,8 @@ const OrganizationPage = () => {
       <PetCardModal
         isOpen={isModalOpen}
         onClose={closePetModal}
-        pet={selectedPet}
+        animal={selectedPet}
+        authorName={organization.name}
       />
 
       <div className="organizationCommentsBody">
