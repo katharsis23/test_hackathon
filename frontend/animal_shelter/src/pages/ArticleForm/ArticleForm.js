@@ -4,7 +4,7 @@ import genderImage from "../../assets/images/gender.png";
 import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
 import { useNavigate } from "react-router-dom";
-import Article_Service from "../../services/article_service";
+import Article_service from "../../services/article_service";
 import Article from "../../models/article_model";
 import { get_user_id, get_user_type } from "../../services/cache";
 
@@ -49,7 +49,7 @@ const ArticleForm = () => {
     return true;
   };
 
-  const articleService = new Article_Service();
+  const articleService = new Article_service();
 
   const saveArticle = async () => {
     if (validateInput()) {
@@ -86,7 +86,7 @@ const ArticleForm = () => {
   return (
     <div className="articleFormBody">
       <div className="articleFormHeader">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
       </div>
       <div className="articleForm">
         <div className="formContent">
