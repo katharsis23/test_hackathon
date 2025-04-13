@@ -41,10 +41,8 @@ const OrganizationCabinet = () => {
     try {
       const articleService = new Article_service();
 
-      // Get current user ID
       const currentUserId = get_user_id();
 
-      // Prepare updated article data
       const updatedArticle = {
         article_id: selectedArticle.article_id,
         photo_url: selectedArticle.photo_url,
@@ -88,14 +86,13 @@ const OrganizationCabinet = () => {
           const shelterArticles = await articleService.fetch_article(
             shelterData.id
           );
-          console.log("Articles from server (shelter):", shelterArticles);
+          console.log("Fetched articles:", shelterArticles);
           setAnimal(shelterArticles);
 
           const volunteerArticles =
             await articleService.fetch_article_volunteer();
           console.log("Articles from server (volunteer):", volunteerArticles);
 
-          // Transform the volunteer articles to include volunteer name
           const transformedVolunteerArticles = volunteerArticles.map(
             (item) => ({
               article: Article.fromJSON(item),
@@ -163,7 +160,6 @@ const OrganizationCabinet = () => {
                     console.log("Failed to load image:", article.photo_url);
                     e.target.src = animalImage;
                   }}
-                  crossOrigin="anonymous"
                 />
               </div>
               <h2 className="animalName">{article.name}</h2>
@@ -216,7 +212,6 @@ const OrganizationCabinet = () => {
                     );
                     e.target.src = animalImage;
                   }}
-                  crossOrigin="anonymous"
                 />
               </div>
               <h2 className="animalName">{volunteer.article.name}</h2>

@@ -9,60 +9,43 @@ import ageImage from "../../assets/images/age.png";
 import genderImage from "../../assets/images/gender.png";
 import animalImage from "../../assets/images/Pipa.jpg";
 import handsImage from "../../assets/images/hands.png";
+import UserModels from "../../models/user_model";
+import Article_service from "../../services/article_service";
+import CommentService from "../../services/comment_service";
 
 import Comment from "../../models/comments_model";
+
+const { Shelter } = UserModels;
 
 const OrganizationPage = () => {
   const [selectedPet, setSelectedPet] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [organization, setOrganization] = useState(new Shelter());
+  const [animal, setAnimal] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
 
-  const [animal, setAnimal] = useState([
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "cat",
-    },
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "cat",
-    },
-    {
-      id: 1,
-      name: "Піпа",
-      age: 1,
-      ageUnit: "місяць",
-      sex: "Хлопчик",
-      image: animalImage,
-      organization: "GladPet",
-      description:
-        "Піпа - дуже енергійний та веселий котик. Обожнює гратися та швидко знаходить спільну мову з дітьми. Дуже хоче знайти люблячу родину.",
-      healthStatus: "Здоровий",
-      type: "cat",
-    },
-  ]);
+  const handleAddComment = async () => {
+    if (newComment.trim() === "") {
+      alert("Коментар не може бути порожнім!");
+      return;
+    }
+    try {
+      await CommentService.post_comment(organization.id, newComment);
+      const updatedComments = await CommentService.get_comments(
+        organization.id
+      );
+      setComments(updatedComments);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
 
-  const [comments, setComments] = useState([]);
-
-  const openPetModal = (pet) => {
-    setSelectedPet(pet);
+  const openPetModal = (animal) => {
+    console.log("Selected pet:", animal);
+    setSelectedPet(animal);
     setIsModalOpen(true);
   };
 
@@ -70,6 +53,35 @@ const OrganizationPage = () => {
     setIsModalOpen(false);
     setSelectedPet(null);
   };
+
+  useEffect(() => {
+    const fetchOrganizationInfo = async () => {
+      try {
+        const response = await authService.get_user_info();
+        if (response && response.data) {
+          const shelterData = Shelter.fromJSON(response.data);
+          setOrganization(shelterData);
+
+          const articleService = new Article_service();
+          const shelterArticles = await articleService.fetch_article(
+            shelterData.id
+          );
+          setAnimal(shelterArticles);
+
+          const shelterComments = await CommentService.get_comments(
+            shelterData.id
+          );
+          setComments(shelterComments);
+        } else {
+          console.warn("No organization data found.");
+        }
+      } catch (error) {
+        console.error("Error fetching organization info or articles:", error);
+      }
+    };
+
+    fetchOrganizationInfo();
+  }, []);
 
   return (
     <div className="cabinetBodyContainer">
@@ -82,19 +94,19 @@ const OrganizationPage = () => {
         </div>
       </div>
 
-      <div className="organizationInfo">
-        <div className="organizationPhoto">
+      <div className="organizationInfoPage">
+        <div className="organizationPhotoPage">
           <img src={shelterImage} className="photo-img" alt="Shelter" />
         </div>
-        <div className="organizationContacts">
-          <div className="organizationName">
-            <h1>Назва організації:</h1>
+        <div className="organizationContactsPage">
+          <div className="organizationNamePage">
+            <h1>{organization.name}</h1>
           </div>
-          <div className="organizationCategory">
-            <h1>Категорія: Притулок для тварин</h1>
+          <div className="organizationCategoryPage">
+            <h1>Категорія: {organization.shelter_category}</h1>
           </div>
-          <div className="organizationAddress">
-            <h1>Адреса: Яворницького 3б львів</h1>
+          <div className="organizationAddressPage">
+            <h1>Адреса: {organization.address}</h1>
           </div>
         </div>
         <div className="donationInfo">
@@ -111,33 +123,37 @@ const OrganizationPage = () => {
       </div>
 
       <div className="organizationArticlesBody">
-        <div className="activeArticles">
+        <div className="activeArticlesPage">
           <h1>Активні оголошення: </h1>
         </div>
-        <div className="articleCards">
-          {animal.map((pet) => (
+        <div className="articleCardsPage">
+          {animal.map((animal) => (
             <div
               className="animalCardPage"
-              key={pet.id}
-              onClick={() => openPetModal(pet)}
+              key={animal.id}
+              onClick={() => openPetModal(animal)}
             >
               <div className="animalImagePage">
-                <img src={pet.image} alt={pet.name} className="animalPhoto" />
+                <img
+                  src={animal.photo_url || animalImage}
+                  alt={animal.name}
+                  className="animalPhoto"
+                />
               </div>
-              <h2 className="animalNamePage">{pet.name}</h2>
-              <div className="description">
-                <h1 className="animalAge">
+              <h2 className="animalNamePage">{animal.name}</h2>
+              <div className="descriptionPage">
+                <h1 className="animalAgePage">
                   <img src={ageImage} alt="Age" />
-                  Вік: {pet.age} {pet.ageUnit}
+                  Вік: {animal.age} {animal.ageUnit}
                 </h1>
-                <h1 className="animalGender">
+                <h1 className="animalGenderPage">
                   <img src={genderImage} alt="Gender" />
-                  {pet.sex}
+                  {animal.sex}
                 </h1>
               </div>
-              <div className="organizationCardName">
+              <div className="organizationCardNamePage">
                 <img src={handsImage} alt="Organization" />
-                {pet.organization}
+                {organization.name}
               </div>
             </div>
           ))}
@@ -148,15 +164,27 @@ const OrganizationPage = () => {
       <PetCardModal
         isOpen={isModalOpen}
         onClose={closePetModal}
-        pet={selectedPet}
+        animal={selectedPet}
+        authorName={organization.name}
       />
 
       <div className="organizationCommentsBody">
         <div className="commentsText">
           <h1>Коментарі:</h1>
         </div>
+        <div className="addCommentSection">
+          <textarea
+            className="commentInput"
+            placeholder="Напишіть ваш коментар..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button className="addCommentButton" onClick={handleAddComment}>
+            Додати коментар
+          </button>
+        </div>
         <div className="commentsCards">
-        {comments.map((comment) => (
+          {comments.map((comment) => (
             <div className="commentCard" key={comment.comment_id}>
               <p className="commentText">{comment.description}</p>
               <p className="commentAuthor">Автор: {comment.volunteer_name}</p>

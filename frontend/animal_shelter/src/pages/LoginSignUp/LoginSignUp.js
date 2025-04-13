@@ -25,7 +25,6 @@ const LoginSignUp = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     const response = await authService.handle_login(username, password);
-
     if (response) {
       navigate("/");
     } else {
@@ -57,6 +56,7 @@ const LoginSignUp = () => {
     if (response) {
       alert("Signup successful");
       setIsModalOpen(false);
+      set_user_type("volunteer")
       toggleForm();
       navigate("/");
     } else {
@@ -75,9 +75,8 @@ const LoginSignUp = () => {
             <h1>Реєстрація</h1>
             <div className="tab-buttons">
               <button
-                className={`tab-btn left ${
-                  activeTab === "volunteer" ? "active" : ""
-                }`}
+                className={`tab-btn left ${activeTab === "volunteer" ? "active" : ""
+                  }`}
                 onClick={() => {
                   setActiveTab("volunteer");
                   set_user_type("volunteer");
@@ -86,9 +85,8 @@ const LoginSignUp = () => {
                 Волонтер
               </button>
               <button
-                className={`tab-btn right ${
-                  activeTab === "organization" ? "active" : ""
-                }`}
+                className={`tab-btn right ${activeTab === "organization" ? "active" : ""
+                  }`}
                 onClick={() => {
                   setActiveTab("organization");
                   set_user_type("shelter");
@@ -133,15 +131,19 @@ const LoginSignUp = () => {
               <form className="tab-content active" onSubmit={handleSignup}>
                 <div className="form-group">
                   <label>Тип організації:</label>
-                  <select value={shelter_category}
+                  <select
+                    value={shelter_category}
                     onChange={(e) => setShelterCategory(e.target.value)}
-                    required>
+                    required
+                  >
                     <option disabled selected>
                       Оберіть тип
                     </option>
-                    <option value="vet">Ветеринарна клініка</option>
-                    <option value="breeder">Розплідник</option>
-                    <option value="shelter">Притулок</option>
+                    <option value="Ветеринарна клініка">
+                      Ветеринарна клініка
+                    </option>
+                    <option value="Розплідник">Розплідник</option>
+                    <option value="Притулок">Притулок</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -196,9 +198,8 @@ const LoginSignUp = () => {
             <h1>Логін</h1>
             <div className="tab-buttons">
               <button
-                className={`tab-btn left ${
-                  activeTab === "volunteer" ? "active" : ""
-                }`}
+                className={`tab-btn left ${activeTab === "volunteer" ? "active" : ""
+                  }`}
                 onClick={() => {
                   setActiveTab("volunteer");
                   set_user_type("volunteer");
@@ -207,9 +208,8 @@ const LoginSignUp = () => {
                 Волонтер
               </button>
               <button
-                className={`tab-btn right ${
-                  activeTab === "organization" ? "active" : ""
-                }`}
+                className={`tab-btn right ${activeTab === "organization" ? "active" : ""
+                  }`}
                 onClick={() => {
                   setActiveTab("organization");
                   set_user_type("shelter");
