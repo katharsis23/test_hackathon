@@ -10,7 +10,11 @@ class Auth_Service {
         const payload = { username, password, user_type };
 
         try {
-            const response = await axios.post(base_url + "/login", payload);
+            const response = await axios.post(base_url + "/login", payload, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
 
             const user_id = response.data["user_id"]
             if (!user_id) {

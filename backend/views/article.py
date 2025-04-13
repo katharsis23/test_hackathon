@@ -55,13 +55,6 @@ async def post_article(request_: Post_Article, db: AsyncSession = Depends(get_db
         db.add(new_article)
         await db.commit()
 
-        if request_.volunteer_id:
-            new_article_id = new_article.article_id
-            va = Volunteer_Article(
-                volunteer_id=request_.volunteer_id, article_id=new_article_id)
-            db.add(va)
-            await db.commit()
-
         return JSONResponse(
             content={
                 "msg": "article posted succesfully"

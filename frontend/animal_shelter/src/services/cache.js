@@ -2,6 +2,8 @@
 function set_user_type(user_type) {
   try {
     sessionStorage.setItem("user_type", user_type);
+    console.log("SET user_type:", user_type); // 💥
+
   } catch (error) {
     throw new Error(`An error occured ${error}`);
   }
@@ -10,9 +12,13 @@ function set_user_type(user_type) {
 function get_user_type() {
   try {
     const user_type = sessionStorage.getItem("user_type");
-    return user_type;
+    console.log("USER TYPE FROM STORAGE:", user_type); // 💥
+    if (user_type === "volunteer" || user_type === "shelter") {
+      return user_type;
+    }
   } catch (error) {
-    throw new Error(`An error occured ${error}`);
+    console.error(`Error getting user_type: ${error}`);
+    return null; // або навіть краще: викинути помилку
   }
 }
 
