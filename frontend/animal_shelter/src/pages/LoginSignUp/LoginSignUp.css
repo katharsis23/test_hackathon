@@ -164,12 +164,20 @@
 }
 
 .signup_link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
   padding: 5vh 2vh;
   padding-top: 0;
   font-size: 1.7vh;
 }
 
 .login_link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
   padding: 3vh 2vh;
   padding-top: 0.6vh;
   font-size: 1.7vh;
@@ -177,7 +185,7 @@
 
 .signupBtn,
 .loginBtn {
-  width: 5vw;
+  width: 30%;
   height: 3.7vh;
   font-size: 1.7vh;
   border: none;

@@ -4,14 +4,12 @@ import ageIcon from "../../assets/images/age.png";
 import genderIcon from "../../assets/images/gender.png";
 import handsIcon from "../../assets/images/hands.png";
 
-const PetCardModal = ({ isOpen, onClose, pet }) => {
-  if (!isOpen || !pet) return null;
+const PetCardModal = ({ isOpen, onClose, animal, authorName }) => {
+  console.log("PetCardModal props:", { animal, isOpen });
 
-  // Функція для правильного відмінювання слів за числами
+  if (!isOpen || !animal) return null;
+
   const getUnitForm = (value, unit) => {
-    // Використовуємо ageUnit, якщо він є у даних тварини
-
-    // Резервний варіант, якщо ageUnit не вказано
     if (unit === "місяць") {
       if (value === 1) return "місяць";
       else if (value > 1 && value < 5) return "місяці";
@@ -24,20 +22,17 @@ const PetCardModal = ({ isOpen, onClose, pet }) => {
     return unit;
   };
 
-  // Визначення відображення віку
   const getFormattedAge = () => {
-    if (!pet.age) return "";
+    if (!animal.age) return "";
 
-    // Якщо є поле ageUnit, використовуємо його напряму
-    if (pet.ageUnit) {
-      return `${pet.age} ${pet.ageUnit}`;
+    if (animal.ageUnit) {
+      return `${animal.age} ${animal.ageUnit}`;
     }
 
-    // Якщо ageUnit не вказано, визначаємо одиницю за значенням
-    const value = typeof pet.age === "number" ? pet.age : parseInt(pet.age);
-    if (isNaN(value)) return pet.age; // Повертаємо вік як є, якщо не число
+    const value =
+      typeof animal.age === "number" ? animal.age : parseInt(animal.age);
+    if (isNaN(value)) return animal.age;
 
-    // Конвертуємо місяці в роки, якщо більше 12
     if (value >= 12) {
       const years = Math.floor(value / 12);
       return `${years} ${getUnitForm(years, "рік")}`;
@@ -55,11 +50,11 @@ const PetCardModal = ({ isOpen, onClose, pet }) => {
 
         <div className="pet-modal-body">
           <div className="pet-modal-image">
-            <img src={pet.image} alt={pet.name} />
+            <img src={animal.photo_url} alt={animal.name} />
           </div>
 
           <div className="pet-modal-info">
-            <h2 className="pet-modal-name">{pet.name}</h2>
+            <h2 className="pet-modal-name">{animal.name}</h2>
 
             <div className="pet-modal-details">
               <div className="pet-detail-item">
@@ -69,26 +64,28 @@ const PetCardModal = ({ isOpen, onClose, pet }) => {
 
               <div className="pet-detail-item">
                 <img src={genderIcon} alt="Gender" className="detail-icon" />
-                <span>{pet.sex}</span>
+                <span>{animal.sex}</span>
               </div>
 
               <div className="pet-detail-item">
                 <img src={handsIcon} alt="Shelter" className="detail-icon" />
-                <span> {pet.organization || pet.shelter_id}</span>
+                <span>
+                  {authorName || animal.organization || animal.shelter_id}
+                </span>
               </div>
             </div>
 
-            {pet.healthStatus && (
+            {animal.health_status && (
               <div className="pet-health-status">
                 <h3>Стан здоров'я:</h3>
-                <p>{pet.healthStatus}</p>
+                <p>{animal.health_status}</p>
               </div>
             )}
 
-            {pet.description && (
+            {animal.description && (
               <div className="pet-description">
                 <h3>Опис:</h3>
-                <p>{pet.description}</p>
+                <p>{animal.description}</p>
               </div>
             )}
 

@@ -14,21 +14,6 @@ import PetCardModal from "../../components/PetModal/PetCardModal";
 
 function Search() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await authService.get_user_info();
-        setIsLoggedIn(!!response);
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setIsLoggedIn(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
 
   const mockAnimals = [
     {
@@ -41,6 +26,8 @@ function Search() {
       shelter_id: "Щасливий хвіст",
       photo_url:
         "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=300",
+      description:
+        "Барсік — грайливий і ласкавий кіт, який любить увагу та обійми.",
     },
     {
       article_id: 2,
@@ -52,6 +39,8 @@ function Search() {
       shelter_id: "Дім для друга",
       photo_url:
         "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=300",
+      description:
+        "Рекс — енергійний пес, який обожнює прогулянки та активні ігри.",
     },
     {
       article_id: 3,
@@ -63,6 +52,7 @@ function Search() {
       shelter_id: "Кіт і Кіт",
       photo_url:
         "https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?q=80&w=300",
+      description: "Мурка — ніжна кішечка, яка потребує турботи та лікування.",
     },
     {
       article_id: 4,
@@ -74,6 +64,8 @@ function Search() {
       shelter_id: "Щасливий хвіст",
       photo_url:
         "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=300",
+      description:
+        "Шарік — добрий пес із великим серцем, який потребує особливого догляду.",
     },
     {
       article_id: 5,
@@ -85,6 +77,8 @@ function Search() {
       shelter_id: "Кіт і Кіт",
       photo_url:
         "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=300",
+      description:
+        "Ліза — грайлива та допитлива кішечка, яка шукає люблячий дім.",
     },
     {
       article_id: 7,
@@ -96,6 +90,8 @@ function Search() {
       shelter_id: "Щасливий хвіст",
       photo_url:
         "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=300",
+      description:
+        "Стрілка — лагідна собачка, яка потребує терпіння та турботи.",
     },
     {
       article_id: 8,
@@ -107,6 +103,8 @@ function Search() {
       shelter_id: "Кіт і Кіт",
       photo_url:
         "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=300",
+      description:
+        "Сімба — молодий і активний кіт, який любить гратися та досліджувати світ.",
     },
   ];
 
@@ -123,7 +121,6 @@ function Search() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Замість fetchAnimals() використовуємо mockAnimals
     setAnimals(mockAnimals);
     setFilteredAnimals(mockAnimals);
   }, []);
@@ -180,6 +177,7 @@ function Search() {
   };
 
   const openModal = (animal) => {
+    console.log("isModalOpen:", isModalOpen, "selectedAnimal:", selectedAnimal);
     console.log("Modal open triggered", animal);
     setSelectedAnimal(animal);
     setIsModalOpen(true);
@@ -382,14 +380,6 @@ function Search() {
       <div className="cabinetHeader">
         <h1 onClick={() => navigate("/")}>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div
-            className="login"
-            onClick={() =>
-              navigate(isLoggedIn ? "/OrganizationCabinet" : "/LoginSignUp")
-            }
-          >
-            <h1>Увійти</h1>
-          </div>
           <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>

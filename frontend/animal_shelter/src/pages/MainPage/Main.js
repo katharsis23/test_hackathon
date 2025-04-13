@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Main.css";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/auth";
+import PetCardModal from "../../components/PetModal/PetCardModal";
 
 import pipaDog from "../../assets/images/Pipa.jpg";
 import ameliaCat from "../../assets/images/Amelia.jpg";
@@ -30,11 +31,25 @@ export default function Life4PawApp() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await authService.get_user_info();
+        setIsLoggedIn(!!response);
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
     const fetchArticle = async () => {
       try {
         setLoading(true);
         const fetchedData = await Article_service.fetch_article_homepage();
-        console.log("Fetched data:", fetchedData); // Debug log
+        console.log("Fetched data:", fetchedData);
         setPets(Array.isArray(fetchedData) ? fetchedData : []);
       } catch (err) {
         console.error("Error fetching pets:", err);
@@ -66,7 +81,7 @@ export default function Life4PawApp() {
     if (announcements) {
       announcements.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
     }
   };
@@ -95,6 +110,16 @@ export default function Life4PawApp() {
     // }
 
     return authorName;
+  };
+
+  const openModal = (pet) => {
+    setSelectedPet(pet);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedPet(null);
+    setIsModalOpen(false);
   };
 
   return (
@@ -186,6 +211,7 @@ export default function Life4PawApp() {
               <div
                 className="pet-card"
                 key={petData.article_id || `pet-${Math.random()}`}
+                onClick={() => openModal(petData)}
               >
                 <div className="pet-image">
                   {petData.photo_url && (
@@ -240,6 +266,16 @@ export default function Life4PawApp() {
           <div className="no-pets-message">No pets available at the moment</div>
         )}
       </section>
+
+      {/* Pet Modal */}
+      {isModalOpen && selectedPet && (
+        <PetCardModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          animal={selectedPet}
+          authorName={getShelterVolunteerInfo(selectedPet)} // Передаємо authorName
+        />
+      )}
 
       {/* Shelters Section */}
       <section className="shelters-section">
