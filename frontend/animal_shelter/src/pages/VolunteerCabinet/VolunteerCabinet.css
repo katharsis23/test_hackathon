@@ -1,239 +1,236 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap");
 
 .cabinetBodyContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    min-height: 100vh;
-    min-width: 600px;
-    background-image: url("../../assets/images/background.svg");
-    background-repeat: repeat;
-    background-position: top left;
-    background-size: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 600px;
+  background-image: url("../../assets/images/background.svg");
+  background-repeat: repeat;
+  background-position: top left;
+  background-size: auto;
 }
 
 .cabinetHeader {
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 7.5vh;
-    width: 100%;
-    background-color: rgb(77, 118, 110);
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 7.5vh;
+  width: 100%;
+  background-color: rgb(77, 118, 110);
 }
 
 .cabinetHeader h1 {
-    color: white;
-    font-family: "Archivo Black", sans-serif;
-    font-size: 3.8vh;
-    margin: 0;
-    margin-left: 1.5vw;
-    cursor: pointer;
+  color: white;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 3.8vh;
+  margin: 0;
+  margin-left: 1.5vw;
+  cursor: pointer;
 }
 
 .headerBtnContainer {
-    display: flex;
-    align-items: center;
-    margin-right: 1.5vw;
+  display: flex;
+  align-items: center;
+  margin-right: 1.5vw;
 }
 
 .find h1 {
-    font-family: "Montserrat Alternates", sans-serif;
-    font-weight: lighter;
-    font-size: 2.2vh;
-    cursor: pointer;
-    margin-right: 1vw;
-    margin-left: 1vw;
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: lighter;
+  font-size: 2.2vh;
+  cursor: pointer;
+  margin-right: 1vw;
+  margin-left: 1vw;
 }
 
 .find {
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-    border-radius: 1vh;
-    padding: 1vh 0.2vw;
-    background-color: rgb(88, 152, 140);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 1vh;
+  padding: 1vh 0.2vw;
+  background-color: rgb(88, 152, 140);
 }
 
 .volunteerInfo {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 1vh;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1vh;
 }
 
 .volunteerPhoto {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 22vw;
-    margin-right: 2.3vw;
-    margin-top: 6vh;
-    height: 30vh;
-    padding: 1.8vh 4.5vh;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 22vw;
+  margin-right: 2.3vw;
+  margin-top: 6vh;
+  height: 30vh;
+  padding: 1.8vh 4.5vh;
 }
 
 .photo-img {
-    height: 100%;
-    object-fit: cover;
+  height: 100%;
+  object-fit: cover;
 }
 
 .volunteeNameBlock {
-    font-family: "Montserrat Alternates", sans-serif;
-    height: 100%;
-    display: flex;
+  font-family: "Montserrat Alternates", sans-serif;
+  height: 100%;
+  display: flex;
 }
 
 .volunteerName h1 {
-    font-size: 8.4vh;
-    margin: 0;
-    padding-bottom: 13vh;
+  font-size: 8.4vh;
+  margin: 0;
+  padding-bottom: 13vh;
 }
 
 @media (max-width: 768px) {
-    .volunteerPhoto {
-        flex-direction: column;
-        width: 50vw;
-        padding: 1vh 2vw;
-        margin-left: 20vw;
-    }
+  .volunteerPhoto {
+    flex-direction: column;
+    width: 50vw;
+    padding: 1vh 2vw;
+    margin-left: 20vw;
+  }
 
-    .photo-img {
-        width: 100%;
-        height: auto;
-        object-fit: contain;
-    }
+  .photo-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
 
-    .volunteeNameBlock {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        height: auto;
-        margin-top: 1vh;
-    }
-
-    .volunteerName h1 {
-        font-size: 4vh;
-        text-align: center;
-        padding-top: 15vh;
-        padding-left: 10vw;
-    }
-
-    .animalCard h2 {
-        font-size: 2.3vh;
-    }
-
-    .activeArticles h1 {
-        font-size: 3.3vh;
-        margin-left: 8vw;
-    }
-
-}
-
-
-.volunteerArticlesBody {
-    display: flex;
+  .volunteeNameBlock {
     flex-direction: column;
     align-items: center;
     width: 100%;
     height: auto;
-    margin-top: 2vh;
-}
+    margin-top: 1vh;
+  }
 
-.activeArticles {
-    display: flex;
-    width: 100%;
-    padding-left: 2vw;
-    font-size: 2.4vh;
-    font-family: "Roboto Slab", serif;
-    font-optical-sizing: auto;
-    font-weight: lighter;
-    font-style: normal;
-}
+  .volunteerName h1 {
+    font-size: 4vh;
+    text-align: center;
+    padding-top: 15vh;
+    padding-left: 10vw;
+  }
 
-.articleCards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    width: 78%;
-    height: auto;
-    margin-top: 2vh;
-}
+  .animalCard h2 {
+    font-size: 2.3vh;
+  }
 
-.animalCard {
-    background-color: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 0;
-    width: 13vw;
-    min-width: 200px;
-    max-width: 320px;
-    max-height: 500px;
-    min-height: 200px;
-    overflow: hidden;
-    margin: 1.6vh;
-}
-
-.animalImage {
-    width: 100%;
-    height: 23vh;
-    object-fit: cover;
-    background-color: #000;
-    border-top-left-radius: 2vh;
-    border-top-right-radius: 2vh;
-    overflow: hidden;
-    background-color: transparent;
-}
-
-.animalPhoto {
-    width: 100%;
-    height: 100%;
-    border-top-left-radius: 2vh;
-    border-top-right-radius: 2vh;
-    object-fit: cover;
-}
-
-.animalName {
+  .activeArticles h1 {
     font-size: 3.3vh;
-    font-weight: bold;
-    margin: 1.2vh 1vh 0.7vh 1vh;
-    color: #000;
+    margin-left: 8vw;
+  }
 }
 
-.description {
-    display: flex;
-    justify-content: space-between;
-    margin: 1.2vh 2vh 1.2vh 1vh;
-    gap: 24px;
+.volunteerArticlesBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-top: 2vh;
 }
 
-.animalAge,
-.animalGender {
-    display: flex;
-    align-items: center;
-    font-size: 1.8vh;
-    font-weight: normal;
-    color: #444;
+.activeArticlesVolunteer {
+  display: flex;
+  width: 100%;
+  padding-left: 2vw;
+  font-size: 2.4vh;
+  font-family: "Roboto Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: lighter;
+  font-style: normal;
 }
 
-.animalAge img,
-.animalGender img,
-.organizationCardName img {
-    width: 2.8vh;
-    height: 2.8vh;
-    margin-right: 0.5vh;
+.articleCardsVolunteer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 78%;
+  height: auto;
+  margin-top: 2vh;
 }
 
-.organizationCardName {
-    display: flex;
-    align-items: center;
-    font-size: 1.8vh;
-    font-weight: normal;
-    margin: 1.2vh 2vh 1.2vh 1vh;
-    color: #444;
+.animalCardVolunteer {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  width: 13vw;
+  min-width: 200px;
+  max-width: 320px;
+  max-height: 500px;
+  min-height: 200px;
+  overflow: hidden;
+  margin: 1.6vh;
+}
+
+.animalImageVolunteer {
+  width: 100%;
+  height: 23vh;
+  object-fit: cover;
+  background-color: #000;
+  border-top-left-radius: 2vh;
+  border-top-right-radius: 2vh;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.animalPhotoVolunteer {
+  width: 100%;
+  height: 100%;
+  border-top-left-radius: 2vh;
+  border-top-right-radius: 2vh;
+  object-fit: cover;
+}
+
+.animalNameVolunteer {
+  font-size: 3.3vh;
+  font-weight: bold;
+  margin: 1.2vh 1vh 0.7vh 1vh;
+  color: #000;
+}
+
+.descriptionVolunteer {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.2vh 2vh 1.2vh 1vh;
+  gap: 24px;
+}
+
+.animalAgeVolunteer,
+.animalGenderVolunteer {
+  display: flex;
+  align-items: center;
+  font-size: 1.8vh;
+  font-weight: normal;
+  color: #444;
+}
+
+.animalAgeVolunteer img,
+.animalGenderVolunteer img,
+.organizationCardNameVolunteer img {
+  width: 2.8vh;
+  height: 2.8vh;
+  margin-right: 0.5vh;
+}
+
+.organizationCardNameVolunteer {
+  display: flex;
+  align-items: center;
+  font-size: 1.8vh;
+  font-weight: normal;
+  margin: 1.2vh 2vh 1.2vh 1vh;
+  color: #444;
 }

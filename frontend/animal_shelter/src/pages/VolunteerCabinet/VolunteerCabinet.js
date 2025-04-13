@@ -45,42 +45,42 @@ const VolunteerCabinet = () => {
         </div>
       </div>
       <div className="volunteerArticlesBody">
-        <div className="activeArticles">
+        <div className="activeArticlesVolunteer">
           <h1>Улюблені оголошення: </h1>
         </div>
-        <div className="articleCards">
-          <div className="animalCard">
-            <div className="animalImage">
+        <div className="articleCardsVolunteer">
+          <div className="animalCardVolunteer">
+            <div className="animalImageVolunteer">
               <img
                 src="https://th.bing.com/th/id/R.121340b8cb0466ed586c78b496797212?rik=hJr%2bVRwSeXSoxQ&pid=ImgRaw&r=0"
-                className="animalPhoto"
+                className="animalPhotoVolunteer"
               />
             </div>
-            <h2 className="animalName">Мурзік</h2>
-            <div className="description">
-              <h1 className="animalAge">
+            <h2 className="animalNameVolunteer">Мурзік</h2>
+            <div className="descriptionVolunteer">
+              <h1 className="animalAgeVolunteer">
                 <img src={ageImage} alt="Age" /> Вік: 10
               </h1>
-              <h1 className="animalGender">
+              <h1 className="animalGenderVolunteer">
                 <img src={genderImage} alt="Gender" />
                 Хлопчик
               </h1>
             </div>
-            <div className="organizationCardName">
+            <div className="organizationCardNameVolunteer">
               <img src={handsImage} alt="Organization" />
               ГоШелтер
             </div>
           </div>
-          <div className="animalCard">
-            <div className="animalImage">
+          <div className="animalCardVolunteer">
+            <div className="animalImageVolunteer">
               <img
                 src="https://th.bing.com/th/id/OIP.Wl4ICx3mgr_UNcTl4DZ52QAAAA?rs=1&pid=ImgDetMain"
                 className="animalPhoto"
               />
             </div>
-            <h2 className="animalName">Мілка</h2>
-            <div className="description">
-              <h1 className="animalAge">
+            <h2 className="animalNameVolunteer">Мілка</h2>
+            <div className="descriptionVolunteer">
+              <h1 className="animalAgeVolunteer">
                 <img src={ageImage} alt="Age" /> Вік: 2
               </h1>
               <h1 className="animalGender">
@@ -88,29 +88,29 @@ const VolunteerCabinet = () => {
                 Дівчинка
               </h1>
             </div>
-            <div className="organizationCardName">
+            <div className="organizationCardNameVolunteer">
               <img src={handsImage} alt="Organization" />
               ВусаЛапиХвіст
             </div>
           </div>
-          <div className="animalCard">
-            <div className="animalImage">
+          <div className="animalCardVolunteer">
+            <div className="animalImageVolunteer">
               <img
                 src="https://th.bing.com/th/id/OIP.Q0A35f2q_4NCwjB3slN6wQHaJ4?rs=1&pid=ImgDetMain"
                 className="animalPhoto"
               />
             </div>
-            <h2 className="animalName">Анатолій</h2>
-            <div className="description">
-              <h1 className="animalAge">
+            <h2 className="animalNameVolunteer">Анатолій</h2>
+            <div className="descriptionVolunteer">
+              <h1 className="animalAgeVolunteer">
                 <img src={ageImage} alt="Age" /> Вік: 5
               </h1>
-              <h1 className="animalGender">
+              <h1 className="animalGenderVolunteer">
                 <img src={genderImage} alt="Gender" />
                 Хлопчик
               </h1>
             </div>
-            <div className="organizationCardName">
+            <div className="organizationCardNameVolunteer">
               <img src={handsImage} alt="Organization" />
               Добрі руки
             </div>

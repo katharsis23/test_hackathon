@@ -82,18 +82,18 @@ const OrganizationPage = () => {
         </div>
       </div>
 
-      <div className="organizationInfo">
-        <div className="organizationPhoto">
+      <div className="organizationInfoPage">
+        <div className="organizationPhotoPage">
           <img src={shelterImage} className="photo-img" alt="Shelter" />
         </div>
-        <div className="organizationContacts">
-          <div className="organizationName">
+        <div className="organizationContactsPage">
+          <div className="organizationNamePage">
             <h1>Назва організації:</h1>
           </div>
-          <div className="organizationCategory">
+          <div className="organizationCategoryPage">
             <h1>Категорія: Притулок для тварин</h1>
           </div>
-          <div className="organizationAddress">
+          <div className="organizationAddressPage">
             <h1>Адреса: Яворницького 3б львів</h1>
           </div>
         </div>
@@ -111,10 +111,10 @@ const OrganizationPage = () => {
       </div>
 
       <div className="organizationArticlesBody">
-        <div className="activeArticles">
+        <div className="activeArticlesPage">
           <h1>Активні оголошення: </h1>
         </div>
-        <div className="articleCards">
+        <div className="articleCardsPage">
           {animal.map((pet) => (
             <div
               className="animalCardPage"
@@ -125,17 +125,17 @@ const OrganizationPage = () => {
                 <img src={pet.image} alt={pet.name} className="animalPhoto" />
               </div>
               <h2 className="animalNamePage">{pet.name}</h2>
-              <div className="description">
-                <h1 className="animalAge">
+              <div className="descriptionPage">
+                <h1 className="animalAgePage">
                   <img src={ageImage} alt="Age" />
                   Вік: {pet.age} {pet.ageUnit}
                 </h1>
-                <h1 className="animalGender">
+                <h1 className="animalGenderPage">
                   <img src={genderImage} alt="Gender" />
                   {pet.sex}
                 </h1>
               </div>
-              <div className="organizationCardName">
+              <div className="organizationCardNamePage">
                 <img src={handsImage} alt="Organization" />
                 {pet.organization}
               </div>
@@ -156,7 +156,7 @@ const OrganizationPage = () => {
           <h1>Коментарі:</h1>
         </div>
         <div className="commentsCards">
-        {comments.map((comment) => (
+          {comments.map((comment) => (
             <div className="commentCard" key={comment.comment_id}>
               <p className="commentText">{comment.description}</p>
               <p className="commentAuthor">Автор: {comment.volunteer_name}</p>
