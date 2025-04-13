@@ -81,7 +81,7 @@ async def post_article(request_: Post_Article, db: AsyncSession = Depends(get_db
 @article_router.get("/fetch_article_homepage")
 async def fetch_article_homepage(request_: Request, db: AsyncSession = Depends(get_db)):
     try:
-        query = await db.execute(select(Article).limit(4))
+        query = await db.execute(select(Article).limit(20))
         articles = query.scalars().all()
         article_list = []
         
@@ -153,7 +153,7 @@ class Fetch_Article_Shelter(BaseModel):
 @article_router.post("/fetch_article_shelter")
 async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSession = Depends(get_db)):
     try:
-        query = await db.execute(select(Article).where(Article.shelter_id == request_.shelter_id).limit(3))
+        query = await db.execute(select(Article).where(Article.shelter_id == request_.shelter_id).limit(20))
         articles = query.scalars().all()
         if articles is None:
             return JSONResponse(

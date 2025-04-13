@@ -23,7 +23,25 @@ const OrganizationPage = () => {
   const [organization, setOrganization] = useState(new Shelter());
   const [animal, setAnimal] = useState([]);
   const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
+
+  const handleAddComment = async () => {
+    if (newComment.trim() === "") {
+      alert("Коментар не може бути порожнім!");
+      return;
+    }
+    try {
+      await CommentService.post_comment(organization.id, newComment);
+      const updatedComments = await CommentService.get_comments(
+        organization.id
+      );
+      setComments(updatedComments);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
 
   const openPetModal = (animal) => {
     console.log("Selected pet:", animal);
@@ -153,6 +171,17 @@ const OrganizationPage = () => {
       <div className="organizationCommentsBody">
         <div className="commentsText">
           <h1>Коментарі:</h1>
+        </div>
+        <div className="addCommentSection">
+          <textarea
+            className="commentInput"
+            placeholder="Напишіть ваш коментар..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button className="addCommentButton" onClick={handleAddComment}>
+            Додати коментар
+          </button>
         </div>
         <div className="commentsCards">
           {comments.map((comment) => (
