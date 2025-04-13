@@ -41,10 +41,8 @@ const OrganizationCabinet = () => {
     try {
       const articleService = new Article_service();
 
-      // Get current user ID
       const currentUserId = get_user_id();
 
-      // Prepare updated article data
       const updatedArticle = {
         article_id: selectedArticle.article_id,
         photo_url: selectedArticle.photo_url,
