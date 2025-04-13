@@ -48,7 +48,8 @@ export default function Life4PawApp() {
     const fetchArticle = async () => {
       try {
         setLoading(true);
-        const fetchedData = await Article_service.fetch_article_homepage();
+        const article_service = new Article_service();
+        const fetchedData = await article_service.fetch_article_homepage();
         console.log("Fetched data:", fetchedData);
         setPets(Array.isArray(fetchedData) ? fetchedData : []);
       } catch (err) {

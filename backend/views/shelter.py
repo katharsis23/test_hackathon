@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 import json
 from pydantic import BaseModel
 from sqlalchemy.future import select
-
+from httpx import AsyncClient
 
 shelter_router=APIRouter()
 
@@ -55,16 +55,26 @@ async def fetch_comment(request_: Get_Comments, db: AsyncSession = Depends(get_d
                 content={"comments": []},
                 status_code=200
             )
-
-        response = [
-            {
+        response=[]
+        for comment in comments:
+            author_name=""
+            async with AsyncClient() as client:
+                request_to_get_name=await client.post(
+                    url="http://localhost:8000/auth/get_user_info",
+                    json={
+                        "id": comment.volunteer_id,
+                        "user_type": "volunteer"
+                    }
+                )
+                vol_data=request_to_get_name.json()
+                author_name=vol_data["name"]
+            response.append({
+                "shelter_id": comment.shelter_id,
                 "comment_id": comment.comment_id,
                 "volunteer_id": comment.volunteer_id,
-                "shelter_id": comment.shelter_id,
-                "description": comment.description
-            }
-            for comment in comments
-        ]
+                "description": comment.description,
+                "author_name": author_name
+            })
 
         return JSONResponse(
             content={"comments": response},
