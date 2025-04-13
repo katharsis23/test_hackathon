@@ -14,12 +14,8 @@ function App() {
         <Route path="/LoginSignUp" element={<LoginSignUp />} />
         <Route path="/OrganizationCabinet" element={<OrganizationCabinet />} />
         <Route path="/ArticleForm" element={<ArticleForm />} />
-<<<<<<< HEAD
         <Route path="/VolunteerCabinet" element={<VolunteerCabinet />} />
-=======
         <Route path="/" element={<Life4PawApp />} />
-        <Route path="/OrganizationPage" element={<OrganizationPage />} />
->>>>>>> d5e56f516d9bb5a9d74c1e3bea72be2e6752764b
       </Routes>
     </Router>
   );

@@ -10,6 +10,7 @@ class Article {
     description = "",
     volunteer_id = "null",
     shelter_id = "",
+    author_name,
   } = {}) {
     this.article_id = article_id;
     this.photo_url = photo_url;
@@ -21,6 +22,8 @@ class Article {
     this.description = description;
     this.volunteer_id = volunteer_id;
     this.shelter_id = shelter_id;
+    this.author_name = author_name;
+
   }
 
   static fromJSON(json) {
@@ -35,6 +38,8 @@ class Article {
       description: json.description,
       volunteer_id: json.volunteer_id || null,
       shelter_id: json.shelter_id,
+      author_name: json.author_name,
+
     });
   }
 

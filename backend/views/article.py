@@ -9,6 +9,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from sqlalchemy import join
 from httpx import AsyncClient
+import traceback
 
 
 article_router = APIRouter()
@@ -77,37 +78,37 @@ async def fetch_article_homepage(request_: Request, db: AsyncSession = Depends(g
         query = await db.execute(select(Article).limit(4))
         articles = query.scalars().all()
         article_list = []
-        
+
         for article in articles:
             author_name = "Unknown"  # Default value in case requests fail
-            
+
             try:
                 if article.volunteer_id is not None:
                     async with AsyncClient() as client:
                         request_to_author_name = await client.post(
-                        url="http://localhost:8000/auth/get_user_info",
-                        json={  # ← also fix: use `json=` instead of `content=`
-                         "id": article.volunteer_id,
-                         "user_type": "volunteer"
-                        }
-                    )
+                            url="http://localhost:8000/auth/get_user_info",
+                            json={  # ← also fix: use `json=` instead of `content=`
+                                "id": article.volunteer_id,
+                                "user_type": "volunteer"
+                            }
+                        )
                     vol_data = request_to_author_name.json()
                     author_name = vol_data["name"]
                 elif article.shelter_id is not None:
                     async with AsyncClient() as client:
                         request_to_author_name = await client.post(
-                        url="http://localhost:8000/auth/get_user_info",
-                        json={
-                        "id": article.shelter_id,
-                        "user_type": "shelter"
-                        }
+                            url="http://localhost:8000/auth/get_user_info",
+                            json={
+                                "id": article.shelter_id,
+                                "user_type": "shelter"
+                            }
                         )
                 vol_data = request_to_author_name.json()
                 author_name = vol_data["name"]
             except Exception as e:
                 # Log the error but continue processing other articles
                 print(f"Error fetching author name: {e}")
-                
+
             article_list.append({
                 "article_id": article.article_id,  # Make sure to include the ID
                 "photo_url": article.photo_url,
@@ -121,7 +122,7 @@ async def fetch_article_homepage(request_: Request, db: AsyncSession = Depends(g
                 "volunteer_id": article.volunteer_id,
                 "author_name": author_name
             })
-            
+
         return JSONResponse(
             content={
                 "array_of_article": article_list
@@ -129,7 +130,8 @@ async def fetch_article_homepage(request_: Request, db: AsyncSession = Depends(g
             status_code=200
         )
     except Exception as e:
-        print(f"Error in fetch_article_homepage: {str(e)}")  # Add more detailed logging
+        # Add more detailed logging
+        print(f"Error in fetch_article_homepage: {str(e)}")
         return JSONResponse(
             content={
                 "msg": "Error fetching articles",
@@ -167,7 +169,7 @@ async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSessio
                     "animal_type": article.animal_type,
                     "description": article.description,
                     "shelter_id": article.shelter_id,
-                    "volunteer_id": article.volunteer_id  
+                    "volunteer_id": article.volunteer_id
                 }
             )
         return JSONResponse(
@@ -184,7 +186,6 @@ async def fetch_article_shelter(request_: Fetch_Article_Shelter, db: AsyncSessio
             },
             status_code=500
         )
-    
 
 
 @article_router.get("/fetch_article_volunteer")
@@ -244,7 +245,8 @@ async def fetch_article_volunteer(request_: Request, db: AsyncSession = Depends(
                 "detail": str(e)  # fixed typo
             },
             status_code=500
-        )        
+        )
+
 
 class Add_to_Favourite(BaseModel):
     volunteer_id: str
@@ -288,27 +290,101 @@ class Fetch_Favourites(BaseModel):
     user_id: str
 
 
+# @article_router.post("/fetch_favourite_articles")
+# async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSession = Depends(get_db)):
+#     try:
+#         # JOIN Volunteer_Article with Article on article_id
+#         stmt = (
+#             select(Article)
+#             .join(Volunteer_Article, Volunteer_Article.article_id == Article.article_id)
+#             .where(Volunteer_Article.volunteer_id == request_.user_id)
+#         )
+
+
+#         result = await db.execute(stmt)
+#         articles = result.scalars().all()
+
+#         if not articles:
+#             return JSONResponse(
+#                 content={"array_of_favourites": []},
+#                 status_code=200
+#             )
+
+
+#         if result.shelter_id:
+#             shelter_info = await db.execute(select(Shelter).where(Shelter.shelter_id == result.shelter_id))
+
+#             author_name = shelter_info.name
+#         elif result.volunteer_id:
+#             volunteer_info = await db.execute(select(Volunteer).where(Volunteer.volunteer_id == result.volunteer_id))
+#             author_name = volunteer_info.volunteer_id
+
+
+#         response = [
+#             {
+#                 "photo_url": article.photo_url,
+#                 "name": article.name,
+#                 "age": article.age,
+#                 "sex": article.sex,
+#                 "health_status": article.health_status,
+#                 "animal_type": article.animal_type,
+#                 "description": article.description,
+#                 "shelter_id": article.shelter_id,
+#                 "volunteer_id": article.volunteer_id,
+#             }
+#             for article in articles
+#         ]
+
+#         return JSONResponse(
+#             content={"array_of_favourites": response},
+#             status_code=200
+#         )
+
+#     except Exception as e:
+#         return JSONResponse(
+#             content={
+#                 "msg": "This is bad :(",
+#                 "detail": str(e)
+#             },
+#             status_code=500
+#         )
+
 @article_router.post("/fetch_favourite_articles")
 async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSession = Depends(get_db)):
     try:
-        # JOIN Volunteer_Article with Article on article_id
         stmt = (
             select(Article)
             .join(Volunteer_Article, Volunteer_Article.article_id == Article.article_id)
             .where(Volunteer_Article.volunteer_id == request_.user_id)
         )
-
         result = await db.execute(stmt)
         articles = result.scalars().all()
 
         if not articles:
-            return JSONResponse(
-                content={"array_of_favourites": []},
-                status_code=200
-            )
+            return JSONResponse(content={"array_of_favourites": []}, status_code=200)
 
-        response = [
-            {
+        response = []
+
+        for article in articles:
+            author_name = None
+
+            if article.shelter_id:
+                shelter_stmt = select(Shelter).where(
+                    Shelter.shelter_id == article.shelter_id)
+                shelter_result = await db.execute(shelter_stmt)
+                shelter = shelter_result.scalar_one_or_none()
+                if shelter:
+                    author_name = shelter.name
+
+            elif article.volunteer_id:
+                volunteer_stmt = select(Volunteer).where(
+                    Volunteer.volunteer_id == article.volunteer_id)
+                volunteer_result = await db.execute(volunteer_stmt)
+                volunteer = volunteer_result.scalar_one_or_none()
+                if volunteer:
+                    author_name = volunteer.username
+
+            response.append({
                 "photo_url": article.photo_url,
                 "name": article.name,
                 "age": article.age,
@@ -318,21 +394,16 @@ async def fetching_favourite_article(request_: Fetch_Favourites, db: AsyncSessio
                 "description": article.description,
                 "shelter_id": article.shelter_id,
                 "volunteer_id": article.volunteer_id,
-            }
-            for article in articles
-        ]
+                "author_name": author_name
+            })
 
-        return JSONResponse(
-            content={"array_of_favourites": response},
-            status_code=200
-        )
+        return JSONResponse(content={"array_of_favourites": response}, status_code=200)
 
     except Exception as e:
+        print("Error occurred:", str(e))
+
         return JSONResponse(
-            content={
-                "msg": "This is bad :(",
-                "detail": str(e)
-            },
+            content={"msg": "This is bad :(", "detail": str(e)},
             status_code=500
         )
 

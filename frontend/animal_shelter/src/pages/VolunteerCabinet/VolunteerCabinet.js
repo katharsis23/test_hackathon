@@ -2,15 +2,22 @@
 import React, { useState, useEffect } from "react";
 import "./VolunteerCabinet.css";
 import volunteerImage from "../../assets/images/volunteer.svg";
+import animalImage from "../../assets/images/image.png";
 import ageImage from "../../assets/images/age.png";
 import genderImage from "../../assets/images/gender.png";
 import handsImage from "../../assets/images/hands.png";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/auth";
+import articleService from "../../services/article_service";
+import Article from "../../models/article_model";
+
 
 const VolunteerCabinet = () => {
     const [username, setUsername] = useState("");
     const navigate = useNavigate();
+    const [animal, setAnimal] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -21,6 +28,16 @@ const VolunteerCabinet = () => {
             else {
                 alert('Get user info failed.')
             }
+
+            ///////////
+            const favouriteArticles = await articleService.fetch_favourite_articles();
+            console.log("Articles from server:", favouriteArticles);
+
+            const articles = favouriteArticles.map(Article.fromJSON);
+
+
+            setAnimal(articles);
+
         }
 
         fetchUserInfo();
@@ -29,7 +46,7 @@ const VolunteerCabinet = () => {
     return (
         <div className="cabinetBodyContainer">
             <div className="cabinetHeader">
-                <h1 onClick={() => navigate("/Home")}>Life4Paw</h1>
+                <h1 onClick={() => navigate("/")}>Life4Paw</h1>
                 <div className="headerBtnContainer">
                     <div className="find" onClick={() => navigate("/ArticleForm")}>
                         <h1>Знайшли тварину?</h1>
@@ -51,66 +68,36 @@ const VolunteerCabinet = () => {
                     <h1>Улюблені оголошення: </h1>
                 </div>
                 <div className="articleCards">
-                    <div className="animalCard" >
-                        <div className="animalImage">
-                            <img src="https://th.bing.com/th/id/R.121340b8cb0466ed586c78b496797212?rik=hJr%2bVRwSeXSoxQ&pid=ImgRaw&r=0" className="animalPhoto"
-                            />
+                    {animal.map((article) => (
+                        <div className="animalCard" key={article.article_id}>
+                            <div className="animalImage">
+                                <img
+                                    src={article.photo_url || animalImage}
+                                    alt={article.name}
+                                    className="animalPhoto"
+                                    onError={(e) => {
+                                        console.log("Failed to load image:", article.photo_url);
+                                        e.target.src = animalImage;
+                                    }}
+                                    crossOrigin="anonymous"
+                                />
+                            </div>
+                            <h2 className="animalName">{article.name}</h2>
+                            <div className="description">
+                                <h1 className="animalAge">
+                                    <img src={ageImage} alt="Age" /> Вік: {article.age}
+                                </h1>
+                                <h1 className="animalGender">
+                                    <img src={genderImage} alt="Gender" />
+                                    {article.sex}
+                                </h1>
+                            </div>
+                            <div className="organizationCardName">
+                                <img src={handsImage} alt="Organization" />
+                                {article.author_name}
+                            </div>
                         </div>
-                        <h2 className="animalName">Мурзік</h2>
-                        <div className="description">
-                            <h1 className="animalAge">
-                                <img src={ageImage} alt="Age" /> Вік: 10
-                            </h1>
-                            <h1 className="animalGender">
-                                <img src={genderImage} alt="Gender" />
-                                Хлопчик
-                            </h1>
-                        </div>
-                        <div className="organizationCardName">
-                            <img src={handsImage} alt="Organization" />
-                            ГоШелтер
-                        </div>
-                    </div>
-                    <div className="animalCard" >
-                        <div className="animalImage">
-                            <img src="https://th.bing.com/th/id/OIP.Wl4ICx3mgr_UNcTl4DZ52QAAAA?rs=1&pid=ImgDetMain" className="animalPhoto"
-                            />
-                        </div>
-                        <h2 className="animalName">Мілка</h2>
-                        <div className="description">
-                            <h1 className="animalAge">
-                                <img src={ageImage} alt="Age" /> Вік: 2
-                            </h1>
-                            <h1 className="animalGender">
-                                <img src={genderImage} alt="Gender" />
-                                Дівчинка
-                            </h1>
-                        </div>
-                        <div className="organizationCardName">
-                            <img src={handsImage} alt="Organization" />
-                            ВусаЛапиХвіст
-                        </div>
-                    </div>
-                    <div className="animalCard" >
-                        <div className="animalImage">
-                            <img src="https://th.bing.com/th/id/OIP.Q0A35f2q_4NCwjB3slN6wQHaJ4?rs=1&pid=ImgDetMain" className="animalPhoto"
-                            />
-                        </div>
-                        <h2 className="animalName">Анатолій</h2>
-                        <div className="description">
-                            <h1 className="animalAge">
-                                <img src={ageImage} alt="Age" /> Вік: 5
-                            </h1>
-                            <h1 className="animalGender">
-                                <img src={genderImage} alt="Gender" />
-                                Хлопчик
-                            </h1>
-                        </div>
-                        <div className="organizationCardName">
-                            <img src={handsImage} alt="Organization" />
-                            Добрі руки
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>
