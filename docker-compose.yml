@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  database:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: life4paws
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: backend_container
+    volumes:
+      - ./backend:/backend
+      - ./database/.env:/database/.env  # mount the .env file at expected path
+    depends_on:
+      - database
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend/animal_shelter/
+      dockerfile: Dockerfile
+    container_name: frontend_container
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge

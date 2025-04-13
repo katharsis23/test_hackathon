@@ -3,9 +3,10 @@ from sqlalchemy.orm import sessionmaker
 from typing import AsyncGenerator
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
-
-load_dotenv(dotenv_path=f"/home/daniel_kaiser/coding/test_hackathon/database/.env")
+resolved_path = Path(__file__).resolve().parent.parent / "database" / ".env"
+load_dotenv(dotenv_path=resolved_path)
 DB_NAME=os.getenv("DATABASE_NAME")
 DB_USER=os.getenv("DATABASE_USER")
 DB_PASSWORD=os.getenv("DATABASE_PASSWORD")
