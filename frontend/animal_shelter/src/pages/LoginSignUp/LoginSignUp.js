@@ -133,15 +133,19 @@ const LoginSignUp = () => {
               <form className="tab-content active" onSubmit={handleSignup}>
                 <div className="form-group">
                   <label>Тип організації:</label>
-                  <select value={shelter_category}
+                  <select
+                    value={shelter_category}
                     onChange={(e) => setShelterCategory(e.target.value)}
-                    required>
+                    required
+                  >
                     <option disabled selected>
                       Оберіть тип
                     </option>
-                    <option value="vet">Ветеринарна клініка</option>
-                    <option value="breeder">Розплідник</option>
-                    <option value="shelter">Притулок</option>
+                    <option value="Ветеринарна клініка">
+                      Ветеринарна клініка
+                    </option>
+                    <option value="Розплідник">Розплідник</option>
+                    <option value="Притулок">Притулок</option>
                   </select>
                 </div>
                 <div className="form-group">

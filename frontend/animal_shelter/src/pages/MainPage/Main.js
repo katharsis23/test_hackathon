@@ -19,7 +19,11 @@ import genderIcon from "../../assets/images/gender.png";
 import handsIcon from "../../assets/images/hands.png";
 import Article from "../../models/article_model";
 import Article_service from "../../services/article_service";
-import { set_user_type, get_user_id, get_user_type } from "../../services/cache";
+import {
+  set_user_type,
+  get_user_id,
+  get_user_type,
+} from "../../services/cache";
 
 export default function Life4PawApp() {
   const [scrollY, setScrollY] = useState(0);
@@ -33,15 +37,14 @@ export default function Life4PawApp() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user_id=get_user_id()
-    if(user_id){
+    const user_id = get_user_id();
+    if (user_id) {
       setIsLoggedIn(true);
       setUserType(get_user_type());
-    }else{
+    } else {
       setIsLoggedIn(false);
       setUserType(get_user_type());
     }
-
   }, []);
 
   useEffect(() => {

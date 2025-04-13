@@ -30,15 +30,13 @@ class CommentService {
       });
 
       if (response.status === 200 && response.data.comments) {
-        return response.data.comments.map((item) =>
-        {
-          const comment=Comments.fromJSON(item)
-          return{
+        return response.data.comments.map((item) => {
+          const comment = Comments.fromJSON(item);
+          return {
             ...comment,
-            "volunteer_name": item["author_name"]
-          }
-        }
-        );
+            volunteer_name: item["author_name"],
+          };
+        });
       }
       return [];
     } catch (error) {
