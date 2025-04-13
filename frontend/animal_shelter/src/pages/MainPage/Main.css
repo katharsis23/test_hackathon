@@ -1,0 +1,489 @@
+/* Import fonts */
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat+Alternates:wght@400;500;600&family=Roboto+Slab:wght@400;500;600&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto Slab", serif;
+  line-height: 1.7;
+  color: #333;
+  background-color: #f5f7f6;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: #4d766e;
+  color: white;
+  padding: 2vh 1.5vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0.2vh 1vw rgba(0, 0, 0, 0.1);
+  height: 7.5vh;
+  width: 100vw;
+}
+
+.header h1 {
+  font-family: "Archivo Black", sans-serif;
+  font-size: 3.8vh;
+}
+
+.main-nav {
+  display: none;
+}
+
+.nav-item {
+  margin: 0 1vw;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-item h1 {
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: lighter;
+  font-size: 2.2vh;
+  cursor: pointer;
+  margin-right: 1vw;
+  margin-left: 1vw;
+}
+
+.nav-item:hover {
+  color: #a3e0d9;
+}
+
+.find h1 {
+  font-family: "Montserrat Alternates", sans-serif;
+  font-weight: lighter;
+  font-size: 2vh;
+  cursor: pointer;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 1vw;
+  margin-left: 1vw;
+}
+
+.find {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 1vh;
+  padding: 1vh 0.2vw;
+  border: none !important;
+  color: white;
+  background-color: rgb(88, 152, 140);
+}
+
+.cta-button:hover {
+  background-color: #1a5c55;
+}
+
+.mobile-menu-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Hero section */
+.hero-section {
+  position: relative;
+  height: 100vh;
+  width: 100%; /* Змінюємо з 100vw на 100% */
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  transition: opacity 0.5s ease;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6vh 3vw 0;
+}
+
+.hero-text-container {
+  max-width: 47vw;
+  margin: 0 auto;
+}
+
+.hero-text {
+  color: white;
+  font-family: "Montserrat Alternates", sans-serif;
+  font-size: 2.5vh;
+  line-height: 1.8;
+  margin-bottom: 3vh;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.find-friend-button {
+  display: inline-block;
+  background-color: #7c9a3c;
+  color: white;
+  font-family: "Montserrat Alternates", sans-serif;
+  padding: 1.5vh 4vw;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 2vh;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.find-friend-button:hover {
+  background-color: #8baf42;
+  transform: scale(1.05);
+}
+
+/* Choose friend section */
+.choose-friend-section {
+  padding: 10vh 3vw;
+  background-color: white;
+  position: relative;
+  z-index: 20;
+  min-height: 90vh;
+}
+
+.section-container {
+  width: 100%; /* Змінюємо з 90vw на 100% */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2vw;
+  text-align: center;
+}
+
+.section-title {
+  font-family: "Roboto Slab", serif;
+  font-size: 5vh;
+  font-weight: 600;
+  margin-bottom: 8vh;
+  position: relative;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10vw;
+  height: 0.5vh;
+  background-color: #7c9a3c;
+}
+
+.pet-options {
+  display: flex;
+  justify-content: center;
+  gap: 8vw;
+  margin-bottom: 8vh;
+}
+
+.pet-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.pet-option:hover {
+  transform: translateY(-10px);
+}
+
+.pet-icon {
+  width: 15vh;
+  height: 15vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2vh;
+  background-color: #f5f7f6;
+  border-radius: 50%;
+  border: 0.5vh solid #7c9a3c;
+  padding: 2vh;
+}
+.cat-image {
+  margin-right: 2vh;
+}
+.icon-placeholder {
+  font-size: 10vh;
+}
+
+.pet-type {
+  font-family: "Roboto Slab", serif;
+  font-size: 3vh;
+  font-weight: 500;
+}
+
+/* Announcements section */
+.announcements-section {
+  padding: 10vh 3vw;
+  background-color: #f5f7f6;
+  min-height: 90vh;
+  position: relative;
+}
+
+.announcements-section .section-title {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.pets-grid {
+  width: 100%; /* Змінюємо з 90vw на 100% */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2vw; /* Додаємо padding замість width */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 3vw;
+}
+
+.pet-card {
+  background-color: white;
+  border-radius: 2vh;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pet-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.pet-image {
+  height: 30vh;
+  overflow: hidden;
+}
+
+.pet-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pet-info {
+  padding: 3vh 2vw;
+}
+
+.pet-name {
+  font-family: "Roboto Slab", serif;
+  font-size: 3vh;
+  margin-bottom: 2vh;
+  font-weight: 600;
+}
+
+.pet-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+}
+
+.detail-icon {
+  font-size: 0vh;
+}
+
+.detail-text {
+  font-size: 2vh;
+}
+
+/* Shelters section */
+.shelters-section {
+  padding: 10vh 3vw;
+  background-color: white;
+  min-height: 90vh;
+}
+
+.shelters-section .section-title {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.shelters-grid {
+  width: 100%; /* Змінюємо з 90vw на 100% */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2vw; /* Додаємо padding замість width */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 4vw;
+}
+
+.shelter-card {
+  background-color: #f5f7f6;
+  border-radius: 2vh;
+  padding: 4vh 3vw;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.shelter-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.shelter-logo {
+  width: 15vh;
+  height: 15vh;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 3vh;
+  border: 0.5vh solid #7c9a3c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shelter-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block; /* Added block display */
+}
+
+.logo-placeholder {
+  font-size: 7vh;
+}
+
+.shelter-name {
+  font-family: "Roboto Slab", serif;
+  color: #7c9a3c;
+  font-size: 3vh;
+  font-weight: 600;
+  margin-bottom: 2vh;
+}
+
+.shelter-address {
+  font-size: 2vh;
+  color: #666;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2a7973;
+  color: white;
+  padding: 2vh 2vw;
+  text-align: right;
+  height: 75px;
+}
+
+.footer-text {
+  font-family: "Roboto Slab", serif;
+  font-size: 2vh;
+}
+
+/* Background paw prints */
+.choose-friend-section,
+.announcements-section {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200' fill='none'%3E%3Cpath d='M40 70C46.6274 70 52 64.6274 52 58C52 51.3726 46.6274 46 40 46C33.3726 46 28 51.3726 28 58C28 64.6274 33.3726 70 40 70Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3Cpath d='M60 50C66.6274 50 72 44.6274 72 38C72 31.3726 66.6274 26 60 26C53.3726 26 48 31.3726 48 38C48 44.6274 53.3726 50 60 50Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3Cpath d='M80 70C86.6274 70 92 64.6274 92 58C92 51.3726 86.6274 46 80 46C73.3726 46 68 51.3726 68 58C68 64.6274 73.3726 70 80 70Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3Cpath d='M60 90C66.6274 90 72 84.6274 72 78C72 71.3726 66.6274 66 60 66C53.3726 66 48 71.3726 48 78C48 84.6274 53.3726 90 60 90Z' fill='%23E0E8E0' fill-opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 15vw;
+}
+
+/* Media queries for responsiveness */
+@media (min-width: 768px) {
+  .main-nav {
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-menu-button {
+    display: none;
+  }
+
+  .hero-text {
+    font-size: 1.75rem;
+  }
+
+  .section-title {
+    font-size: 3rem;
+  }
+
+  .pet-icon {
+    width: 15rem;
+    height: 15rem;
+  }
+
+  .pet-type {
+    font-size: 2rem;
+  }
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  .hero-text {
+    font-size: 3vh;
+  }
+
+  .section-title {
+    font-size: 4vh;
+  }
+
+  .pet-icon {
+    width: 30vw;
+    height: 30vw;
+  }
+
+  .pet-type {
+    font-size: 2.5vh;
+  }
+
+  .detail-text {
+    font-size: 1.8vh;
+  }
+
+  .hero-text-container {
+    max-width: 90%; /* Змінюємо з vw на % */
+  }
+}
+
+.icon-image {
+  width: 8vh;
+  height: 8vh;
+  object-fit: contain;
+}
+
+.detail-icon-image {
+  width: 2.5vh;
+  height: 2.5vh;
+  object-fit: contain;
+  vertical-align: middle;
+  filter: brightness(0) saturate(100%); /* Makes icons single color */
+}

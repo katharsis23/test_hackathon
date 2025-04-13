@@ -8,77 +8,148 @@ import animalImage from "../../assets/images/image.png";
 import handsImage from "../../assets/images/hands.png";
 import catImage from "../../assets/images/cat.png";
 import dogImage from "../../assets/images/dog.png";
-
 import { useNavigate } from "react-router-dom";
-import { ArticleService } from "../../services/article_service";
+
+import Article from "../../models/article_model";
+import Article_service from "../../services/article_service";
+import CommentService from "../../services/comment_service";
+import authService from "../../services/auth";
 import { get_user_id } from "../../services/cache";
+import UserModels from "../../models/user_model";
+const { Shelter } = UserModels;
 
 const OrganizationCabinet = () => {
-  const [comments, setComments] = useState([]);
   const [animal, setAnimal] = useState([]);
+  const [animalVolunteer, setAnimalVolunteer] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [organization, setOrganization] = useState(new Shelter());
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
-
-  const articleService = new ArticleService();
-  const shelterId = get_user_id();
-
-  // Додано відсутні функції
-  const fetchArticles = async () => {
-    try {
-      const articles = await articleService.fetchArticlesForShelter(shelterId);
-      setAnimal(articles);
-    } catch (error) {
-      console.error("Помилка завантаження оголошень:", error);
-    }
-  };
-
-  const fetchComments = async () => {
-    setComments([]);
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchArticles();
-    fetchComments();
+    const checkAuth = async () => {
+      try {
+        const response = await authService.get_user_info();
+        setIsLoggedIn(!!response);
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
   const openEditModal = (article) => {
-    setSelectedArticle(article);
+    setSelectedArticle({ ...article });
     setIsModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setSelectedArticle(null);
     setIsModalOpen(false);
+    setSelectedArticle(null);
   };
 
-  // Виправлений метод з використанням ArticleService
   const saveChanges = async () => {
-    if (!selectedArticle) return;
-
     try {
-      await articleService.edit_article(selectedArticle);
+      const articleService = new Article_service();
+
+      // Get current user ID
+      const currentUserId = get_user_id();
+
+      // Prepare updated article data
+      const updatedArticle = {
+        article_id: selectedArticle.article_id,
+        photo_url: selectedArticle.photo_url,
+        name: selectedArticle.name,
+        age: selectedArticle.age,
+        sex: selectedArticle.sex,
+        health_status: selectedArticle.health_status,
+        animal_type: selectedArticle.animal_type,
+        description: selectedArticle.description,
+        shelter_id: organization.id,
+        volunteer_id: selectedArticle.volunteer_id || currentUserId,
+      };
+
+      await articleService.edit_article(updatedArticle);
+
       setAnimal((prev) =>
-        prev.map((item) =>
-          item.article_id === selectedArticle.article_id
-            ? selectedArticle
-            : item
+        prev.map((article) =>
+          article.article_id === updatedArticle.article_id
+            ? updatedArticle
+            : article
         )
       );
+
       closeEditModal();
     } catch (error) {
-      console.error("Помилка оновлення:", error);
+      console.error("Error saving changes:", error);
+      alert("Failed to save changes. Please try again.");
     }
   };
+
+  useEffect(() => {
+    const fetchOrganizationInfo = async () => {
+      try {
+        const response = await authService.get_user_info();
+        if (response && response.data) {
+          const shelterData = Shelter.fromJSON(response.data);
+          setOrganization(shelterData);
+
+          const articleService = new Article_service();
+
+          const shelterArticles = await articleService.fetch_article(
+            shelterData.id
+          );
+          console.log("Articles from server (shelter):", shelterArticles);
+          setAnimal(shelterArticles);
+
+          const volunteerArticles =
+            await articleService.fetch_article_volunteer();
+          console.log("Articles from server (volunteer):", volunteerArticles);
+
+          // Transform the volunteer articles to include volunteer name
+          const transformedVolunteerArticles = volunteerArticles.map(
+            (item) => ({
+              article: Article.fromJSON(item),
+              volunteer_name: item["volunteer_name"],
+            })
+          );
+
+          setAnimalVolunteer(transformedVolunteerArticles);
+
+          const shelterComments = await CommentService.get_comments(
+            shelterData.id
+          );
+          console.log("Comments from server:", shelterComments);
+          setComments(shelterComments);
+        } else {
+          console.warn("No organization data found.");
+        }
+      } catch (error) {
+        console.error("Error fetching organization info or articles:", error);
+      }
+    };
+
+    fetchOrganizationInfo();
+  }, []);
 
   return (
     <div className="cabinetBodyContainer">
       <div className="cabinetHeader">
-        <h1>Life4Paw</h1>
+        <h1 onClick={() => navigate("/")}>Life4Paw</h1>
         <div className="headerBtnContainer">
-          <div className="login">
-            <h1>Увійти</h1>
+          <div
+            className="login"
+            onClick={() =>
+              navigate(isLoggedIn ? "/OrganizationCabinet" : "/LoginSignUp")
+            }
+          >
+            <h1>{isLoggedIn ? "Кабінет" : "Увійти"}</h1>
           </div>
-          <div className="find">
+          <div className="find" onClick={() => navigate("/ArticleForm")}>
             <h1>Знайшли тварину?</h1>
           </div>
         </div>
@@ -89,13 +160,13 @@ const OrganizationCabinet = () => {
         </div>
         <div className="organizationContacts">
           <div className="organizationName">
-            <h1>Назва організації:</h1>
+            <h1>{organization.name}</h1>
           </div>
           <div className="organizationCategory">
-            <h1>Категорія: притулок для тварин</h1>
+            <h1>Категорія: {organization.shelter_category}</h1>
           </div>
           <div className="organizationAddress">
-            <h1>Адреса: яворницького 3б львів</h1>
+            <h1>Адреса: {organization.address}</h1>
           </div>
         </div>
       </div>
@@ -111,6 +182,11 @@ const OrganizationCabinet = () => {
                   src={article.photo_url || animalImage}
                   alt={article.name}
                   className="animalPhoto"
+                  onError={(e) => {
+                    console.log("Failed to load image:", article.photo_url);
+                    e.target.src = animalImage;
+                  }}
+                  crossOrigin="anonymous"
                 />
               </div>
               <h2 className="animalName">{article.name}</h2>
@@ -125,7 +201,7 @@ const OrganizationCabinet = () => {
               </div>
               <div className="organizationCardName">
                 <img src={handsImage} alt="Organization" />
-                {article.shelter_id}
+                {organization.name}
               </div>
               <div className="cardOptions">
                 <button
@@ -145,28 +221,36 @@ const OrganizationCabinet = () => {
           <h1>Прийом тваринок:</h1>
         </div>
         <div className="takeAnimalsCards">
-          {animal.map((article) => (
-            <div className="animalCard" key={article.article_id}>
+          {animalVolunteer.map((volunteer) => (
+            <div className="animalCard" key={volunteer.article.article_id}>
               <div className="animalImage">
                 <img
-                  src={article.photo_url || animalImage}
-                  alt={article.name}
+                  src={volunteer.article.photo_url || animalImage}
+                  alt={volunteer.article.name}
                   className="animalPhoto"
+                  onError={(e) => {
+                    console.log(
+                      "Failed to load image:",
+                      volunteer.article.photo_url
+                    );
+                    e.target.src = animalImage;
+                  }}
+                  crossOrigin="anonymous"
                 />
               </div>
-              <h2 className="animalName">{article.name}</h2>
+              <h2 className="animalName">{volunteer.article.name}</h2>
               <div className="description">
                 <h1 className="animalAge">
-                  <img src={ageImage} alt="Age" /> Вік: {article.age}
+                  <img src={ageImage} alt="Age" /> Вік: {volunteer.article.age}
                 </h1>
                 <h1 className="animalGender">
                   <img src={genderImage} alt="Gender" />
-                  {article.sex}
+                  {volunteer.article.sex}
                 </h1>
               </div>
               <div className="organizationCardName">
                 <img src={handsImage} alt="Organization" />
-                {article.volunteer_id}
+                {volunteer.volunteer_name}
               </div>
             </div>
           ))}
@@ -179,52 +263,30 @@ const OrganizationCabinet = () => {
         <div className="commentsCards">
           {comments.map((comment) => (
             <div className="commentCard" key={comment.comment_id}>
-              <p className="commentText">{comment.description}111212</p>
-              <p className="commentAuthor">
-                Автор: {comment.volunteer_id}12121
-              </p>
+              <p className="commentText">{comment.description}</p>
+              <p className="commentAuthor">Автор: {comment.volunteer_id}</p>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Модальне вікно */}
       {isModalOpen && (
         <div className="modal">
           <div className="modalContent">
             <h2>Редагування</h2>
             <div className="modalBody">
-              <div className="modalImage">
-                {selectedArticle.photo_url ? (
-                  <img
-                    src={selectedArticle.photo_url}
-                    alt="Фото тваринки"
-                    className="animalPhotoPreview"
-                  />
-                ) : (
-                  <div className="imagePlaceholder">Фото тваринки</div>
-                )}
-                <label className="customFileUpload">
-                  Вибрати фото
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                          setSelectedArticle({
-                            ...selectedArticle,
-                            photo_url: event.target.result,
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                </label>
-              </div>
+              <label>
+                Посилання на фото:
+                <input
+                  type="text"
+                  value={selectedArticle.photo_url}
+                  onChange={(e) =>
+                    setSelectedArticle({
+                      ...selectedArticle,
+                      photo_url: e.target.value,
+                    })
+                  }
+                />
+              </label>
               <div className="modalFields">
                 <label>
                   Ім'я:
@@ -289,12 +351,12 @@ const OrganizationCabinet = () => {
                   <div className="typeButtons">
                     <button
                       className={`typeButton ${
-                        selectedArticle.animal_type === "Пес" ? "active" : ""
+                        selectedArticle.animal_type === "dogs" ? "active" : ""
                       }`}
                       onClick={() =>
                         setSelectedArticle({
                           ...selectedArticle,
-                          animal_type: "Пес",
+                          animal_type: "dogs",
                         })
                       }
                     >
@@ -302,12 +364,12 @@ const OrganizationCabinet = () => {
                     </button>
                     <button
                       className={`typeButton ${
-                        selectedArticle.animal_type === "Кіт" ? "active" : ""
+                        selectedArticle.animal_type === "cats" ? "active" : ""
                       }`}
                       onClick={() =>
                         setSelectedArticle({
                           ...selectedArticle,
-                          animal_type: "Кіт",
+                          animal_type: "cats",
                         })
                       }
                     >
