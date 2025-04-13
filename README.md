@@ -20,19 +20,55 @@
                 comments - таблиця коментарів
 
 
-4) Docker - контейнеризація 
-        1) database_container
-        2) backend container
-        3) frontend container
-        4) docker compose
+--------------------------Як запустити ----------------------
 
-Додаток є абсолютно динамічним в своїй основі, що надає змогу підключати, створювати об'єкти в реальному час
+1) Створіть базу даних на основі бекапу в ./database/backup.sql
+    1.а     Скопіюйте код бази даних в Mysql-workbench
+    1.b     Додайте рядки на початок файлу з ./database/init.sql
 
-------------------------Як підключити------------------------------------
+2) Створіть віртуальне середовище в Пайтон в директорії ./backend/
+    Windows: python -m venv venv
+             ./venv/Scripts/activate
+        !!Якщо користуєтесь оболонкою bash Linux використовуйте
+            source ./venv/Scripts/activate
+        
+    Linux:    python3 -m venv venv
+              source ./venv/bin/activate
 
-1) Отримайте dockerfiles, docker-compose з репозиторію
-2) Завантажте docker
-3) в директорії для docker-compose напишіть команду
-    docker-compose up --build
+    перевірте чи змінилася директорія інтерпретатора 
+                which python 
+
+            використовуйте python3 для Лінукса
+        Можливо потрібно буде ввести шлях вручну. У VScode Ctrl+Shift+P->Python: Select interpreter->шлях до .exe файлу
+
+3)Завантаження бібліотек
+    cd ./backend/
+    pip install -r requirements.txt
+    pip freeze > requirements.txt
+
+4)Передивляємось чи всі біблотеки імпортувалися
+    файли backend/database.py
+          backend/views/utils.py
+    чутливі до змін, бо у них є параметри шляху до .env файлу. Замініть шлях на свій
+
+5)Пробуємо запустити сервер 
+в директорії backend/
 
 
+uvicorn views.main:animal_shelter --reload
+
+перевіряємо логи сервера
+
+6) заходимо на папку frontend/animal_shelter/
+
+якщо у вас є npm або yarn
+
+npm install react react-router-dom axios web-vitals 
+
+7) Пробуємо запускати сервер для фронтенду
+
+npm start
+
+
+Якщо у вас є якісь питання по встановленню:
+Contact-info: daniklv2006@gmail.com
