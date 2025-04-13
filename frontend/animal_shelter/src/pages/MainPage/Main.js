@@ -19,6 +19,7 @@ import genderIcon from "../../assets/images/gender.png";
 import handsIcon from "../../assets/images/hands.png";
 import Article from "../../models/article_model";
 import Article_service from "../../services/article_service";
+import { set_user_type, get_user_id, get_user_type } from "../../services/cache";
 
 export default function Life4PawApp() {
   const [scrollY, setScrollY] = useState(0);
@@ -28,20 +29,19 @@ export default function Life4PawApp() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await authService.get_user_info();
-        setIsLoggedIn(!!response);
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setIsLoggedIn(false);
-      }
-    };
+    const user_id=get_user_id()
+    if(user_id){
+      setIsLoggedIn(true);
+      setUserType(get_user_type());
+    }else{
+      setIsLoggedIn(false);
+      setUserType(get_user_type());
+    }
 
-    checkAuth();
   }, []);
 
   useEffect(() => {
@@ -91,24 +91,8 @@ export default function Life4PawApp() {
   const getShelterVolunteerInfo = (petData) => {
     if (!petData) return "Unknown";
 
-    // Access article properties from the new structure
-    const pet = petData; // The entire object now contains article properties
+    const pet = petData;
     const authorName = pet.author_name || "Unknown Author";
-
-    // const shelterInfo = pet.shelter_id ? `Shelter: ${pet.shelter_id}` : "";
-    // const volunteerInfo = pet.volunteer_id && pet.volunteer_id !== "null" ? `Volunteer: ${pet.volunteer_id}` : "";
-
-    // let displayInfo = authorName;
-
-    // if (shelterInfo || volunteerInfo) {
-    //   displayInfo += " (";
-    //   if (shelterInfo && volunteerInfo) {
-    //     displayInfo += `${shelterInfo} | ${volunteerInfo}`;
-    //   } else {
-    //     displayInfo += shelterInfo || volunteerInfo;
-    //   }
-    //   displayInfo += ")";
-    // }
 
     return authorName;
   };
@@ -123,6 +107,18 @@ export default function Life4PawApp() {
     setIsModalOpen(false);
   };
 
+  const handleCabinetClick = () => {
+    if (isLoggedIn) {
+      if (userType === "volunteer") {
+        navigate("/VolunteerCabinet");
+      } else if (userType === "shelter") {
+        navigate("/OrganizationCabinet");
+      }
+    } else {
+      navigate("/LoginSignUp"); // Redirect to login if not logged in
+    }
+  };
+
   return (
     <div className="app-container">
       {/* Header */}
@@ -131,9 +127,7 @@ export default function Life4PawApp() {
         <nav className="main-nav">
           <span
             className="nav-item"
-            onClick={() =>
-              navigate(isLoggedIn ? "/OrganizationCabinet" : "/LoginSignUp")
-            }
+            onClick={handleCabinetClick} // Use the handleCabinetClick function here
           >
             <h1>{isLoggedIn ? "Кабінет" : "Увійти"}</h1>
           </span>
