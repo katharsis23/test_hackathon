@@ -71,4 +71,4 @@ npm start
 
 
 Якщо у вас є якісь питання по встановленню:
-Contact-info: daniklv2006@gmail.com
+
